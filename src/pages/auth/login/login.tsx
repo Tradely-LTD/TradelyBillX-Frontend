@@ -18,7 +18,7 @@ const LoginPage = () => {
     <Container>
       {/* Left Section with Background Image */}
       <Info>
-        <div className="absolute z-20 max-w-xl p-8 text-white top-1/4 left-8">
+        <div className="absolute z-20 max-w-xl p-8 text-white top-[20px] left-8">
           <Logo />
           <h2 className="text-4xl font-bold leading-relaxed">
             Streamline your AUFCDN online waybill requests effortlessly.
