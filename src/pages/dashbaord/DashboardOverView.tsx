@@ -1,26 +1,27 @@
-import React from 'react';
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
-import AnimatedPieChart from '../../common/ui/AnimatedPieChart';
+import React from "react";
+import { LineChart, Line, ResponsiveContainer } from "recharts";
+import AnimatedPieChart from "../../common/ui/AnimatedPieChart";
 
 // Card Components
-const Card = ({ className = '', children }) => (
+const Card = ({ className = "", children }) => (
   <div
-    className={`bg-white rounded-lg border border-gray-200 shadow-sm  ${className}`}>
+    className={`bg-white rounded-lg border border-gray-200 shadow-sm  ${className}`}
+  >
     {children}
   </div>
 );
 
-const CardHeader = ({ className = '', children }) => (
+const CardHeader = ({ className = "", children }) => (
   <div className={`p-6 border-b border-gray-200 ${className}`}>{children}</div>
 );
 
-const CardTitle = ({ className = '', children }) => (
+const CardTitle = ({ className = "", children }) => (
   <h3 className={`text-lg font-semibold text-gray-900 ${className}`}>
     {children}
   </h3>
 );
 
-const CardContent = ({ className = '', children }) => (
+const CardContent = ({ className = "", children }) => (
   <div className={`p-6  ${className}`}>{children}</div>
 );
 
@@ -35,36 +36,36 @@ const DashboardOverview = () => {
   // Stats cards data
   const statsCards = [
     {
-      title: 'Waybills Submitted',
-      value: '100',
-      change: '5% last month',
+      title: "Waybills Submitted",
+      value: "100",
+      change: "5% last month",
       data: chartData,
     },
     {
-      title: 'Payments Made',
-      value: '100',
-      change: '+5% last month',
+      title: "Payments Made",
+      value: "100",
+      change: "+5% last month",
       data: chartData,
     },
     {
-      title: 'Incidents Reported',
-      value: '50',
-      change: '+5% last month',
+      title: "Incidents Reported",
+      value: "50",
+      change: "+5% last month",
       data: chartData,
     },
   ];
 
   // Status data for donut charts
   const waybillStatus = [
-    { status: 'Pending', percentage: 40, color: 'rgb(239, 68, 68)' },
-    { status: 'In Transit', percentage: 35, color: 'rgb(59, 130, 246)' },
-    { status: 'Delivered', percentage: 25, color: 'rgb(45, 212, 191)' },
+    { status: "Pending", percentage: 40, color: "rgb(239, 68, 68)" },
+    { status: "In Transit", percentage: 35, color: "rgb(59, 130, 246)" },
+    { status: "Delivered", percentage: 25, color: "rgb(45, 212, 191)" },
   ];
 
   const incidentStatus = [
-    { status: 'Open', percentage: 40, color: 'rgb(239, 68, 68)' },
-    { status: 'In Progress', percentage: 35, color: 'rgb(59, 130, 246)' },
-    { status: 'Resolved', percentage: 25, color: 'rgb(45, 212, 191)' },
+    { status: "Open", percentage: 40, color: "rgb(239, 68, 68)" },
+    { status: "In Progress", percentage: 35, color: "rgb(59, 130, 246)" },
+    { status: "Resolved", percentage: 25, color: "rgb(45, 212, 191)" },
   ];
 
   // SVG donut chart component
@@ -175,7 +176,8 @@ const DashboardOverview = () => {
               {waybillStatus.map((status, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center space-x-2">
+                  className="flex flex-col items-center space-x-2"
+                >
                   <div className="flex items-center gap-[10px]">
                     <div
                       className="w-3 h-3 rounded-full"
@@ -201,7 +203,8 @@ const DashboardOverview = () => {
               {incidentStatus.map((status, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center space-x-2">
+                  className="flex flex-col items-center space-x-2"
+                >
                   <div className="flex items-center gap-[10px]">
                     <div
                       className="w-3 h-3 rounded-full"

@@ -1,10 +1,11 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { appPaths } from './utils/app-paths';
-import PrivateRoute from './common/router-helper/private-route';
-import Layout from './common/ui/layout';
-import Dashboard from './pages/dashbaord/dashboard';
-import Login from './pages/auth/login/login';
-import DashboardOverview from './pages/dashbaord/DashboardOverView';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { appPaths } from "./utils/app-paths";
+import PrivateRoute from "./common/router-helper/private-route";
+import Layout from "./common/ui/layout";
+import Dashboard from "./pages/dashbaord/dashboard";
+import Login from "./pages/auth/login/login";
+import DashboardOverview from "./pages/dashbaord/DashboardOverView";
+import Configuration from "./pages/configuration/configuration";
 
 function AppRouter() {
   return (
@@ -24,16 +25,18 @@ function AppRouter() {
             <PrivateRoute>
               <Layout />
             </PrivateRoute>
-          }>
+          }
+        >
           <Route
             index
-            //   path={}
+            path={"/"}
             element={
               <PrivateRoute>
                 <DashboardOverview />
               </PrivateRoute>
             }
           />
+          <Route path={appPaths.configuration} element={<Configuration />} />
         </Route>
         {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>
