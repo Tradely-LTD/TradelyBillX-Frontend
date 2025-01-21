@@ -15,5 +15,6 @@ export const appPaths = {
   dashboard: "/",
   history: "/history",
   profile: "/profile",
+  configuration: "/configuration",
   getUser: (id = ":id") => `/user/${id}`,
 };
