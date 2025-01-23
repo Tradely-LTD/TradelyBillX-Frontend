@@ -8,7 +8,6 @@ import {
   Underline,
   Code,
   Image,
-  ChevronDown,
 } from "lucide-react";
 
 export default function SecurityNotification() {

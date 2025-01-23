@@ -1,6 +1,5 @@
-import React from "react";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
-import AnimatedPieChart from "../../common/ui/AnimatedPieChart";
+import AnimatedPieChart from "@/common/ui/AnimatedPieChart";
 
 // Card Components
 const Card = ({ className = "", children }) => (

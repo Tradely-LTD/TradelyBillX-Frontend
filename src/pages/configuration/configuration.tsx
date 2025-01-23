@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { TabButton, TabContainer } from "../../common/tab";
+import { TabButton, TabContainer } from "@/common/tab";
 import PaymentGateway from "./components/paymentGateway";
 import SecurityNotification from "./components/securityNotification";
 import UnionManagement from "./components/unionManagement";
-import Button from "../../common/button/button";
+import Button from "@/common/button/button";
 import { Filter, Sort } from "iconsax-react";
+import PaymentGatewayModal from "./components/paymentModal";
 
 const Configuration = () => {
   const [activeTab, setActiveTab] = useState("payment");
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const handleSwitchTab = (value: string) => {
     setActiveTab(value);
   };
@@ -29,15 +33,52 @@ const Configuration = () => {
         return null;
     }
   };
+  const renderTabHeader = () => {
+    switch (activeTab) {
+      case "payment":
+        return (
+          <div className="flex justify-between items-center">
+            <div>
+              <div className="text-2xl font-semibold">
+                {" "}
+                Payment Gateway Setup
+              </div>
+              <div className="text-[#64748B]">
+                You can set up payment gateways that are enabled for agents to
+                use for transactions.
+              </div>
+            </div>
+            <Button onClick={handleModal}>Add Payment</Button>
+          </div>
+        );
+      case "security":
+        return (
+          <>
+            <div className="text-2xl font-semibold">
+              Security & Notification Settings
+            </div>
+            <div className="text-[#64748B]">
+              Security & Notification Settings
+            </div>
+          </>
+        );
+      case "union":
+        return (
+          <>
+            <div className="text-2xl font-semibold">Union Management</div>
+            <div className="text-[#64748B]">
+              Set up and displays all unions currently in the system
+            </div>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="w-full mx-auto px-4 py-2 ">
-      <div className="text-2xl font-semibold"> Payment Gateway Setup</div>
-      <div className="text-[#64748B]">
-        You can set up payment gateways that are enabled for agents to use for
-        transactions.
-      </div>
-
+      <>{renderTabHeader()}</>
       <div className="my-4 flex  items-center justify-between">
         <div className="w-[100%]">
           <TabContainer style={{ width: "70%" }}>
@@ -77,6 +118,7 @@ const Configuration = () => {
       </div>
 
       <div className="tab-content my-6">{renderTabContent()}</div>
+      <PaymentGatewayModal onClose={handleModal} isOpen={isModalOpen} />
     </div>
   );
 };
