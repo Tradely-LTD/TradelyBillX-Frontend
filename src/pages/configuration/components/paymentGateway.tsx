@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Button from "../../../common/button/button";
 import { ArrowLeft, ArrowRight, Pencil, Trash2 } from "lucide-react";
-import PaymentGatewayModal from "./modal";
 
 const gateways = [
   {
@@ -116,18 +115,13 @@ function PaymentGateway() {
       </div>
 
       <div className="flex gap-3 justify-between py-3">
-        <Button
-          disabled
-          leftIcon={<ArrowLeft color="green" />}
-          variant="outlined"
-        >
+        <Button disabled leftIcon={<ArrowLeft />} variant="outlined">
           Previous
         </Button>
         <Button disabled rightIcon={<ArrowRight />} variant="outlined">
           Next
         </Button>
       </div>
-      {/* <PaymentGatewayModal isEnabled={true} /> */}
     </div>
   );
 }

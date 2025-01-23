@@ -79,8 +79,8 @@ function Button({
       case "outlined":
         return {
           backgroundColor: "transparent",
-          border: "1px solid #2C7743",
-          color: "#2C7743",
+          border: "1.5px solid #eeeeee",
+          color: "#64748B",
         };
       case "ghost":
         return {
