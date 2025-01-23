@@ -1,27 +1,68 @@
-import { LineChart, Line, ResponsiveContainer } from "recharts";
-import AnimatedPieChart from "@/common/ui/AnimatedPieChart";
+import React from 'react';
+import {
+  LineChart,
+  Line,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts';
+import AnimatedPieChart from '../../common/ui/AnimatedPieChart';
+
+const data = [
+  { name: '01 Oct', payment: 100.5, commission: 38.1 },
+  { name: '02 Oct', payment: 200.0, commission: 50.0 },
+  { name: '03 Oct', payment: 150.0, commission: 45.0 },
+  { name: '04 Oct', payment: 300.0, commission: 60.0 },
+  { name: '05 Oct', payment: 250.0, commission: 55.0 },
+  { name: '06 Oct', payment: 400.0, commission: 70.0 },
+  { name: '07 Oct', payment: 350.0, commission: 65.0 },
+];
 
 // Card Components
-const Card = ({ className = "", children }) => (
+const Card = ({ className = '', children }) => (
   <div
-    className={`bg-white rounded-lg border border-gray-200 shadow-sm  ${className}`}
-  >
+    className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
     {children}
   </div>
 );
 
-const CardHeader = ({ className = "", children }) => (
+const CardHeader = ({ className = '', children }) => (
   <div className={`p-6 border-b border-gray-200 ${className}`}>{children}</div>
 );
 
-const CardTitle = ({ className = "", children }) => (
+const CardTitle = ({ className = '', children }) => (
   <h3 className={`text-lg font-semibold text-gray-900 ${className}`}>
     {children}
   </h3>
 );
 
-const CardContent = ({ className = "", children }) => (
-  <div className={`p-6  ${className}`}>{children}</div>
+const CardContent = ({ className = '', children }) => (
+  <div className={`p-6 ${className}`}>{children}</div>
+);
+
+// Payment Stats Card Component
+const PaymentStatsCard = () => (
+  <div className="grid grid-cols-2 gap-[10px] p-8 rounded-lg my-6">
+    <div className="space-y-2 w-[90%] bg-gray-50 p-[20px] rounded-lg">
+      <p className="text-gray-600 text-lg">Payments Made</p>
+      <p className="text-4xl font-bold text-gray-900">100.538.149 NGN</p>
+      <div className="flex items-center text-green-500">
+        <span className="text-sm">+5% last month</span>
+      </div>
+    </div>
+    <div className="space-y-2 w-[90%] bg-gray-50 p-[20px] rounded-lg">
+      <p className="text-gray-600 text-lg">Commission Earned</p>
+      <p className="text-4xl font-bold text-gray-900">20.000.000 NGN</p>
+      <div className="flex items-center text-green-500">
+        <span className="text-sm">+5% last month</span>
+      </div>
+    </div>
+  </div>
 );
 
 // Dashboard Component
@@ -35,83 +76,37 @@ const DashboardOverview = () => {
   // Stats cards data
   const statsCards = [
     {
-      title: "Waybills Submitted",
-      value: "100",
-      change: "5% last month",
+      title: 'Waybills Submitted',
+      value: '100',
+      change: '5% last month',
       data: chartData,
     },
     {
-      title: "Payments Made",
-      value: "100",
-      change: "+5% last month",
+      title: 'Payments Made',
+      value: '100',
+      change: '+5% last month',
       data: chartData,
     },
     {
-      title: "Incidents Reported",
-      value: "50",
-      change: "+5% last month",
+      title: 'Incidents Reported',
+      value: '50',
+      change: '+5% last month',
       data: chartData,
     },
   ];
 
   // Status data for donut charts
   const waybillStatus = [
-    { status: "Pending", percentage: 40, color: "rgb(239, 68, 68)" },
-    { status: "In Transit", percentage: 35, color: "rgb(59, 130, 246)" },
-    { status: "Delivered", percentage: 25, color: "rgb(45, 212, 191)" },
+    { status: 'Pending', percentage: 40, color: 'rgb(239, 68, 68)' },
+    { status: 'In Transit', percentage: 35, color: 'rgb(59, 130, 246)' },
+    { status: 'Delivered', percentage: 25, color: 'rgb(45, 212, 191)' },
   ];
 
   const incidentStatus = [
-    { status: "Open", percentage: 40, color: "rgb(239, 68, 68)" },
-    { status: "In Progress", percentage: 35, color: "rgb(59, 130, 246)" },
-    { status: "Resolved", percentage: 25, color: "rgb(45, 212, 191)" },
+    { status: 'Open', percentage: 40, color: 'rgb(239, 68, 68)' },
+    { status: 'In Progress', percentage: 35, color: 'rgb(59, 130, 246)' },
+    { status: 'Resolved', percentage: 25, color: 'rgb(45, 212, 191)' },
   ];
-
-  // SVG donut chart component
-  const DonutChart = ({ data, size = 150 }) => {
-    let startAngle = 0;
-    const radius = size / 2;
-    const centerX = radius;
-    const centerY = radius;
-    const innerRadius = radius * 0.6;
-
-    return (
-      <svg width={size} height={size} className="transform -rotate-90">
-        {data.map((item, index) => {
-          const percentage = item.percentage;
-          const angle = (percentage / 100) * 360;
-          const endAngle = startAngle + angle;
-
-          // Calculate path
-          const x1 = centerX + radius * Math.cos((startAngle * Math.PI) / 180);
-          const y1 = centerY + radius * Math.sin((startAngle * Math.PI) / 180);
-          const x2 = centerX + radius * Math.cos((endAngle * Math.PI) / 180);
-          const y2 = centerY + radius * Math.sin((endAngle * Math.PI) / 180);
-
-          const largeArcFlag = angle > 180 ? 1 : 0;
-
-          // Create path for arc
-          const d = `
-            M ${
-              centerX + innerRadius * Math.cos((startAngle * Math.PI) / 180)
-            } ${centerY + innerRadius * Math.sin((startAngle * Math.PI) / 180)}
-            L ${x1} ${y1}
-            A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}
-            L ${centerX + innerRadius * Math.cos((endAngle * Math.PI) / 180)} ${
-            centerY + innerRadius * Math.sin((endAngle * Math.PI) / 180)
-          }
-            A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${
-            centerX + innerRadius * Math.cos((startAngle * Math.PI) / 180)
-          } ${centerY + innerRadius * Math.sin((startAngle * Math.PI) / 180)}
-          `;
-
-          startAngle = endAngle;
-
-          return <path key={index} d={d} fill={item.color} />;
-        })}
-      </svg>
-    );
-  };
 
   return (
     <div className="space-y-6">
@@ -139,7 +134,6 @@ const DashboardOverview = () => {
               <div className="flex flex-row justify-between space-y-4">
                 <div className="w-1/2 flex flex-col gap-[20px]">
                   <h3 className="text-gray-500 font-medium">{stat.title}</h3>
-
                   <span className="text-3xl font-semibold">{stat.value}</span>
                   <span className="text-green-500 text-sm">{stat.change}</span>
                 </div>
@@ -175,8 +169,7 @@ const DashboardOverview = () => {
               {waybillStatus.map((status, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center space-x-2"
-                >
+                  className="flex flex-col items-center space-x-2">
                   <div className="flex items-center gap-[10px]">
                     <div
                       className="w-3 h-3 rounded-full"
@@ -196,14 +189,13 @@ const DashboardOverview = () => {
           <CardHeader>
             <CardTitle>Incidents Status</CardTitle>
           </CardHeader>
-          <CardContent className="flex  gap-[50px] items-center">
+          <CardContent className="flex gap-[50px] items-center">
             <AnimatedPieChart data={incidentStatus} />
             <div className="space-y-4">
               {incidentStatus.map((status, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center space-x-2"
-                >
+                  className="flex flex-col items-center space-x-2">
                   <div className="flex items-center gap-[10px]">
                     <div
                       className="w-3 h-3 rounded-full"
@@ -217,6 +209,25 @@ const DashboardOverview = () => {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-bold mb-4">Payment & Commission</h2>
+
+        <BarChart
+          width={window.innerWidth - 350}
+          height={300}
+          data={data}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="payment" fill="#8884d8" />
+          <Bar dataKey="commission" fill="#82ca9d" />
+        </BarChart>
+        <PaymentStatsCard />
       </div>
     </div>
   );
