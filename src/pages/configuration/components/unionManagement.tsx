@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../../../common/button/button";
+import Button from "@/common/button/button";
 import { ArrowLeft, ArrowRight, Pencil, Trash2 } from "lucide-react";
 
 const gateways = [

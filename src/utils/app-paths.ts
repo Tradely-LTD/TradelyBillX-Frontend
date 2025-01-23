@@ -16,5 +16,6 @@ export const appPaths = {
   history: "/history",
   profile: "/profile",
   configuration: "/configuration",
+  users: "/users",
   getUser: (id = ":id") => `/user/${id}`,
 };

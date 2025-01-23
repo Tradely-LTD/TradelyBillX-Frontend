@@ -17,83 +17,83 @@ import {
 import Button from "../button/button";
 import Input from "../input/input";
 import { appPaths } from "../../utils/app-paths";
+import { useHeader } from "./useHeader";
+
+const menuItems = [
+  {
+    icon: BarChart2,
+    label: "Dashboard",
+    path: "/",
+    description: "Overview of key metrics and performance",
+  },
+  {
+    icon: Settings2,
+    label: "System Configuration",
+    path: appPaths.configuration,
+    description: "Manage system settings and preferences",
+  },
+  {
+    icon: FileText,
+    label: "Waybill",
+    path: "/waybill",
+    hasSubmenu: true,
+    submenuItems: [
+      { label: "Create Waybill", path: "/waybill/create" },
+      { label: "View All Waybills", path: "/waybill/list" },
+      { label: "Pending Waybills", path: "/waybill/pending" },
+    ],
+    description: "Manage shipping documents and tracking",
+  },
+  {
+    icon: DollarSign,
+    label: "Transaction History",
+    path: "/transactions",
+    description: "View and manage financial transactions",
+  },
+  {
+    icon: AlertTriangle,
+    label: "Incident Reporting",
+    path: "/incidents",
+    description: "Report and track delivery incidents",
+  },
+  {
+    icon: Activity,
+    label: "Activity Logs",
+    path: "/users",
+    description: "System and user activity monitoring",
+  },
+  {
+    icon: PieChart,
+    label: "Commission Tracker",
+    path: "/commission",
+    description: "Track and manage delivery commissions",
+  },
+  {
+    icon: Users,
+    label: "User Management",
+    path: "/users",
+    description: "Manage system users and permissions",
+  },
+  {
+    icon: Package,
+    label: "Inventory",
+    path: "/inventory",
+    description: "Track and manage package inventory",
+  },
+  {
+    icon: Truck,
+    label: "Fleet Management",
+    path: "/fleet",
+    description: "Monitor and manage delivery vehicles",
+  },
+];
 
 function Layout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const menuItems = [
-    {
-      icon: BarChart2,
-      label: "Dashboard",
-      path: "/",
-      description: "Overview of key metrics and performance",
-    },
-    {
-      icon: Settings2,
-      label: "System Configuration",
-      path: appPaths.configuration,
-      description: "Manage system settings and preferences",
-    },
-    {
-      icon: FileText,
-      label: "Waybill",
-      path: "/waybill",
-      hasSubmenu: true,
-      submenuItems: [
-        { label: "Create Waybill", path: "/waybill/create" },
-        { label: "View All Waybills", path: "/waybill/list" },
-        { label: "Pending Waybills", path: "/waybill/pending" },
-      ],
-      description: "Manage shipping documents and tracking",
-    },
-    {
-      icon: DollarSign,
-      label: "Transaction History",
-      path: "/transactions",
-      description: "View and manage financial transactions",
-    },
-    {
-      icon: AlertTriangle,
-      label: "Incident Reporting",
-      path: "/incidents",
-      description: "Report and track delivery incidents",
-    },
-    {
-      icon: Activity,
-      label: "Activity Logs",
-      path: "/logs",
-      description: "System and user activity monitoring",
-    },
-    {
-      icon: PieChart,
-      label: "Commission Tracker",
-      path: "/commission",
-      description: "Track and manage delivery commissions",
-    },
-    {
-      icon: Users,
-      label: "User Management",
-      path: "/users",
-      description: "Manage system users and permissions",
-    },
-    {
-      icon: Package,
-      label: "Inventory",
-      path: "/inventory",
-      description: "Track and manage package inventory",
-    },
-    {
-      icon: Truck,
-      label: "Fleet Management",
-      path: "/fleet",
-      description: "Monitor and manage delivery vehicles",
-    },
-  ];
-
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
-
+  const { buttonComponent } = useHeader();
   const handleMenuClick = (item) => {
     if (item.hasSubmenu) {
       setExpandedSubmenu(expandedSubmenu === item.label ? null : item.label);
@@ -210,6 +210,7 @@ function Layout() {
               <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
             </button>
             <Button onClick={() => navigate("/")}>+ New Waybill</Button>
+            {/* {buttonComponent} */}
           </div>
         </header>
 
