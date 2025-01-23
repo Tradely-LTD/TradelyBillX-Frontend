@@ -17,7 +17,6 @@ import {
 import Button from "../button/button";
 import Input from "../input/input";
 import { appPaths } from "../../utils/app-paths";
-import { useHeader } from "./useHeader";
 
 const menuItems = [
   {
@@ -93,7 +92,7 @@ function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
-  const { buttonComponent } = useHeader();
+
   const handleMenuClick = (item) => {
     if (item.hasSubmenu) {
       setExpandedSubmenu(expandedSubmenu === item.label ? null : item.label);
