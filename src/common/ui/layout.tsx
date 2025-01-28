@@ -32,6 +32,12 @@ const menuItems = [
     description: "Manage system settings and preferences",
   },
   {
+    icon: Users,
+    label: "User Management",
+    path: "/users",
+    description: "Manage system users and permissions",
+  },
+  {
     icon: FileText,
     label: "Waybill",
     path: "/waybill",
@@ -58,7 +64,7 @@ const menuItems = [
   {
     icon: Activity,
     label: "Activity Logs",
-    path: "/users",
+    path: "/activity",
     description: "System and user activity monitoring",
   },
   {
@@ -66,12 +72,6 @@ const menuItems = [
     label: "Commission Tracker",
     path: "/commission",
     description: "Track and manage delivery commissions",
-  },
-  {
-    icon: Users,
-    label: "User Management",
-    path: "/users",
-    description: "Manage system users and permissions",
   },
   {
     icon: Package,
@@ -142,7 +142,7 @@ function Layout() {
               >
                 <item.icon className="h-5 w-5" />
                 <span
-                  className={`ml-3 transition-opacity duration-200
+                  className={`ml-3 transition-opacity duration-200 font-[500]
                   ${isSidebarCollapsed ? "opacity-0 hidden" : "opacity-100"}`}
                 >
                   {item.label}
