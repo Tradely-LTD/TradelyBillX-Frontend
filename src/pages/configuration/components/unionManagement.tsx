@@ -99,13 +99,18 @@ function UnionManagement() {
 
       <div className="flex gap-3 justify-between py-3">
         <Button
-          disabled
+          // disabled
           leftIcon={<ArrowLeft color="green" />}
           variant="outlined"
+          className="!text-green-700 !rounded-lg"
         >
           Previous
         </Button>
-        <Button disabled rightIcon={<ArrowRight />} variant="outlined">
+        <Button
+          className="!text-green-700  !rounded-lg"
+          rightIcon={<ArrowRight />}
+          variant="outlined"
+        >
           Next
         </Button>
       </div>

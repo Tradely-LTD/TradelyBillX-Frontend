@@ -105,13 +105,17 @@ const Configuration = () => {
 
         <div className="flex gap-3">
           <Button
-            className="!w-[120px]"
+            className="!w-[120px] h-[40px]"
             variant="outlined"
             leftIcon={<Filter />}
           >
             Filter
           </Button>
-          <Button className="!w-[120px]" variant="outlined" leftIcon={<Sort />}>
+          <Button
+            className="!w-[120px] h-[40px]"
+            variant="outlined"
+            leftIcon={<Sort />}
+          >
             Sort by
           </Button>
         </div>

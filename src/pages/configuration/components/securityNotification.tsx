@@ -9,7 +9,9 @@ import {
   Code,
   Image,
 } from "lucide-react";
-
+import BellIcon from "@/assets/bell.svg";
+import PaswordIcon from "@/assets/password.svg";
+import { Select } from "@radix-ui/themes";
 export default function SecurityNotification() {
   const [settings, setSettings] = useState({
     minPasswordLength: "8",
@@ -30,9 +32,10 @@ export default function SecurityNotification() {
       {/* Password Policy Section */}
       <div className="bg-white flex items-start justify-between rounded-lg p-6 border border-gray-200 ">
         <div className="flex items-center gap-4 mb-6 w-[50%]">
-          <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-            <Lock className="w-6 h-6 text-green-700" />
-          </div>
+          {/* <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"> */}
+          {/* <Lock className="w-6 h-6 text-green-700" /> */}
+          <img src={PaswordIcon} alt="password_icon" />
+          {/* </div> */}
           <div>
             <h2 className="text-xl font-semibold">Password Policy</h2>
             <p className="text-sm text-gray-500">
@@ -53,22 +56,27 @@ export default function SecurityNotification() {
                   Options for setting the minimum number of characters
                 </p>
               </div>
-              <div className="relative">
-                <select
-                  className="block w-[100px] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  onChange={(e) =>
+              <div className="relative ">
+                <Select.Root
+                  onValueChange={(value) =>
                     setSettings((prev) => ({
                       ...prev,
-                      minPasswordLength: e.target.value,
+                      minPasswordLength: value,
                     }))
                   }
-                  value={settings.minPasswordLength}
+                  defaultValue="6"
                 >
-                  <option value="6">6</option>
-                  <option value="8">8</option>
-                  <option value="10">10</option>
-                  <option value="12">12</option>
-                </select>
+                  <Select.Trigger style={{ width: " 80px" }} />
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Label>Length</Select.Label>
+                      <Select.Item value="6">6</Select.Item>
+                      <Select.Item value="8">8</Select.Item>
+                      <Select.Item value="10">10</Select.Item>
+                      <Select.Item value="12">12</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
               </div>
             </div>
             <div>
@@ -113,21 +121,26 @@ export default function SecurityNotification() {
               </p>
             </div>
             <div className="relative">
-              <select
-                className="block w-[100px] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={(e) =>
+              <Select.Root
+                onValueChange={(value) =>
                   setSettings((prev) => ({
                     ...prev,
-                    passwordExpiry: e.target.value,
+                    passwordExpiry: value,
                   }))
                 }
-                value={settings.passwordExpiry}
+                defaultValue="30"
               >
-                <option value="30">30 days</option>
-                <option value="60">60 days</option>
-                <option value="90">90 days</option>
-                <option value="120">120 days</option>
-              </select>
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Group>
+                    <Select.Label>Days</Select.Label>
+                    <Select.Item value="30">30 days</Select.Item>
+                    <Select.Item value="60">60 days</Select.Item>
+                    <Select.Item value="90">90 days</Select.Item>
+                    <Select.Item value="120">120 days</Select.Item>
+                  </Select.Group>
+                </Select.Content>
+              </Select.Root>
             </div>
           </div>
         </div>
@@ -136,9 +149,9 @@ export default function SecurityNotification() {
       {/* Notification Settings Section */}
       <div className="bg-white flex items-start justify-between gap-3 rounded-lg p-6 border border-gray-200 my-3">
         <div className="flex items-center gap-4 mb-6 w-[50%]">
-          <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-            <Bell className="w-6 h-6 text-green-700" />
-          </div>
+          {/* <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center"> */}
+          <img src={BellIcon} alt="bell_icon" />
+          {/* </div> */}
           <div>
             <h2 className="text-xl font-semibold">Notification Settings</h2>
             <p className="text-sm text-gray-500">
