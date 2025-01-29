@@ -17,5 +17,6 @@ export const appPaths = {
   profile: "/profile",
   configuration: "/configuration",
   users: "/users",
+  user: "/user",
   getUser: (id = ":id") => `/user/${id}`,
 };

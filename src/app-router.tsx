@@ -6,6 +6,7 @@ import Login from "./pages/auth/login/login";
 import DashboardOverview from "./pages/dashbaord/DashboardOverView";
 import Configuration from "./pages/configuration/configuration";
 import UserManagement from "./pages/users/user-management";
+import UserForm from "./pages/users/components/user-form";
 
 function AppRouter() {
   return (
@@ -38,6 +39,11 @@ function AppRouter() {
           />
           <Route path={appPaths.configuration} element={<Configuration />} />
           <Route path={appPaths.users} element={<UserManagement />} />
+          <Route path={appPaths.user} element={<UserForm mode="create" />} />
+          <Route
+            path={`${appPaths.user}/:id`}
+            element={<UserForm mode="update" />}
+          />
         </Route>
         {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>

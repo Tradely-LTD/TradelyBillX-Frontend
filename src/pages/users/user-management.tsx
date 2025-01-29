@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "@/common/button/button";
 import { TabButton, TabContainer } from "@/common/tab";
 import { Sort } from "iconsax-react";
@@ -6,82 +6,84 @@ import { ArrowLeft, ArrowRight, Filter, Pencil, Trash2 } from "lucide-react";
 import { Checkbox } from "@radix-ui/themes";
 import Input from "@/common/input/input";
 import StatusIndicator from "@/common/status";
+import { useNavigate } from "react-router-dom";
 
+const users = [
+  {
+    name: "Oliver Liam",
+    role: "Super Admin",
+    email: "oll.liam@gmail.com",
+    union: "Livestock Transport Union",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "William James",
+    role: "Admin",
+    email: "wjames@gmail.com",
+    union: "National Truck",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "Jackson Logan",
+    role: "Admin",
+    email: "jacksonl@gmail.com",
+    union: "Livestock Transport Union",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "Mason Henry",
+    role: "Super Admin",
+    email: "masonhendry@gmail.com",
+    union: "National Truck",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "Benjamin William",
+    role: "Admin",
+    email: "benwilliam@gmail.com",
+    union: "National Truck",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "Mason Lucas",
+    role: "Super Admin",
+    email: "lucasmason@gmail.com",
+    union: "Livestock Transport Union",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "Noah William",
+    role: "User/Agent",
+    email: "noahw@gmail.com",
+    union: "Drivers Union",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "James Oliver",
+    role: "User/Agent",
+    email: "james.oil@gmail.com",
+    union: "Livestock Transport Union",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "David Michael",
+    role: "User/Agent",
+    email: "davidlll@gmail.com",
+    union: "Drivers Union",
+    location: "Abuja, Nigeria",
+  },
+  {
+    name: "Matthew Taylor",
+    role: "Super Admin",
+    email: "mataylor@gmail.com",
+    union: "National Truck",
+    location: "Abuja, Nigeria",
+  },
+];
 const UserManagement = () => {
-  const users = [
-    {
-      name: "Oliver Liam",
-      role: "Super Admin",
-      email: "oll.liam@gmail.com",
-      union: "Livestock Transport Union",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "William James",
-      role: "Admin",
-      email: "wjames@gmail.com",
-      union: "National Truck",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "Jackson Logan",
-      role: "Admin",
-      email: "jacksonl@gmail.com",
-      union: "Livestock Transport Union",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "Mason Henry",
-      role: "Super Admin",
-      email: "masonhendry@gmail.com",
-      union: "National Truck",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "Benjamin William",
-      role: "Admin",
-      email: "benwilliam@gmail.com",
-      union: "National Truck",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "Mason Lucas",
-      role: "Super Admin",
-      email: "lucasmason@gmail.com",
-      union: "Livestock Transport Union",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "Noah William",
-      role: "User/Agent",
-      email: "noahw@gmail.com",
-      union: "Drivers Union",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "James Oliver",
-      role: "User/Agent",
-      email: "james.oil@gmail.com",
-      union: "Livestock Transport Union",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "David Michael",
-      role: "User/Agent",
-      email: "davidlll@gmail.com",
-      union: "Drivers Union",
-      location: "Abuja, Nigeria",
-    },
-    {
-      name: "Matthew Taylor",
-      role: "Super Admin",
-      email: "mataylor@gmail.com",
-      union: "National Truck",
-      location: "Abuja, Nigeria",
-    },
-  ];
+  const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("payment");
+  const [activeTab, setActiveTab] = useState("all");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleSwitchTab = (value: string) => {
@@ -117,15 +119,24 @@ const UserManagement = () => {
           </p>
         </div>
         <div>
-          <Input
-            classNameWrapper="!border-none "
-            className="h-[34px] !bg-[#eff0f2cf] !rounded-[5px]"
-            type="date"
-            label="Date Range"
-          />
+          <Button
+            onClick={() => {
+              navigate("/user");
+            }}
+          >
+            Add User
+          </Button>
         </div>
       </div>
 
+      <div className=" flex justify-end mb-4">
+        <Input
+          classNameWrapper="!border-none "
+          className="h-[34px] !bg-[#eff0f2cf] !rounded-[5px]"
+          type="date"
+          label="Date Range"
+        />
+      </div>
       <div className="flex justify-between mb-4">
         <div className="w-[60%]">
           <TabContainer className=" !w-full">

@@ -214,7 +214,7 @@ function Layout() {
         </header>
 
         {/* Page Content */}
-        <div className="p-6">
+        <div className="p-6 bg-gray-50">
           <Outlet />
         </div>
       </main>

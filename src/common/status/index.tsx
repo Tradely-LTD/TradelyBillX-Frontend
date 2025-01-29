@@ -59,8 +59,7 @@ const StatusPill = styled.div<{
           &::before { background: #0EA4E9; }
         `;
       case "Admin":
-        return;
-        `background: #FEF8E6;
+        return `background: #FEF8E6;
             color: #EAB208;
             &::before { background: #EAB208; }
           `;

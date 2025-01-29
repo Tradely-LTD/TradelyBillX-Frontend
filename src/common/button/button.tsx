@@ -80,7 +80,7 @@ function Button({
         return {
           backgroundColor: "transparent",
           border: "1.5px solid #eeeeee",
-          color: "#64748B",
+          color: "#2C7743",
         };
       case "ghost":
         return {
