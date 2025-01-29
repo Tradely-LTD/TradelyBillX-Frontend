@@ -72,6 +72,7 @@ function Input({
     borderRadius: "6px",
     transition: "all 0.2s ease-in-out",
     backgroundColor: disabled ? "#f3f4f6" : "white",
+    marginBottom: "10px",
   };
 
   const inputStyles = {
@@ -86,6 +87,7 @@ function Input({
     backgroundColor: "transparent",
     cursor: disabled ? "not-allowed" : "text",
     fontWeight: 300,
+    height: "40px",
   };
 
   const iconStyles = {
@@ -113,7 +115,7 @@ function Input({
 
   const labelStyles = {
     display: "block",
-    marginBottom: "0.5rem",
+    marginBottom: "0.2rem",
     fontSize: "0.875rem",
     fontWeight: "500",
     color: "#374151",
