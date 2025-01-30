@@ -1,17 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-export type StatusType = "Admin" | "Super Admin" | "User" | "Agent" | boolean;
+export type StatusType = "Admin" | "Super Admin" | "User" | "Agent" | "Allowed" | "Restricated" | boolean;
 
 interface StatusIndicatorProps {
   status?: StatusType;
   pale?: boolean;
 }
 
-const StatusIndicator: React.FC<StatusIndicatorProps> = ({
-  status = "Admin",
-  pale = false,
-}) => {
+const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status = "Admin", pale = false }) => {
   let displayStatus: Exclude<StatusType, boolean>;
   if (typeof status === "boolean") {
     displayStatus = status ? "Admin" : "User";
@@ -62,6 +59,16 @@ const StatusPill = styled.div<{
         return `background: #FEF8E6;
             color: #EAB208;
             &::before { background: #EAB208; }
+          `;
+      case "Allowed":
+        return `background: #ECF9F6;
+            color: #40C4AA;
+            &::before { background: #40C4AA; }
+          `;
+      case "Restricated":
+        return `background: #FEE7EB;
+            color: #F43F5D;
+            &::before { background: #F43F5D; }
           `;
 
       case "User":

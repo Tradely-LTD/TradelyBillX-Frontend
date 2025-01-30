@@ -20,4 +20,5 @@ export const appPaths = {
   user: '/user',
   getUser: (id = ':id') => `/user/${id}`,
   waybil: '/waybill',
+  location: '/location',
 };
