@@ -7,6 +7,8 @@ import DashboardOverview from "./pages/dashbaord/DashboardOverView";
 import Configuration from "./pages/configuration/configuration";
 import UserManagement from "./pages/users/user-management";
 import UserForm from "./pages/users/components/user-form";
+import LocationManagement from "./pages/location/location-management";
+import LocationForm from "./pages/location/components/location-form";
 
 function AppRouter() {
   return (
@@ -38,12 +40,11 @@ function AppRouter() {
             }
           />
           <Route path={appPaths.configuration} element={<Configuration />} />
+          <Route path={appPaths.location} element={<LocationManagement />} />
+          <Route path={`${appPaths.location}/:id`} element={<LocationForm mode="create" />} />
           <Route path={appPaths.users} element={<UserManagement />} />
           <Route path={appPaths.user} element={<UserForm mode="create" />} />
-          <Route
-            path={`${appPaths.user}/:id`}
-            element={<UserForm mode="update" />}
-          />
+          <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
         </Route>
         {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>
