@@ -1,36 +1,43 @@
 import React, { useState } from 'react';
-import { Select } from '@radix-ui/themes';
 import { ArrowDown } from 'iconsax-react';
 
-interface SelectComponentProps {
-  label?: string;
+interface SelectProps {
+  placeholder?: string;
   value?: string;
-  defaultValue?: string;
-  options: { label: string; value: string }[];
-  onChange: (value: string) => void;
-  className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  name?: string;
   disabled?: boolean;
   required?: boolean;
+  className?: string;
+  classNameWrapper?: string;
   error?: string;
+  label?: string;
   fullWidth?: boolean;
-  placeholder?: string;
+  onBlur?: (e: React.FocusEvent<HTMLSelectElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLSelectElement>) => void;
+  options: Array<{ value: string; label: string }>;
   leftIcon?: React.ReactNode;
+  rest?: any;
 }
 
-const SelectComponent: React.FC<SelectComponentProps> = ({
-  label,
+function Select({
+  placeholder = '',
   value,
-  defaultValue,
-  options,
+  classNameWrapper,
   onChange,
-  className = '',
+  name,
   disabled = false,
   required = false,
+  className = '',
   error,
+  label,
   fullWidth = false,
-  placeholder,
+  onBlur,
+  onFocus,
+  options,
   leftIcon,
-}) => {
+  rest,
+}: SelectProps) {
   const [isFocused, setIsFocused] = useState(false);
 
   const containerStyles = {
@@ -51,7 +58,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     marginBottom: '10px',
   };
 
-  const triggerStyles = {
+  const selectStyles = {
     padding: '0.75rem 1rem',
     paddingLeft: leftIcon ? '2.5rem' : '1rem',
     paddingRight: '2.5rem',
@@ -59,11 +66,12 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     width: '100%',
     border: 'none',
     outline: 'none',
-    borderRadius: '6px',
+    borderRadius: '30px',
     backgroundColor: 'transparent',
     cursor: disabled ? 'not-allowed' : 'pointer',
     fontWeight: 300,
     height: '40px',
+    appearance: 'none' as const,
     color: value ? '#000' : '#64748b',
   };
 
@@ -105,71 +113,57 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     fontWeight: 500,
   };
 
-  const contentStyles = {
-    backgroundColor: 'white',
-    borderRadius: '6px',
-    boxShadow:
-      '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-    maxHeight: '300px',
-    overflow: 'auto',
+  const handleFocus = (e: React.FocusEvent<HTMLSelectElement>) => {
+    setIsFocused(true);
+    onFocus?.(e);
   };
 
-  const itemStyles = {
-    padding: '0.5rem 1rem',
-    cursor: 'pointer',
-    fontSize: '0.875rem',
-    color: '#374151',
-    transition: 'background-color 0.2s',
-    '&:hover': {
-      backgroundColor: '#F3F4F6',
-    },
-    '&[data-highlighted]': {
-      backgroundColor: '#F3F4F6',
-    },
+  const handleBlur = (e: React.FocusEvent<HTMLSelectElement>) => {
+    setIsFocused(false);
+    onBlur?.(e);
   };
 
   return (
-    <div style={containerStyles} className={className}>
+    <div>
       {label && (
         <label style={labelStyles}>
           {label}
           {required && <span style={{ color: '#ef4444' }}> *</span>}
         </label>
       )}
-
-      <div style={selectWrapperStyles}>
-        {leftIcon && <span style={leftIconStyles}>{leftIcon}</span>}
-
-        <Select.Root
-          onValueChange={onChange}
-          value={value}
-          defaultValue={defaultValue}
-          disabled={disabled}>
-          <Select.Trigger
-            style={triggerStyles}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}>
-            <Select.Value placeholder={placeholder || 'Select option'} />
-          </Select.Trigger>
-
-          <Select.Content style={contentStyles} position="popper">
-            <Select.Group>
-              {options.map((option) => (
-                <Select.Item
-                  key={option.value}
-                  value={option.value}
-                  style={itemStyles}>
-                  {option.label}
-                </Select.Item>
-              ))}
-            </Select.Group>
-          </Select.Content>
-        </Select.Root>
+      <div style={containerStyles}>
+        <div style={selectWrapperStyles} className={classNameWrapper}>
+          {leftIcon && <span style={leftIconStyles}>{leftIcon}</span>}
+          <select
+            value={value}
+            onChange={onChange}
+            name={name}
+            disabled={disabled}
+            required={required}
+            className={className}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            style={selectStyles}
+            {...rest}>
+            {placeholder && (
+              <option value="" disabled>
+                {placeholder}
+              </option>
+            )}
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <span style={rightIconStyles}>
+            <ArrowDown size="20" color="#64748b" />
+          </span>
+        </div>
       </div>
-
       {error && <div style={errorStyles}>{error}</div>}
     </div>
   );
-};
+}
 
-export default SelectComponent;
+export default Select;

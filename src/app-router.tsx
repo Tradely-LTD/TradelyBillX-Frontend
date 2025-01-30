@@ -1,12 +1,13 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { appPaths } from "./utils/app-paths";
-import PrivateRoute from "./common/router-helper/private-route";
-import Layout from "./common/ui/layout";
-import Login from "./pages/auth/login/login";
-import DashboardOverview from "./pages/dashbaord/DashboardOverView";
-import Configuration from "./pages/configuration/configuration";
-import UserManagement from "./pages/users/user-management";
-import UserForm from "./pages/users/components/user-form";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { appPaths } from './utils/app-paths';
+import PrivateRoute from './common/router-helper/private-route';
+import Layout from './common/ui/layout';
+import Login from './pages/auth/login/login';
+import DashboardOverview from './pages/dashbaord/DashboardOverView';
+import Configuration from './pages/configuration/configuration';
+import UserManagement from './pages/users/user-management';
+import UserForm from './pages/users/components/user-form';
+import Waybill from './pages/waybill/Waybill';
 
 function AppRouter() {
   return (
@@ -26,11 +27,10 @@ function AppRouter() {
             <PrivateRoute>
               <Layout />
             </PrivateRoute>
-          }
-        >
+          }>
           <Route
             index
-            path={"/"}
+            path={'/'}
             element={
               <PrivateRoute>
                 <DashboardOverview />
@@ -44,6 +44,7 @@ function AppRouter() {
             path={`${appPaths.user}/:id`}
             element={<UserForm mode="update" />}
           />
+          <Route path={appPaths.waybil} element={<Waybill />} />
         </Route>
         {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>
