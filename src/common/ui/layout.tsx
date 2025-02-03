@@ -43,7 +43,7 @@ const menuItems = [
     path: "/waybill",
     hasSubmenu: true,
     submenuItems: [
-      { label: "Create Waybill", path: "/waybill/create" },
+      { label: "Create Waybill", path: "/waybill" },
       { label: "View All Waybills", path: "/waybill/list" },
       { label: "Pending Waybills", path: "/waybill/pending" },
     ],
@@ -102,7 +102,7 @@ function Layout() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-white">
       {/* Sidebar */}
       <aside
         className={`fixed left-0 top-0 h-full bg-white transition-all duration-300 ease-in-out
@@ -176,7 +176,7 @@ function Layout() {
 
       {/* Main Content */}
       <main
-        className={`flex-1 transition-all duration-300 ease-in-out
+        className={`flex-1 transition-all duration-300 ease-in-out bg-white
         ${isSidebarCollapsed ? "ml-16" : "ml-64"}`}
       >
         {/* Top Header */}
@@ -201,13 +201,13 @@ function Layout() {
               <Bell className="h-5 w-5" />
               <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
             </button>
-            <Button onClick={() => navigate("/")}>+ New Waybill</Button>
+
             {/* {buttonComponent} */}
           </div>
         </header>
 
         {/* Page Content */}
-        <div className="p-6 bg-gray-50">
+        <div className="p-6 bg-white">
           <Outlet />
         </div>
       </main>
