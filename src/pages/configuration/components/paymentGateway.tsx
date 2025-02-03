@@ -40,18 +40,10 @@ function PaymentGateway() {
               <th className="w-8 p-4">
                 <input type="checkbox" className="rounded border-gray-300" />
               </th>
-              <th className="text-left p-4 text-gray-600 font-normal">
-                Gateway Selection
-              </th>
-              <th className="text-left p-4 text-gray-600 font-normal">
-                API & Secret Key
-              </th>
-              <th className="text-left p-4 text-gray-600 font-normal">
-                Status
-              </th>
-              <th className="text-left p-4 text-gray-600 font-normal">
-                Action
-              </th>
+              <th className="text-left p-4 text-gray-600 font-normal">Gateway Selection</th>
+              <th className="text-left p-4 text-gray-600 font-normal">API & Secret Key</th>
+              <th className="text-left p-4 text-gray-600 font-normal">Status</th>
+              <th className="text-left p-4 text-gray-600 font-normal">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -67,10 +59,10 @@ function PaymentGateway() {
                         gateway.name === "Stripe"
                           ? "bg-purple-500 text-white"
                           : gateway.name === "Flutterwave"
-                          ? "bg-orange-500 text-white"
-                          : gateway.name === "Paystack"
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-500 text-white"
+                            ? "bg-orange-500 text-white"
+                            : gateway.name === "Paystack"
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-500 text-white"
                       }`}
                     >
                       {gateway.logo}
@@ -78,9 +70,7 @@ function PaymentGateway() {
                     <span className="font-medium">{gateway.name}</span>
                   </div>
                 </td>
-                <td className="p-4 font-mono text-sm text-gray-600">
-                  {gateway.apiKey}
-                </td>
+                <td className="p-4 font-mono text-sm text-gray-600">{gateway.apiKey}</td>
                 <td className="p-4">
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
@@ -93,9 +83,7 @@ function PaymentGateway() {
                       }}
                     />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
-                    <span className="ml-2">
-                      {gateway.status ? "Enable" : "Disable"}
-                    </span>
+                    <span className="ml-2">{gateway.status ? "Enable" : "Disable"}</span>
                   </label>
                 </td>
                 <td className="p-4">

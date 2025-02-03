@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const AnimatedPieChart = ({ data, size = 200 }) => {
   const [animationProgress, setAnimationProgress] = useState(0);
@@ -35,7 +35,8 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
       <svg
         width={size}
         height={size}
-        className="transform transition-transform duration-500 hover:scale-105">
+        className="transform transition-transform duration-500 hover:scale-105"
+      >
         {/* Background circle */}
         <circle
           cx={centerX}
@@ -59,52 +60,30 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
 
           // Calculate segment path
           const startX =
-            centerX +
-            Math.cos((currentStartAngle * Math.PI) / 180) *
-              (radius - strokeWidth);
+            centerX + Math.cos((currentStartAngle * Math.PI) / 180) * (radius - strokeWidth);
           const startY =
-            centerY +
-            Math.sin((currentStartAngle * Math.PI) / 180) *
-              (radius - strokeWidth);
+            centerY + Math.sin((currentStartAngle * Math.PI) / 180) * (radius - strokeWidth);
           const endX =
             centerX +
-            Math.cos(((currentStartAngle + angle) * Math.PI) / 180) *
-              (radius - strokeWidth);
+            Math.cos(((currentStartAngle + angle) * Math.PI) / 180) * (radius - strokeWidth);
           const endY =
             centerY +
-            Math.sin(((currentStartAngle + angle) * Math.PI) / 180) *
-              (radius - strokeWidth);
+            Math.sin(((currentStartAngle + angle) * Math.PI) / 180) * (radius - strokeWidth);
 
           const largeArcFlag = angle > 180 ? 1 : 0;
 
           const pathData = `
-              M ${
-                centerX +
-                innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)
-              } ${
-            centerY +
-            innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)
-          }
+              M ${centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)} ${
+                centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)
+              }
               L ${startX} ${startY}
-              A ${radius - strokeWidth} ${
-            radius - strokeWidth
-          } 0 ${largeArcFlag} 1 ${endX} ${endY}
+              A ${radius - strokeWidth} ${radius - strokeWidth} 0 ${largeArcFlag} 1 ${endX} ${endY}
               L ${
-                centerX +
-                innerRadius *
-                  Math.cos(((currentStartAngle + angle) * Math.PI) / 180)
-              } ${
-            centerY +
-            innerRadius *
-              Math.sin(((currentStartAngle + angle) * Math.PI) / 180)
-          }
+                centerX + innerRadius * Math.cos(((currentStartAngle + angle) * Math.PI) / 180)
+              } ${centerY + innerRadius * Math.sin(((currentStartAngle + angle) * Math.PI) / 180)}
               A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${
-            centerX +
-            innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)
-          } ${
-            centerY +
-            innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)
-          }
+                centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)
+              } ${centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)}
             `;
 
           return (
@@ -114,8 +93,9 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
                 fill={item.color}
                 className="transition-opacity duration-300 hover:opacity-90"
                 style={{
-                  filter: 'drop-shadow(0 1px 2px rgb(0 0 0 / 0.1))',
-                }}>
+                  filter: "drop-shadow(0 1px 2px rgb(0 0 0 / 0.1))",
+                }}
+              >
                 <title>{`${item.status}: ${item.percentage}%`}</title>
               </path>
             </g>

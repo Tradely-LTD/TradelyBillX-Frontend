@@ -1,7 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-export type StatusType = "Admin" | "Super Admin" | "User" | "Agent" | "Allowed" | "Restricated" | boolean;
+export type StatusType =
+  | "Admin"
+  | "Super Admin"
+  | "User"
+  | "Agent"
+  | "Allowed"
+  | "Restricated"
+  | boolean;
 
 interface StatusIndicatorProps {
   status?: StatusType;

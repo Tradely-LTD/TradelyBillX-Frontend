@@ -9,16 +9,7 @@ interface TextProps {
   secondaryColor?: boolean;
 }
 
-const Text = ({
-  children,
-  color,
-  block,
-  h1,
-  h2,
-  h3,
-  style,
-  secondaryColor,
-}: TextProps) => {
+const Text = ({ children, color, block, h1, h2, h3, style, secondaryColor }: TextProps) => {
   const baseStyle = {
     color: color ? color : secondaryColor ? "#64748B " : "#15191E",
     fontSize: h1 ? "24px" : h2 ? "18px" : h3 ? "16px" : "14px",

@@ -1,5 +1,5 @@
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 import {
   Menu,
   Bell,
@@ -13,77 +13,77 @@ import {
   Users,
   Package,
   Truck,
-} from 'lucide-react';
-import Button from '../button/button';
-import Input from '../input/input';
-import { appPaths } from '../../utils/app-paths';
+} from "lucide-react";
+import Button from "../button/button";
+import Input from "../input/input";
+import { appPaths } from "../../utils/app-paths";
 
 const menuItems = [
   {
     icon: BarChart2,
-    label: 'Dashboard',
-    path: '/',
-    description: 'Overview of key metrics and performance',
+    label: "Dashboard",
+    path: "/",
+    description: "Overview of key metrics and performance",
   },
   {
     icon: Settings2,
-    label: 'System Configuration',
+    label: "System Configuration",
     path: appPaths.configuration,
-    description: 'Manage system settings and preferences',
+    description: "Manage system settings and preferences",
   },
   {
     icon: Users,
-    label: 'User Management',
-    path: '/users',
-    description: 'Manage system users and permissions',
+    label: "User Management",
+    path: "/users",
+    description: "Manage system users and permissions",
   },
   {
     icon: FileText,
-    label: 'Waybill',
-    path: '/waybill',
+    label: "Waybill",
+    path: "/waybill",
     hasSubmenu: true,
     submenuItems: [
-      { label: 'Create Waybill', path: '/waybill' },
-      { label: 'View All Waybills', path: '/waybill/list' },
-      { label: 'Pending Waybills', path: '/waybill/pending' },
+      { label: "Create Waybill", path: "/waybill" },
+      { label: "View All Waybills", path: "/waybill/list" },
+      { label: "Pending Waybills", path: "/waybill/pending" },
     ],
-    description: 'Manage shipping documents and tracking',
+    description: "Manage shipping documents and tracking",
   },
   {
     icon: DollarSign,
-    label: 'Transaction History',
-    path: '/transactions',
-    description: 'View and manage financial transactions',
+    label: "Transaction History",
+    path: "/transactions",
+    description: "View and manage financial transactions",
   },
   {
     icon: AlertTriangle,
-    label: 'Incident Reporting',
-    path: '/incidents',
-    description: 'Report and track delivery incidents',
+    label: "Incident Reporting",
+    path: "/incidents",
+    description: "Report and track delivery incidents",
   },
   {
     icon: Activity,
-    label: 'Activity Logs',
-    path: '/activity',
-    description: 'System and user activity monitoring',
+    label: "Activity Logs",
+    path: "/activity",
+    description: "System and user activity monitoring",
   },
   {
     icon: PieChart,
-    label: 'Commission Tracker',
-    path: '/commission',
-    description: 'Track and manage delivery commissions',
+    label: "Commission Tracker",
+    path: "/commission",
+    description: "Track and manage delivery commissions",
   },
   {
     icon: Package,
-    label: 'Inventory',
-    path: '/inventory',
-    description: 'Track and manage package inventory',
+    label: "Inventory",
+    path: "/inventory",
+    description: "Track and manage package inventory",
   },
   {
     icon: Truck,
-    label: 'Fleet Management',
-    path: '/fleet',
-    description: 'Monitor and manage delivery vehicles',
+    label: "Fleet Management",
+    path: "/fleet",
+    description: "Monitor and manage delivery vehicles",
   },
 ];
 
@@ -106,23 +106,22 @@ function Layout() {
       {/* Sidebar */}
       <aside
         className={`fixed left-0 top-0 h-full bg-white transition-all duration-300 ease-in-out
-        ${isSidebarCollapsed ? 'w-16' : 'w-64'} border-r border-gray-200`}>
+        ${isSidebarCollapsed ? "w-16" : "w-64"} border-r border-gray-200`}
+      >
         {/* Logo */}
         <div className="flex items-center h-16 px-4 border-b border-gray-200">
           <img src="../vite.svg" alt="Logo" className="h-8 w-8" />
           <span
             className={`ml-2 font-semibold text-xl transition-opacity duration-200
-            ${isSidebarCollapsed ? 'opacity-0' : 'opacity-100'}`}>
+            ${isSidebarCollapsed ? "opacity-0" : "opacity-100"}`}
+          >
             AUFCDN
           </span>
         </div>
 
         {/* Navigation Menu */}
         <nav className="p-2">
-          <p
-            className={`px-4 py-2 text-sm text-gray-500 ${
-              isSidebarCollapsed ? 'hidden' : ''
-            }`}>
+          <p className={`px-4 py-2 text-sm text-gray-500 ${isSidebarCollapsed ? "hidden" : ""}`}>
             Main Menu
           </p>
           {menuItems.map((item, index) => (
@@ -132,43 +131,44 @@ function Layout() {
                 className={`flex items-center px-4 py-2 my-1 rounded-lg cursor-pointer
                   ${
                     location.pathname === item.path
-                      ? 'bg-green-50 text-green-700'
-                      : 'hover:bg-gray-100'
+                      ? "bg-green-50 text-green-700"
+                      : "hover:bg-gray-100"
                   }
-                  transition-all duration-200 ease-in-out`}>
+                  transition-all duration-200 ease-in-out`}
+              >
                 <item.icon className="h-5 w-5" />
                 <span
                   className={`ml-3 transition-opacity duration-200 font-[500]
-                  ${isSidebarCollapsed ? 'opacity-0 hidden' : 'opacity-100'}`}>
+                  ${isSidebarCollapsed ? "opacity-0 hidden" : "opacity-100"}`}
+                >
                   {item.label}
                 </span>
                 {item.hasSubmenu && !isSidebarCollapsed && (
                   <Menu
                     className={`h-4 w-4 ml-auto transform transition-transform duration-200 
-                    ${expandedSubmenu === item.label ? 'rotate-180' : ''}`}
+                    ${expandedSubmenu === item.label ? "rotate-180" : ""}`}
                   />
                 )}
               </div>
               {/* Submenu */}
-              {item.hasSubmenu &&
-                expandedSubmenu === item.label &&
-                !isSidebarCollapsed && (
-                  <div className="ml-8 mt-1">
-                    {item.submenuItems.map((subItem, subIndex) => (
-                      <div
-                        key={subIndex}
-                        onClick={() => navigate(subItem.path)}
-                        className={`px-4 py-2 text-sm rounded-lg cursor-pointer
+              {item.hasSubmenu && expandedSubmenu === item.label && !isSidebarCollapsed && (
+                <div className="ml-8 mt-1">
+                  {item.submenuItems.map((subItem, subIndex) => (
+                    <div
+                      key={subIndex}
+                      onClick={() => navigate(subItem.path)}
+                      className={`px-4 py-2 text-sm rounded-lg cursor-pointer
                         ${
                           location.pathname === subItem.path
-                            ? 'bg-green-50 text-green-700'
-                            : 'hover:bg-gray-100'
-                        }`}>
-                        {subItem.label}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                            ? "bg-green-50 text-green-700"
+                            : "hover:bg-gray-100"
+                        }`}
+                    >
+                      {subItem.label}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </nav>
@@ -177,18 +177,19 @@ function Layout() {
       {/* Main Content */}
       <main
         className={`flex-1 transition-all duration-300 ease-in-out bg-white
-        ${isSidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
+        ${isSidebarCollapsed ? "ml-16" : "ml-64"}`}
+      >
         {/* Top Header */}
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
           <div className="flex items-center">
             <button
               onClick={() => setIsSidebarCollapsed((prev) => !prev)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 z-50">
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 z-50"
+            >
               <Menu className="h-5 w-5" />
             </button>
             <h1 className="ml-4 text-xl font-semibold">
-              {menuItems.find((item) => item.path === location.pathname)
-                ?.label || 'Dashboard'}
+              {menuItems.find((item) => item.path === location.pathname)?.label || "Dashboard"}
             </h1>
           </div>
 

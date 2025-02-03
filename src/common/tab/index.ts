@@ -16,8 +16,7 @@ export const TabButton = styled.div<{ active: boolean }>`
   width: 100%;
   height: 30px;
   min-width: 100px;
-  box-shadow: ${(props) =>
-    props.active ? "rgba(0, 0, 0, 0.1) 0px 4px 12px" : ""};
+  box-shadow: ${(props) => (props.active ? "rgba(0, 0, 0, 0.1) 0px 4px 12px" : "")};
   background: ${(props) => (props.active ? "#fff" : "#f0f4f9")};
   border-radius: 30px;
   color: ${(props) => (props.active ? "#000" : "#4F5D75")};

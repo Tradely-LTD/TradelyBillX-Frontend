@@ -113,10 +113,7 @@ const UserManagement = () => {
       <div className="flex justify-between mb-5">
         <div>
           <h1 className="text-xl font-bold mb-2">User & Role Management</h1>
-          <p>
-            Allows the Super Admin to manage all users and assign agent roles to
-            users.
-          </p>
+          <p>Allows the Super Admin to manage all users and assign agent roles to users.</p>
         </div>
         <div>
           <Button
@@ -140,22 +137,13 @@ const UserManagement = () => {
       <div className="flex justify-between mb-4">
         <div className="w-[60%]">
           <TabContainer className=" !w-full">
-            <TabButton
-              onClick={() => handleSwitchTab("all")}
-              active={activeTab === "all"}
-            >
+            <TabButton onClick={() => handleSwitchTab("all")} active={activeTab === "all"}>
               All
             </TabButton>
-            <TabButton
-              onClick={() => handleSwitchTab("user")}
-              active={activeTab === "user"}
-            >
+            <TabButton onClick={() => handleSwitchTab("user")} active={activeTab === "user"}>
               User/Agent
             </TabButton>
-            <TabButton
-              onClick={() => handleSwitchTab("admin")}
-              active={activeTab === "admin"}
-            >
+            <TabButton onClick={() => handleSwitchTab("admin")} active={activeTab === "admin"}>
               Admin
             </TabButton>
             <TabButton
@@ -168,18 +156,10 @@ const UserManagement = () => {
         </div>
 
         <div className="flex gap-3">
-          <Button
-            className="!w-[120px] h-[40px]"
-            variant="outlined"
-            leftIcon={<Filter />}
-          >
+          <Button className="!w-[120px] h-[40px]" variant="outlined" leftIcon={<Filter />}>
             Filter
           </Button>
-          <Button
-            className="!w-[120px] h-[40px]"
-            variant="outlined"
-            leftIcon={<Sort />}
-          >
+          <Button className="!w-[120px] h-[40px]" variant="outlined" leftIcon={<Sort />}>
             Sort by
           </Button>
         </div>
@@ -211,9 +191,7 @@ const UserManagement = () => {
                 <div className="flex items-center gap-2">
                   <Checkbox
                     checked={selectedItems.includes(user.email)}
-                    onCheckedChange={() =>
-                      handleIndividualSelection(user.email)
-                    }
+                    onCheckedChange={() => handleIndividualSelection(user.email)}
                     id={`user-${index}`}
                   />
                   <label htmlFor={`user-${index}`}>{user.name}</label>

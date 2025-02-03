@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Select } from '@radix-ui/themes';
-import { ArrowDown } from 'iconsax-react';
+import React, { useState } from "react";
+import { Select } from "@radix-ui/themes";
+import { ArrowDown } from "iconsax-react";
 
 interface SelectComponentProps {
   label?: string;
@@ -23,7 +23,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   defaultValue,
   options,
   onChange,
-  className = '',
+  className = "",
   disabled = false,
   required = false,
   error,
@@ -34,97 +34,96 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   const [isFocused, setIsFocused] = useState(false);
 
   const containerStyles = {
-    position: 'relative' as const,
-    width: fullWidth ? '100%' : 'auto',
+    position: "relative" as const,
+    width: fullWidth ? "100%" : "auto",
   };
 
   const selectWrapperStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    position: 'relative' as const,
-    width: '100%',
-    border: '1px solid',
-    borderColor: error ? '#ef4444' : isFocused ? '#2C7743' : '#CBD5E1',
-    borderRadius: '6px',
-    transition: 'all 0.2s ease-in-out',
-    backgroundColor: disabled ? '#f3f4f6' : 'white',
-    marginBottom: '10px',
+    display: "flex",
+    alignItems: "center",
+    position: "relative" as const,
+    width: "100%",
+    border: "1px solid",
+    borderColor: error ? "#ef4444" : isFocused ? "#2C7743" : "#CBD5E1",
+    borderRadius: "6px",
+    transition: "all 0.2s ease-in-out",
+    backgroundColor: disabled ? "#f3f4f6" : "white",
+    marginBottom: "10px",
   };
 
   const triggerStyles = {
-    padding: '0.75rem 1rem',
-    paddingLeft: leftIcon ? '2.5rem' : '1rem',
-    paddingRight: '2.5rem',
-    fontSize: '1rem',
-    width: '100%',
-    border: 'none',
-    outline: 'none',
-    borderRadius: '6px',
-    backgroundColor: 'transparent',
-    cursor: disabled ? 'not-allowed' : 'pointer',
+    padding: "0.75rem 1rem",
+    paddingLeft: leftIcon ? "2.5rem" : "1rem",
+    paddingRight: "2.5rem",
+    fontSize: "1rem",
+    width: "100%",
+    border: "none",
+    outline: "none",
+    borderRadius: "6px",
+    backgroundColor: "transparent",
+    cursor: disabled ? "not-allowed" : "pointer",
     fontWeight: 300,
-    height: '40px',
-    color: value ? '#000' : '#64748b',
+    height: "40px",
+    color: value ? "#000" : "#64748b",
   };
 
   const iconStyles = {
-    position: 'absolute' as const,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    color: '#64748b',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '1.5rem',
-    height: '1.5rem',
+    position: "absolute" as const,
+    top: "50%",
+    transform: "translateY(-50%)",
+    color: "#64748b",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "1.5rem",
+    height: "1.5rem",
   };
 
   const leftIconStyles = {
     ...iconStyles,
-    left: '0.75rem',
+    left: "0.75rem",
   };
 
   const rightIconStyles = {
     ...iconStyles,
-    right: '0.75rem',
-    pointerEvents: 'none',
+    right: "0.75rem",
+    pointerEvents: "none",
   };
 
   const labelStyles = {
-    display: 'block',
-    marginBottom: '0.2rem',
-    fontSize: '0.875rem',
-    fontWeight: '500',
-    color: '#374151',
+    display: "block",
+    marginBottom: "0.2rem",
+    fontSize: "0.875rem",
+    fontWeight: "500",
+    color: "#374151",
   };
 
   const errorStyles = {
-    fontSize: '0.75rem',
-    color: '#ef4444',
-    marginTop: '0.25rem',
+    fontSize: "0.75rem",
+    color: "#ef4444",
+    marginTop: "0.25rem",
     fontWeight: 500,
   };
 
   const contentStyles = {
-    backgroundColor: 'white',
-    borderRadius: '6px',
-    boxShadow:
-      '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-    maxHeight: '300px',
-    overflow: 'auto',
+    backgroundColor: "white",
+    borderRadius: "6px",
+    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+    maxHeight: "300px",
+    overflow: "auto",
   };
 
   const itemStyles = {
-    padding: '0.5rem 1rem',
-    cursor: 'pointer',
-    fontSize: '0.875rem',
-    color: '#374151',
-    transition: 'background-color 0.2s',
-    '&:hover': {
-      backgroundColor: '#F3F4F6',
+    padding: "0.5rem 1rem",
+    cursor: "pointer",
+    fontSize: "0.875rem",
+    color: "#374151",
+    transition: "background-color 0.2s",
+    "&:hover": {
+      backgroundColor: "#F3F4F6",
     },
-    '&[data-highlighted]': {
-      backgroundColor: '#F3F4F6',
+    "&[data-highlighted]": {
+      backgroundColor: "#F3F4F6",
     },
   };
 
@@ -133,7 +132,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
       {label && (
         <label style={labelStyles}>
           {label}
-          {required && <span style={{ color: '#ef4444' }}> *</span>}
+          {required && <span style={{ color: "#ef4444" }}> *</span>}
         </label>
       )}
 
@@ -144,21 +143,20 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
           onValueChange={onChange}
           value={value}
           defaultValue={defaultValue}
-          disabled={disabled}>
+          disabled={disabled}
+        >
           <Select.Trigger
             style={triggerStyles}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}>
-            <Select.Value placeholder={placeholder || 'Select option'} />
+            onBlur={() => setIsFocused(false)}
+          >
+            <Select.Value placeholder={placeholder || "Select option"} />
           </Select.Trigger>
 
           <Select.Content style={contentStyles} position="popper">
             <Select.Group>
               {options.map((option) => (
-                <Select.Item
-                  key={option.value}
-                  value={option.value}
-                  style={itemStyles}>
+                <Select.Item key={option.value} value={option.value} style={itemStyles}>
                   {option.label}
                 </Select.Item>
               ))}

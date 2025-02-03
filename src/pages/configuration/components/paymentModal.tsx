@@ -38,9 +38,7 @@ export default function PaymentGatewayModal({ onClose, isOpen }: ModalProps) {
                     <img src={Money} width={40} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">
-                      Add Payment Gateway
-                    </h3>
+                    <h3 className="font-semibold text-lg">Add Payment Gateway</h3>
                     <p className="text-gray-500 text-sm">
                       Setup payment gateway for available payment
                     </p>
@@ -51,15 +49,11 @@ export default function PaymentGatewayModal({ onClose, isOpen }: ModalProps) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Gateway Selection */}
                   <div>
-                    <label className="font-medium mb-2 block">
-                      Gateway Selection
-                    </label>
+                    <label className="font-medium mb-2 block">Gateway Selection</label>
                     <div className="relative">
                       <select
                         value={formData.gateway}
-                        onChange={(e) =>
-                          setFormData({ ...formData, gateway: e.target.value })
-                        }
+                        onChange={(e) => setFormData({ ...formData, gateway: e.target.value })}
                         className="w-full px-2 py-2.5 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-500"
                       >
                         <option value="" disabled>
@@ -74,15 +68,11 @@ export default function PaymentGatewayModal({ onClose, isOpen }: ModalProps) {
 
                   {/* API Key */}
                   <div>
-                    <label className="font-medium mb-1 block">
-                      API & Secret Key
-                    </label>
+                    <label className="font-medium mb-1 block">API & Secret Key</label>
                     <input
                       type="text"
                       value={formData.apiKey}
-                      onChange={(e) =>
-                        setFormData({ ...formData, apiKey: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, apiKey: e.target.value })}
                       placeholder="Type API or secret key"
                       className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
@@ -90,9 +80,7 @@ export default function PaymentGatewayModal({ onClose, isOpen }: ModalProps) {
 
                   {/* Enable/Disable Toggle */}
                   <div className="flex items-center justify-between">
-                    <label className="font-medium">
-                      Enable or Disable Payment Gateway
-                    </label>
+                    <label className="font-medium">Enable or Disable Payment Gateway</label>
                     <button
                       type="button"
                       onClick={() =>
