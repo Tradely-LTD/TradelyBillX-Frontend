@@ -54,11 +54,7 @@ function UserForm({ mode, userId }: Props) {
             <Input label="FirstName" />
             <Input label="Last Name" />
           </div>
-          <Input
-            type="email"
-            placeholder="Type email address"
-            label="Last Name"
-          />
+          <Input type="email" placeholder="Type email address" label="Last Name" />
 
           <Input label="Phone" />
 
@@ -102,10 +98,7 @@ function UserForm({ mode, userId }: Props) {
       </div>
       <div className="flex justify-between items-center gap-3 ">
         <div>
-          <Button
-            className="!w-[140px] border !border-[red] !text-[red]"
-            variant="outlined"
-          >
+          <Button className="!w-[140px] border !border-[red] !text-[red]" variant="outlined">
             Clear
           </Button>
         </div>

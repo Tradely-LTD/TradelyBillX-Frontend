@@ -121,11 +121,7 @@ function Layout() {
 
         {/* Navigation Menu */}
         <nav className="p-2">
-          <p
-            className={`px-4 py-2 text-sm text-gray-500 ${
-              isSidebarCollapsed ? "hidden" : ""
-            }`}
-          >
+          <p className={`px-4 py-2 text-sm text-gray-500 ${isSidebarCollapsed ? "hidden" : ""}`}>
             Main Menu
           </p>
           {menuItems.map((item, index) => (
@@ -155,26 +151,24 @@ function Layout() {
                 )}
               </div>
               {/* Submenu */}
-              {item.hasSubmenu &&
-                expandedSubmenu === item.label &&
-                !isSidebarCollapsed && (
-                  <div className="ml-8 mt-1">
-                    {item.submenuItems.map((subItem, subIndex) => (
-                      <div
-                        key={subIndex}
-                        onClick={() => navigate(subItem.path)}
-                        className={`px-4 py-2 text-sm rounded-lg cursor-pointer
+              {item.hasSubmenu && expandedSubmenu === item.label && !isSidebarCollapsed && (
+                <div className="ml-8 mt-1">
+                  {item.submenuItems.map((subItem, subIndex) => (
+                    <div
+                      key={subIndex}
+                      onClick={() => navigate(subItem.path)}
+                      className={`px-4 py-2 text-sm rounded-lg cursor-pointer
                         ${
                           location.pathname === subItem.path
                             ? "bg-green-50 text-green-700"
                             : "hover:bg-gray-100"
                         }`}
-                      >
-                        {subItem.label}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                    >
+                      {subItem.label}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </nav>
@@ -195,8 +189,7 @@ function Layout() {
               <Menu className="h-5 w-5" />
             </button>
             <h1 className="ml-4 text-xl font-semibold">
-              {menuItems.find((item) => item.path === location.pathname)
-                ?.label || "Dashboard"}
+              {menuItems.find((item) => item.path === location.pathname)?.label || "Dashboard"}
             </h1>
           </div>
 

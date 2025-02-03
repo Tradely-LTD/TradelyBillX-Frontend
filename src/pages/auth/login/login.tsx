@@ -40,11 +40,7 @@ const LoginPage = () => {
                 <Input label="Email" type="email" placeholder="Type Email" />
               </div>
               <div className="my-3">
-                <Input
-                  label="Password"
-                  type="password"
-                  placeholder="Password"
-                />
+                <Input label="Password" type="password" placeholder="Password" />
               </div>
             </div>
             <div className="flex items-center justify-between mb-6">
@@ -56,17 +52,11 @@ const LoginPage = () => {
                   onChange={(e) => setRememberMe(e.target.checked)}
                   className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                 />
-                <label
-                  htmlFor="remember"
-                  className="ml-2 text-sm text-gray-500"
-                >
+                <label htmlFor="remember" className="ml-2 text-sm text-gray-500">
                   Remember me
                 </label>
               </div>
-              <a
-                href="#"
-                className="text-sm text-green-700 hover:text-green-800"
-              >
+              <a href="#" className="text-sm text-green-700 hover:text-green-800">
                 Forgot Password
               </a>
             </div>

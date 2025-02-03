@@ -39,13 +39,9 @@ const Configuration = () => {
         return (
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-2xl font-semibold">
-                {" "}
-                Payment Gateway Setup
-              </div>
+              <div className="text-2xl font-semibold"> Payment Gateway Setup</div>
               <div className="text-[#64748B]">
-                You can set up payment gateways that are enabled for agents to
-                use for transactions.
+                You can set up payment gateways that are enabled for agents to use for transactions.
               </div>
             </div>
             <Button onClick={handleModal}>Add Payment</Button>
@@ -54,12 +50,8 @@ const Configuration = () => {
       case "security":
         return (
           <>
-            <div className="text-2xl font-semibold">
-              Security & Notification Settings
-            </div>
-            <div className="text-[#64748B]">
-              Security & Notification Settings
-            </div>
+            <div className="text-2xl font-semibold">Security & Notification Settings</div>
+            <div className="text-[#64748B]">Security & Notification Settings</div>
           </>
         );
       case "union":
@@ -82,10 +74,7 @@ const Configuration = () => {
       <div className="my-4 flex  items-center justify-between">
         <div className="w-[100%]">
           <TabContainer style={{ width: "70%" }}>
-            <TabButton
-              onClick={() => handleSwitchTab("payment")}
-              active={activeTab === "payment"}
-            >
+            <TabButton onClick={() => handleSwitchTab("payment")} active={activeTab === "payment"}>
               Payment Gateway
             </TabButton>
             <TabButton
@@ -94,28 +83,17 @@ const Configuration = () => {
             >
               Security & Notification
             </TabButton>
-            <TabButton
-              onClick={() => handleSwitchTab("union")}
-              active={activeTab === "union"}
-            >
+            <TabButton onClick={() => handleSwitchTab("union")} active={activeTab === "union"}>
               Union Management
             </TabButton>
           </TabContainer>
         </div>
 
         <div className="flex gap-3">
-          <Button
-            className="!w-[120px] h-[40px]"
-            variant="outlined"
-            leftIcon={<Filter />}
-          >
+          <Button className="!w-[120px] h-[40px]" variant="outlined" leftIcon={<Filter />}>
             Filter
           </Button>
-          <Button
-            className="!w-[120px] h-[40px]"
-            variant="outlined"
-            leftIcon={<Sort />}
-          >
+          <Button className="!w-[120px] h-[40px]" variant="outlined" leftIcon={<Sort />}>
             Sort by
           </Button>
         </div>

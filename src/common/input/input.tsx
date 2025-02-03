@@ -2,15 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeSlash } from "iconsax-react"; // Import from iconsax
 
 interface InputProps {
-  type?:
-    | "text"
-    | "password"
-    | "email"
-    | "number"
-    | "tel"
-    | "url"
-    | "search"
-    | "date";
+  type?: "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "date";
   placeholder?: string;
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -154,9 +146,7 @@ function Input({
         <div style={inputWrapperStyles} className={classNameWrapper}>
           {leftIcon && <span style={leftIconStyles}>{leftIcon}</span>}
           <input
-            type={
-              type === "password" ? (showPassword ? "text" : "password") : type
-            }
+            type={type === "password" ? (showPassword ? "text" : "password") : type}
             placeholder={placeholder}
             value={value}
             onChange={onChange}

@@ -57,7 +57,10 @@ const LocationManagement = () => {
           <Text block h1>
             Location Management
           </Text>
-          <Text secondaryColor>Allows the Super Admin to restrict or allow waybill generation for specific locations (State, LGA, City/Town).</Text>
+          <Text secondaryColor>
+            Allows the Super Admin to restrict or allow waybill generation for specific locations
+            (State, LGA, City/Town).
+          </Text>
         </div>
         <div>
           <Button
@@ -71,7 +74,12 @@ const LocationManagement = () => {
       </div>
 
       <div className=" flex justify-end mb-4">
-        <Input classNameWrapper="!border-none " className="h-[34px] !bg-[#eff0f2cf] !rounded-[5px]" type="date" label="Date Range" />
+        <Input
+          classNameWrapper="!border-none "
+          className="h-[34px] !bg-[#eff0f2cf] !rounded-[5px]"
+          type="date"
+          label="Date Range"
+        />
       </div>
       <div className="flex justify-between mb-4">
         <div className="w-[60%]">
@@ -82,7 +90,10 @@ const LocationManagement = () => {
             <TabButton onClick={() => handleSwitchTab("allowed")} active={activeTab === "allowed"}>
               Allow
             </TabButton>
-            <TabButton onClick={() => handleSwitchTab("restricated")} active={activeTab === "restricated"}>
+            <TabButton
+              onClick={() => handleSwitchTab("restricated")}
+              active={activeTab === "restricated"}
+            >
               Restricated
             </TabButton>
           </TabContainer>
@@ -102,7 +113,11 @@ const LocationManagement = () => {
           <tr className=" text-left">
             <th className="py-2 px-4 border-b ">
               <div className="flex items-center gap-2">
-                <Checkbox checked={selectedItems.length === locations.length} onCheckedChange={handleBulkSelection} id="select-all" />
+                <Checkbox
+                  checked={selectedItems.length === locations.length}
+                  onCheckedChange={handleBulkSelection}
+                  id="select-all"
+                />
                 <label htmlFor="select-all">State</label>
               </div>
             </th>
@@ -155,7 +170,11 @@ const LocationManagement = () => {
         >
           Previous
         </Button>
-        <Button className="!text-green-700  !rounded-lg" rightIcon={<ArrowRight />} variant="outlined">
+        <Button
+          className="!text-green-700  !rounded-lg"
+          rightIcon={<ArrowRight />}
+          variant="outlined"
+        >
           Next
         </Button>
       </div>

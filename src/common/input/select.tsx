@@ -32,11 +32,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         </label>
       )}
 
-      <Select.Root
-        onValueChange={onChange}
-        value={value}
-        defaultValue={defaultValue}
-      >
+      <Select.Root onValueChange={onChange} value={value} defaultValue={defaultValue}>
         <Select.Trigger style={{ width: "80px", ...triggerStyle }} />
         <Select.Content>
           <Select.Group>
