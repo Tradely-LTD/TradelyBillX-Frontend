@@ -11,11 +11,13 @@ import LocationManagement from './pages/location/location-management';
 import LocationForm from './pages/location/components/location-form';
 
 import Waybill from './pages/waybill/Waybill';
+import Register from './pages/auth/register/register';
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={appPaths.login} element={<Login />} />
+      <Route path={appPaths.login} element={<Login />} />
+      <Route path={appPaths.register} element={<Register />} />
         {/* 
         <Route path={appPaths.register} element={<Registration />} />
         <Route path={appPaths.forgotPassword} element={<ResetPassword />} />
