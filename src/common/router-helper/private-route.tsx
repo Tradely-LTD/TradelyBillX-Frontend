@@ -1,9 +1,9 @@
+import { useUserSlice } from "@/pages/auth/authSlice";
 import { Fragment, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
 function PrivateRoute({ children }: { children: ReactNode }) {
-  //   const { isAuthenticated } = useUserSlice();
-  const isAuthenticated = true;
+  const { isAuthenticated } = useUserSlice();
   return <Fragment>{isAuthenticated ? children : <Navigate to="/login" />}</Fragment>;
 }
 

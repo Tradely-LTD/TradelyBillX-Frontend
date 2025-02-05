@@ -1,18 +1,45 @@
-// LoginPage.jsx
-import { useState } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
 import Input from "../../../common/input/input";
 import Button from "../../../common/button/button";
 import Logo from "../../../common/logo/logo";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../auth.api";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+const schema = yup.object().shape({
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Password is required"),
+  email: yup.string().email("Invalid email address").required("Email is required"),
+});
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log("Login submitted:");
+  const [handleLogin, { isLoading, isSuccess }] = useLoginMutation();
+
+  const onSubmit = async (data: any) => {
+    await handleLogin({ email: data.email, password: data.password }).unwrap();
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/");
+    }
+  }, [isSuccess]);
 
   return (
     <Container>
@@ -34,15 +61,37 @@ const LoginPage = () => {
             <p className="text-gray-500">Please log in to your account</p>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <div>
-                <Input label="Email" type="email" placeholder="Type Email" />
+                <Input
+                  label="Email"
+                  type="text"
+                  placeholder="Email Address"
+                  {...register("email")}
+                  error={errors.email?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const emailValue = e.target.value.toLowerCase();
+                    setValue("email", emailValue);
+                    clearErrors("email");
+                  }}
+                />
               </div>
               <div className="my-3">
-                <Input label="Password" type="password" placeholder="Password" />
+                <Input
+                  label="Password"
+                  type="password"
+                  placeholder="Password"
+                  {...register("password", { required: "Password is required" })}
+                  error={errors.password?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("password", e.target.value);
+                    clearErrors("password");
+                  }}
+                />
               </div>
             </div>
+
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
                 <input
@@ -61,16 +110,16 @@ const LoginPage = () => {
               </a>
             </div>
 
-            <Button fullWidth type="submit">
-              Login
+            <Button loading={isLoading} fullWidth type="submit" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
 
           <p className="text-center mt-8 text-gray-500">
             Don't have an account yet?{" "}
-            <a href="#" className="text-green-700 hover:text-green-800">
+            <Link to="/register" className="text-green-700 hover:text-green-800">
               Create an Account
-            </a>
+            </Link>
           </p>
         </div>
       </div>
