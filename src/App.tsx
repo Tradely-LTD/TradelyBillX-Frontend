@@ -4,7 +4,8 @@ import "./App.css";
 import { persistor, store } from "./store/store";
 import { Provider } from "react-redux";
 import { ErrorBoundary } from "./common/ui/error-boundary";
-
+import { ToastContainer } from "react-toastify";
+// window.global = window;
 function App() {
   return (
     <>
@@ -12,6 +13,7 @@ function App() {
         <Provider store={store}>
           <ErrorBoundary>
             <AppRouter />
+            <ToastContainer />
           </ErrorBoundary>
         </Provider>
       </PersistGate>

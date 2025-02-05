@@ -1,49 +1,77 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { useState, ChangeEvent, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup'; // Import yup for validation
-import Input from "@/common/input/input"; // Assuming your Input component accepts an 'error' prop
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import Input from "@/common/input/input";
 import Button from "@/common/button/button";
 import Logo from "@/common/logo/logo";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../auth.api";
 
-// Define the validation schema using Yup
 const schema = yup.object().shape({
   firstName: yup.string().min(2, "First name is required").required("First name is required"),
   lastName: yup.string().min(2, "Last name is required").required("Last name is required"),
   email: yup.string().email("Invalid email address").required("Email is required"),
-  phoneNumber: yup.string().min(10, "Phone number is required").required("Phone number is required"),
+  phoneNumber: yup
+    .string()
+    .min(10, "Phone number is required")
+    .required("Phone number is required"),
   timeZone: yup.string().min(3, "Time zone is required").required("Time zone is required"),
-  password: yup.string().min(6, "Password must be at least 6 characters long").required("Password is required"),
-  termsAccepted: yup.boolean().oneOf([true], "You must accept the terms").required("You must accept the terms"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Password is required"),
+  state: yup.string().required("State is required"),
+  lga: yup.string().required("LGA is required"),
+  city: yup.string().required("City is required"),
+
+  termsAccepted: yup
+    .boolean()
+    .oneOf([true], "You must accept the terms")
+    .required("You must accept the terms"),
 });
 
 const Register = () => {
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
-  // Use React Hook Form with Yup validation
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    clearErrors,
+  } = useForm({
     resolver: yupResolver(schema),
   });
-
+  const [handleRegister, { isLoading, isSuccess }] = useRegisterMutation();
   const onSubmit = (data: any) => {
-    console.log(data);
-    // Handle the registration logic here
+    const { termsAccepted, ...rest } = data;
+    handleRegister(rest);
   };
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/login");
+    }
+  }, [isSuccess]);
 
   return (
-    <Container>
-      {/* Left Section with Background Image */}
-      <Info>
+    <div className="flex min-h-screen">
+      <div
+        className="w-[70%] bg-cover bg-center bg-no-repeat relative"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('your-background-url')",
+        }}
+      >
         <div className="absolute z-20 max-w-xl p-8 text-white top-[20px] left-8">
           <Logo />
           <h2 className="text-4xl font-bold leading-relaxed">
             Streamline your AUFCDN online waybill requests effortlessly.
           </h2>
         </div>
-      </Info>
+      </div>
 
-      {/* Right Section - Registration Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-10">
@@ -62,6 +90,10 @@ const Register = () => {
                   placeholder="First name"
                   {...register("firstName")}
                   error={errors.firstName?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("firstName", e.target.value.trim());
+                    clearErrors("firstName");
+                  }}
                 />
               </div>
               <div className="my-3">
@@ -71,6 +103,10 @@ const Register = () => {
                   placeholder="Last name"
                   {...register("lastName")}
                   error={errors.lastName?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("lastName", e.target.value.trim());
+                    clearErrors("lastName");
+                  }}
                 />
               </div>
             </div>
@@ -83,6 +119,11 @@ const Register = () => {
                   placeholder="Email Address"
                   {...register("email")}
                   error={errors.email?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const emailValue = e.target.value.toLowerCase();
+                    setValue("email", emailValue);
+                    clearErrors("email");
+                  }}
                 />
               </div>
               <div className="my-3">
@@ -92,6 +133,10 @@ const Register = () => {
                   placeholder="Phone number"
                   {...register("phoneNumber")}
                   error={errors.phoneNumber?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("phoneNumber", e.target.value.replace(/\D/g, ""));
+                    clearErrors("phoneNumber");
+                  }}
                 />
               </div>
             </div>
@@ -101,9 +146,13 @@ const Register = () => {
                 <Input
                   label="Time zone"
                   type="text"
-                  placeholder=""
+                  placeholder="Time zone"
                   {...register("timeZone")}
                   error={errors.timeZone?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("timeZone", e.target.value);
+                    clearErrors("timeZone");
+                  }}
                 />
               </div>
               <div className="my-3">
@@ -113,56 +162,99 @@ const Register = () => {
                   placeholder="Create Password"
                   {...register("password")}
                   error={errors.password?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("password", e.target.value);
+                    clearErrors("password");
+                  }}
+                />
+              </div>
+            </div>
+            <div className="mb-1 grid grid-cols-2 items-center gap-2">
+              <div>
+                <Input
+                  label="State"
+                  type="text"
+                  placeholder="State"
+                  {...register("state")}
+                  error={errors.state?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("state", e.target.value);
+                    clearErrors("state");
+                  }}
+                />
+              </div>
+              <div className="my-3">
+                <Input
+                  label="LGA"
+                  type="text"
+                  placeholder="LGA"
+                  {...register("lga")}
+                  error={errors.lga?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("lga", e.target.value);
+                    clearErrors("lga");
+                  }}
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember" className="ml-2 text-sm text-gray-500">
-                  By registering an account, I have agreed to the
-                  <a href="#" className="text-sm text-green-700 hover:text-green-800">
-                    Terms & Conditions
-                  </a> of AUFCDN.
-                </label>
-              </div>
+            <div className="my-3">
+              <Input
+                label="City"
+                type="text"
+                placeholder="City"
+                {...register("city")}
+                error={errors.city?.message}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setValue("city", e.target.value);
+                  clearErrors("city");
+                }}
+              />
             </div>
 
-            <Button fullWidth type="submit">
+            <div className="flex flex-col justify-between mb-6">
+              <div className="flex items-center ">
+                <div>
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    checked={rememberMe}
+                    onChange={(e) => {
+                      setRememberMe(e.target.checked);
+                      setValue("termsAccepted", e.target.checked);
+                      clearErrors("termsAccepted");
+                    }}
+                    className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                  />
+                  <label htmlFor="remember" className="ml-2 text-sm text-gray-500">
+                    By registering an account, I have agreed to the{" "}
+                    <a href="#" className="text-sm text-green-700 hover:text-green-800">
+                      Terms & Conditions
+                    </a>{" "}
+                    of AUFCDN.
+                  </label>
+                </div>
+              </div>
+              {errors.termsAccepted?.message && (
+                <div className="text-sm text-red-500">{errors.termsAccepted?.message}</div>
+              )}
+            </div>
+
+            <Button loading={isLoading} fullWidth type="submit">
               Register
             </Button>
           </form>
 
           <p className="text-center mt-8 text-gray-500">
             Already have an account?{" "}
-            <a href="#" className="text-green-700 hover:text-green-800">
+            <Link to="/login" className="text-green-700 hover:text-green-800">
               Sign in to your Account
-            </a>
+            </Link>
           </p>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 
 export default Register;
-
-const Info = styled.div`
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://s3-alpha-sig.figma.com/img/f36e/eda3/82a9acebc97b1c621256eb13648950a6?Expires=1738540800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=aONR4dLiJlocr0d43KrMabRw7LSR2wxBv8YSWw1Q3LwatxDsATB7BJXDPXoO~aiqLv0vbSVTq5ApxT6O1aa8THkueMBJJkOoCWJNL3u31MNTWNCymxSkXXBvB~8HcnkGdQ1DncaYI6JlIe6ybmUNX~CHxImaaF9OclW0EF-BQCal10CD5BhkcoSkV0AMzP1n2sp98ckUf8TgyMN8nyAHiEg8f2bhZ1EGnyWPr2z9XmXhFicWE8Zp1GMucQbJFs~svZOyWGZXkD9jOfZyJ49feDmnJnU7pKbazAWTXNynELcynZ-9ACVtqq5tjFwB~ihiqiwmDYY0heWzRll64T3llg__");
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 70%;
-`;
-
-const Container = styled.div`
-  min-height: 100vh;
-  display: flex;
-`;

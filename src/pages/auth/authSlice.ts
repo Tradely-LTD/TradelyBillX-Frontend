@@ -3,19 +3,11 @@
 import { RootState } from "@/store/store";
 import { createSlice } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
+import { LoginResponse } from "./auth.api";
 
 export type AuthState = {
   isAuthenticated: boolean;
-  loginResponse: {
-    status: string;
-    message: string;
-    Authorization: string;
-    public_id: string;
-    email: string;
-    name: string;
-    is_onboarded: boolean;
-    is_tourered: boolean;
-  } | null;
+  loginResponse: LoginResponse | null;
 };
 
 const initialState: AuthState = {

@@ -75,7 +75,7 @@ function Input({
     width: "100%",
     border: "none",
     outline: "none",
-    borderRadius: "30px",
+    borderRadius: "6px",
     backgroundColor: "transparent",
     cursor: disabled ? "not-allowed" : "text",
     fontWeight: 300,
