@@ -1,23 +1,24 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { appPaths } from './utils/app-paths';
-import PrivateRoute from './common/router-helper/private-route';
-import Layout from './common/ui/layout';
-import Login from './pages/auth/login/login';
-import DashboardOverview from './pages/dashbaord/DashboardOverView';
-import Configuration from './pages/configuration/configuration';
-import UserManagement from './pages/users/user-management';
-import UserForm from './pages/users/components/user-form';
-import LocationManagement from './pages/location/location-management';
-import LocationForm from './pages/location/components/location-form';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { appPaths } from "./utils/app-paths";
+import PrivateRoute from "./common/router-helper/private-route";
+import Layout from "./common/ui/layout";
+import Login from "./pages/auth/login/login";
+import DashboardOverview from "./pages/dashbaord/DashboardOverView";
+import Configuration from "./pages/configuration/configuration";
+import UserManagement from "./pages/users/user-management";
+import UserForm from "./pages/users/components/user-form";
+import LocationManagement from "./pages/location/location-management";
+import LocationForm from "./pages/location/components/location-form";
 
-import Waybill from './pages/waybill/Waybill';
-import Register from './pages/auth/register/register';
+import Waybill from "./pages/waybill/Waybill";
+import Register from "./pages/auth/register/register";
+import TransactionHistory from "./pages/transaction/transaction";
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-      <Route path={appPaths.login} element={<Login />} />
-      <Route path={appPaths.register} element={<Register />} />
+        <Route path={appPaths.login} element={<Login />} />
+        <Route path={appPaths.register} element={<Register />} />
         {/* 
         <Route path={appPaths.register} element={<Registration />} />
         <Route path={appPaths.forgotPassword} element={<ResetPassword />} />
@@ -31,10 +32,11 @@ function AppRouter() {
             <PrivateRoute>
               <Layout />
             </PrivateRoute>
-          }>
+          }
+        >
           <Route
             index
-            path={'/'}
+            path={"/"}
             element={
               <PrivateRoute>
                 <DashboardOverview />
@@ -43,21 +45,13 @@ function AppRouter() {
           />
           <Route path={appPaths.configuration} element={<Configuration />} />
           <Route path={appPaths.location} element={<LocationManagement />} />
-          <Route
-            path={`${appPaths.location}/:id`}
-            element={<LocationForm mode="create" />}
-          />
+          <Route path={`${appPaths.location}/:id`} element={<LocationForm mode="create" />} />
           <Route path={appPaths.users} element={<UserManagement />} />
           <Route path={appPaths.user} element={<UserForm mode="create" />} />
-          <Route
-            path={`${appPaths.user}/:id`}
-            element={<UserForm mode="update" />}
-          />
+          <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
           <Route path={appPaths.waybil} element={<Waybill />} />
-          <Route
-            path={`${appPaths.user}/:id`}
-            element={<UserForm mode="update" />}
-          />
+          <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
+          <Route path={appPaths.transaction} element={<TransactionHistory />} />
         </Route>
         {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>

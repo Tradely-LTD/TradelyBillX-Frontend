@@ -109,7 +109,8 @@ export const ProductForm = ({
           </button>
         )}
         <button
-          type="submit"
+          // type="submit"
+          onClick={handleSubmit}
           className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 ml-auto"
         >
           Save

@@ -8,86 +8,8 @@ import Input from "@/common/input/input";
 import Button from "@/common/button/button";
 import SelectComponent from "@/common/input/select";
 import { Calendar, Clock, Edit2 } from "iconsax-react";
-import { Plus, Trash2 } from "lucide-react";
-import { ProductItemRow } from "./ProductItemRow";
-import { ProductForm } from "./ProductForm";
-import PaymentDetailsForm from "./PaymentDetailsForm";
-const ProductDetails: React.FC = () => {
-  const [items, setItems] = useState([
-    { id: 1, type: "Cornn", unit: "Kilogram", quantity: "800" },
-    { id: 2, type: "Wheat", unit: "Kilogram", quantity: "500" },
-    { id: 3, type: "Rice", unit: "TON", quantity: "10" },
-  ]);
-
-  const handleAddItem = () => {
-    setItems([
-      ...items,
-      {
-        id: items.length + 1,
-        type: "",
-        unit: "",
-        quantity: "",
-      },
-    ]);
-  };
-
-  const handleDeleteItem = (id: number) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
-
-  return (
-    <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between gap-[20px] flex-1">
-      <div className="flex gap-3 mb-6">
-        <img src="truck.png" className="h-[48px] w-[48px]" />
-        <div>
-          <div className="text-lg font-semibold">Product Information</div>
-          <div className="text-gray-500">
-            What items will you be transporting? Please add details about the items and their
-            quantity.
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-4 w-[60%]">
-        {items.map((item, index) => (
-          <ProductItemRow
-            index={index + 1}
-            productName={item.type}
-            unit={item.unit}
-            quantity={item.quantity}
-            onEdit={() => console.log("Edit clicked")}
-            onDelete={() => console.log("Delete clicked")}
-          />
-        ))}
-
-        <button
-          type="button"
-          onClick={handleAddItem}
-          className="mt-4 flex items-center gap-2 text-green-600 font-medium"
-        >
-          <Plus className="w-5 h-5" />
-          More Item
-        </button>
-
-        <ProductForm
-          itemNumber={3}
-          initialValues={{
-            productType: "Rice",
-            unit: "TON",
-            quantity: "10",
-          }}
-          onSubmit={(values) => {
-            // Handle form submission
-            console.log(values);
-          }}
-          onDelete={() => {
-            // Handle item deletion
-          }}
-        />
-      </div>
-    </div>
-  );
-};
+import PaymentDetailsForm from "./products/PaymentDetailsForm";
+import { ProductDetails } from "./products/ProductDetails";
 
 const DriverVehicleInfo: React.FC = () => (
   <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between gap-[20px] flex-1">
@@ -263,34 +185,34 @@ const WaybillForm: React.FC = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {({ values }) => (
-        <Form>
-          <Stepper steps={steps} currentStep={step} />
+      {/* {({ values }) => ( */}
+      <Form>
+        <Stepper steps={steps} currentStep={step} />
 
-          <SwitchTransition mode="out-in">
-            <CSSTransition key={step} timeout={300} classNames={`slide-${direction}`}>
-              <div className="mt-4">
-                <CurrentStepComponent />
-              </div>
-            </CSSTransition>
-          </SwitchTransition>
+        <SwitchTransition mode="out-in">
+          <CSSTransition key={step} timeout={300} classNames={`slide-${direction}`}>
+            <div className="mt-4">
+              <CurrentStepComponent />
+            </div>
+          </CSSTransition>
+        </SwitchTransition>
 
-          <div className="flex justify-between mt-8">
-            {step > 0 && (
-              <Button type="button" onClick={handlePrev}>
-                Previous
-              </Button>
-            )}
-            {step < steps.length - 1 ? (
-              <Button type="button" onClick={handleNext}>
-                Next
-              </Button>
-            ) : (
-              <Button type="submit">Submit</Button>
-            )}
-          </div>
-        </Form>
-      )}
+        <div className="flex justify-between mt-8">
+          {step > 0 && (
+            <Button type="button" onClick={handlePrev}>
+              Previous
+            </Button>
+          )}
+          {step < steps.length - 1 ? (
+            <Button type="button" onClick={handleNext}>
+              Next
+            </Button>
+          ) : (
+            <Button type="submit">Submit</Button>
+          )}
+        </div>
+      </Form>
+      {/* )} */}
     </Formik>
   );
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   LineChart,
   Line,
@@ -25,7 +24,7 @@ const data = [
 
 // Card Components
 const Card = ({ className = "", children }) => (
-  <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
+  <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}  `}>
     {children}
   </div>
 );
@@ -65,6 +64,7 @@ const PaymentStatsCard = () => (
 // Dashboard Component
 const DashboardOverview = () => {
   // Sample data for line charts
+  console.log("dash");
   const chartData = Array.from({ length: 20 }, (_, i) => ({
     name: i,
     value: Math.floor(Math.random() * 50) + 50,
@@ -115,19 +115,20 @@ const DashboardOverview = () => {
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-500">Date Range</span>
-          <button className="px-4 py-2 bg-white border rounded-lg flex items-center space-x-2">
-            <span>1 Oct - 30 Oct 2024</span>
-          </button>
+          <input
+            type="date"
+            className="px-4 py-2 bg-white border rounded-lg flex items-center space-x-2"
+          />
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statsCards.map((stat, index) => (
-          <Card key={index}>
+          <Card key={index} className=" max-w-[300px] h-[130px]">
             <CardContent>
-              <div className="flex flex-row justify-between space-y-4">
-                <div className="w-1/2 flex flex-col gap-[20px]">
+              <div className="flex flex-row justify-between">
+                <div className="w-[60%]  flex h-auto flex-col gap-[5px]">
                   <h3 className="text-gray-500 font-medium">{stat.title}</h3>
                   <span className="text-3xl font-semibold">{stat.value}</span>
                   <span className="text-green-500 text-sm">{stat.change}</span>
