@@ -52,7 +52,7 @@ const menuItems = [
   {
     icon: DollarSign,
     label: "Transaction History",
-    path: "/transactions",
+    path: appPaths.transaction,
     description: "View and manage financial transactions",
   },
   {

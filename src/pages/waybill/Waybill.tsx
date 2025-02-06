@@ -1,5 +1,4 @@
-import Button from '@/common/button/button';
-import WaybillForm from './components/WaybillForm';
+import WaybillForm from "./components/WaybillForm";
 
 export default function Waybill() {
   return (
@@ -8,8 +7,7 @@ export default function Waybill() {
         <div>
           <div className="text-2xl font-semibold">Create New Waybill</div>
           <div className="text-[#64748B]">
-            Apply for waybills through the system by submitting product and
-            shipment details.
+            Apply for waybills through the system by submitting product and shipment details.
           </div>
         </div>
       </div>
