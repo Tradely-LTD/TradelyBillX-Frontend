@@ -1,43 +1,109 @@
-import React, { useState } from 'react';
-import { Formik, Form } from 'formik';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import React, { useState } from "react";
+import { Formik, Form } from "formik";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
-import Stepper from './Stepper';
-import { Step, FormValues } from '../types';
-import Input from '@/common/input/input';
-import Button from '@/common/button/button';
-import SelectComponent from '@/common/input/select';
-import { Calendar, Clock } from 'iconsax-react';
+import Stepper from "./Stepper";
+import { Step, FormValues } from "../types";
+import Input from "@/common/input/input";
+import Button from "@/common/button/button";
+import SelectComponent from "@/common/input/select";
+import { Calendar, Clock, Edit2 } from "iconsax-react";
+import { Plus, Trash2 } from "lucide-react";
+import { ProductItemRow } from "./ProductItemRow";
+import { ProductForm } from "./ProductForm";
+import PaymentDetailsForm from "./PaymentDetailsForm";
+const ProductDetails: React.FC = () => {
+  const [items, setItems] = useState([
+    { id: 1, type: "Cornn", unit: "Kilogram", quantity: "800" },
+    { id: 2, type: "Wheat", unit: "Kilogram", quantity: "500" },
+    { id: 3, type: "Rice", unit: "TON", quantity: "10" },
+  ]);
+
+  const handleAddItem = () => {
+    setItems([
+      ...items,
+      {
+        id: items.length + 1,
+        type: "",
+        unit: "",
+        quantity: "",
+      },
+    ]);
+  };
+
+  const handleDeleteItem = (id: number) => {
+    setItems(items.filter((item) => item.id !== id));
+  };
+
+  return (
+    <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between gap-[20px] flex-1">
+      <div className="flex gap-3 mb-6">
+        <img src="truck.png" className="h-[48px] w-[48px]" />
+        <div>
+          <div className="text-lg font-semibold">Product Information</div>
+          <div className="text-gray-500">
+            What items will you be transporting? Please add details about the items and their
+            quantity.
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4 w-[60%]">
+        {items.map((item, index) => (
+          <ProductItemRow
+            index={index + 1}
+            productName={item.type}
+            unit={item.unit}
+            quantity={item.quantity}
+            onEdit={() => console.log("Edit clicked")}
+            onDelete={() => console.log("Delete clicked")}
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={handleAddItem}
+          className="mt-4 flex items-center gap-2 text-green-600 font-medium"
+        >
+          <Plus className="w-5 h-5" />
+          More Item
+        </button>
+
+        <ProductForm
+          itemNumber={3}
+          initialValues={{
+            productType: "Rice",
+            unit: "TON",
+            quantity: "10",
+          }}
+          onSubmit={(values) => {
+            // Handle form submission
+            console.log(values);
+          }}
+          onDelete={() => {
+            // Handle item deletion
+          }}
+        />
+      </div>
+    </div>
+  );
+};
 
 const DriverVehicleInfo: React.FC = () => (
   <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between gap-[20px] flex-1">
     <div className="flex gap-[10px]">
       <img src="truck.png" className="h-[48px] w-[48px]" />
       <div>
-        <div className="text-[18px] font-semibold">
-          Driver and Vehicle Information
-        </div>
+        <div className="text-[18px] font-semibold">Driver and Vehicle Information</div>
         <div className="text-[#64748B]">
           We need to check the driver and vehicle information for verification.
         </div>
       </div>
     </div>
     <div className="flex flex-col gap-[20px] w-1/2">
-      <Input
-        label="Driver's Name"
-        name="driverName"
-        placeholder="Victor Osimhen"
-      />
-      <Input
-        label="Driver's Phone Number"
-        name="driverPhone"
-        placeholder="+234 00-000-000"
-      />
-      <Input
-        label="Vehicle Number"
-        name="vehicleNumber"
-        placeholder="Type vehicle number"
-      />
+      <Input label="Driver's Name" name="driverName" placeholder="Victor Osimhen" />
+      <Input label="Driver's Phone Number" name="driverPhone" placeholder="+234 00-000-000" />
+      <Input label="Vehicle Number" name="vehicleNumber" placeholder="Type vehicle number" />
     </div>
   </div>
 );
@@ -50,8 +116,8 @@ const ShipmentDetails: React.FC = () => (
         <div>
           <div className="text-[18px] font-semibold">Shipment Information</div>
           <div className="text-[#64748B]">
-            We need to verify where the loading location and delivery location
-            of the shipment will be.
+            We need to verify where the loading location and delivery location of the shipment will
+            be.
           </div>
         </div>
       </div>
@@ -59,56 +125,24 @@ const ShipmentDetails: React.FC = () => (
       <div className="flex flex-col gap-[20px] w-1/2">
         <div className="space-y-4">
           <h3 className="font-medium">Loading Location</h3>
-          <SelectComponent
-            onChange={() => {}}
-            options={[]}
-            label="Select state"
-          />
+          <SelectComponent onChange={() => {}} options={[]} label="Select state" />
 
-          <SelectComponent
-            onChange={() => {}}
-            options={[]}
-            label="Select LGA"
-          />
+          <SelectComponent onChange={() => {}} options={[]} label="Select LGA" />
 
-          <SelectComponent
-            onChange={() => {}}
-            options={[]}
-            label="Select town/city"
-          />
+          <SelectComponent onChange={() => {}} options={[]} label="Select town/city" />
 
-          <Input
-            label="Market/Location"
-            name="loadingMarket"
-            placeholder="Type full address"
-          />
+          <Input label="Market/Location" name="loadingMarket" placeholder="Type full address" />
         </div>
 
         <div className="space-y-4 mt-6">
           <h3 className="font-medium">Delivery Location</h3>
-          <SelectComponent
-            onChange={() => {}}
-            options={[]}
-            label="Select state"
-          />
+          <SelectComponent onChange={() => {}} options={[]} label="Select state" />
 
-          <SelectComponent
-            onChange={() => {}}
-            options={[]}
-            label="Select LGA"
-          />
+          <SelectComponent onChange={() => {}} options={[]} label="Select LGA" />
 
-          <SelectComponent
-            onChange={() => {}}
-            options={[]}
-            label="Select town/city"
-          />
+          <SelectComponent onChange={() => {}} options={[]} label="Select town/city" />
 
-          <Input
-            label="Market/Location"
-            name="deliveryMarket"
-            placeholder="Type full address"
-          />
+          <Input label="Market/Location" name="deliveryMarket" placeholder="Type full address" />
           <div className="space-y-6">
             <div className="space-y-6">
               <div>
@@ -120,9 +154,7 @@ const ShipmentDetails: React.FC = () => (
                       type="date"
                       name="departureDate"
                       placeholder="dd/mm/yyyy"
-                      rightIcon={
-                        <Calendar size="20" color="#64748b" variant="Bold" />
-                      }
+                      rightIcon={<Calendar size="20" color="#64748b" variant="Bold" />}
                     />
                   </div>
                   <div>
@@ -131,9 +163,7 @@ const ShipmentDetails: React.FC = () => (
                       type="time"
                       name="departureTime"
                       placeholder="00:00"
-                      rightIcon={
-                        <Clock size="20" color="#64748b" variant="Bold" />
-                      }
+                      rightIcon={<Clock size="20" color="#64748b" variant="Bold" />}
                     />
                   </div>
                 </div>
@@ -148,9 +178,7 @@ const ShipmentDetails: React.FC = () => (
                       type="date"
                       name="arrivalDate"
                       placeholder="dd/mm/yyyy"
-                      rightIcon={
-                        <Calendar size="20" color="#64748b" variant="Bold" />
-                      }
+                      rightIcon={<Calendar size="20" color="#64748b" variant="Bold" />}
                     />
                   </div>
                   <div>
@@ -159,9 +187,7 @@ const ShipmentDetails: React.FC = () => (
                       type="time"
                       name="arrivalTime"
                       placeholder="00:00"
-                      rightIcon={
-                        <Clock size="20" color="#64748b" variant="Bold" />
-                      }
+                      rightIcon={<Clock size="20" color="#64748b" variant="Bold" />}
                     />
                   </div>
                 </div>
@@ -176,73 +202,60 @@ const ShipmentDetails: React.FC = () => (
       <div className="flex gap-[10px]">
         <img src="child.png" className="h-[48px] w-[48px]" />
         <div>
-          <div className="text-[18px] font-semibold">
-            Owner & Receiver Information
-          </div>
+          <div className="text-[18px] font-semibold">Owner & Receiver Information</div>
           <div className="text-[#64748B]">
-            For ease of delivery, please include the name of the owner and
-            recipient of the goods.
+            For ease of delivery, please include the name of the owner and recipient of the goods.
           </div>
         </div>
       </div>
 
       <div className="flex flex-col gap-[20px] w-1/2">
         <div className="space-y-4">
-          <Input
-            label="Goods Owner's Name"
-            name="loadingMarket"
-            placeholder="Type full name"
-          />
+          <Input label="Goods Owner's Name" name="loadingMarket" placeholder="Type full name" />
 
-          <Input
-            label="Goods Receiver's Name"
-            name="loadingMarket"
-            placeholder="Type full name"
-          />
+          <Input label="Goods Receiver's Name" name="loadingMarket" placeholder="Type full name" />
         </div>
       </div>
     </div>
   </div>
 );
 
-const ProductDetails: React.FC = () => (
-  <div>{/* Add Product Details fields here */}</div>
-);
-
 const PaymentDetails: React.FC = () => (
-  <div>{/* Add Payment Details fields here */}</div>
+  <div>
+    <PaymentDetailsForm />
+  </div>
 );
 
 const steps: Step[] = [
-  { label: 'Driver/Vehicle Information', component: DriverVehicleInfo },
-  { label: 'Shipment Details', component: ShipmentDetails },
-  { label: 'Product Details', component: ProductDetails },
-  { label: 'Payment Details', component: PaymentDetails },
+  { label: "Driver/Vehicle Information", component: DriverVehicleInfo },
+  { label: "Shipment Details", component: ShipmentDetails },
+  { label: "Product Details", component: ProductDetails },
+  { label: "Payment Details", component: PaymentDetails },
 ];
 
 const initialValues: FormValues = {
-  driverName: '',
-  driverPhone: '',
-  vehicleNumber: '',
+  driverName: "",
+  driverPhone: "",
+  vehicleNumber: "",
   // Add other fields as needed
 };
 
 const WaybillForm: React.FC = () => {
   const [step, setStep] = useState(0);
-  const [direction, setDirection] = useState<'next' | 'prev'>('next');
+  const [direction, setDirection] = useState<"next" | "prev">("next");
 
   const handleNext = () => {
-    setDirection('next');
+    setDirection("next");
     setStep((prev) => prev + 1);
   };
 
   const handlePrev = () => {
-    setDirection('prev');
+    setDirection("prev");
     setStep((prev) => prev - 1);
   };
 
   const handleSubmit = (values: FormValues) => {
-    console.log('Form Data:', values);
+    console.log("Form Data:", values);
     // Handle form submission
   };
 
@@ -255,10 +268,7 @@ const WaybillForm: React.FC = () => {
           <Stepper steps={steps} currentStep={step} />
 
           <SwitchTransition mode="out-in">
-            <CSSTransition
-              key={step}
-              timeout={300}
-              classNames={`slide-${direction}`}>
+            <CSSTransition key={step} timeout={300} classNames={`slide-${direction}`}>
               <div className="mt-4">
                 <CurrentStepComponent />
               </div>
