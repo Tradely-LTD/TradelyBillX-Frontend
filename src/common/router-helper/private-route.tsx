@@ -4,7 +4,8 @@ import { Navigate } from "react-router-dom";
 
 function PrivateRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useUserSlice();
-  return <Fragment>{isAuthenticated ? children : <Navigate to="/login" />}</Fragment>;
+
+  return <Fragment>{!isAuthenticated ? children : <Navigate to="/" />}</Fragment>;
 }
 
 export default PrivateRoute;
