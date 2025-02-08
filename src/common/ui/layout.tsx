@@ -11,10 +11,7 @@ import {
   PieChart,
   Settings2,
   Users,
-  Package,
-  Truck,
 } from "lucide-react";
-import Button from "../button/button";
 import Input from "../input/input";
 import { appPaths } from "../../utils/app-paths";
 
@@ -73,18 +70,6 @@ const menuItems = [
     path: "/commission",
     description: "Track and manage delivery commissions",
   },
-  {
-    icon: Package,
-    label: "Inventory",
-    path: "/inventory",
-    description: "Track and manage package inventory",
-  },
-  {
-    icon: Truck,
-    label: "Fleet Management",
-    path: "/fleet",
-    description: "Monitor and manage delivery vehicles",
-  },
 ];
 
 function Layout() {
@@ -99,6 +84,14 @@ function Layout() {
     } else {
       navigate(item.path);
     }
+  };
+
+  // Helper function to check if a path is active
+  const isPathActive = (itemPath) => {
+    if (itemPath === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(itemPath);
   };
 
   return (
@@ -129,11 +122,7 @@ function Layout() {
               <div
                 onClick={() => handleMenuClick(item)}
                 className={`flex items-center px-4 py-2 my-1 rounded-lg cursor-pointer
-                  ${
-                    location.pathname === item.path
-                      ? "bg-green-50 text-green-700"
-                      : "hover:bg-gray-100"
-                  }
+                  ${isPathActive(item.path) ? "bg-green-50 text-green-700" : "hover:bg-gray-100"}
                   transition-all duration-200 ease-in-out`}
               >
                 <item.icon className="h-5 w-5" />
@@ -159,7 +148,7 @@ function Layout() {
                       onClick={() => navigate(subItem.path)}
                       className={`px-4 py-2 text-sm rounded-lg cursor-pointer
                         ${
-                          location.pathname === subItem.path
+                          isPathActive(subItem.path)
                             ? "bg-green-50 text-green-700"
                             : "hover:bg-gray-100"
                         }`}
@@ -189,7 +178,7 @@ function Layout() {
               <Menu className="h-5 w-5" />
             </button>
             <h1 className="ml-4 text-xl font-semibold">
-              {menuItems.find((item) => item.path === location.pathname)?.label || "Dashboard"}
+              {menuItems.find((item) => isPathActive(item.path))?.label || "Dashboard"}
             </h1>
           </div>
 
@@ -201,8 +190,6 @@ function Layout() {
               <Bell className="h-5 w-5" />
               <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
             </button>
-
-            {/* {buttonComponent} */}
           </div>
         </header>
 

@@ -22,4 +22,7 @@ export const appPaths = {
   waybil: "/waybill",
   location: "/location",
   transaction: "/transaction",
+  incident: "incidents",
+  activity: "activity",
+  commission: "commission",
 };

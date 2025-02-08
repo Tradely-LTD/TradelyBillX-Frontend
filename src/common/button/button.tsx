@@ -104,7 +104,7 @@ function Button({
     justifyContent: "center",
     gap: "0.5rem",
     borderRadius: "5px",
-    height: "45px",
+    height: "42px",
     fontWeight: 500,
     cursor: disabled || loading ? "not-allowed" : "pointer",
     width: fullWidth ? "100%" : "auto",

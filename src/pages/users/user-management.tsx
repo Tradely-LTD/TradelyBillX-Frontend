@@ -118,7 +118,7 @@ const UserManagement = () => {
         <div>
           <Button
             onClick={() => {
-              navigate("/user");
+              navigate("/users/add");
             }}
           >
             Add User
