@@ -12,7 +12,13 @@ import LocationForm from "./pages/location/components/location-form";
 
 import Waybill from "./pages/waybill/Waybill";
 import Register from "./pages/auth/register/register";
-import TransactionHistory from "./pages/transaction/transaction";
+import TransactionHistory from "./pages/transaction/transaction-history";
+import Transaction from "./pages/transaction/transaction";
+import Incidents from "./pages/incident/incidents";
+import IncidentForm from "./pages/incident/components/incident-form";
+import IncidentPreview from "./pages/incident/components/incident-preview";
+import ActivityLogs from "./pages/ActivityLogs/activity-logs";
+import CommisionTracker from "./pages/commission/commission";
 function AppRouter() {
   return (
     <BrowserRouter>
@@ -47,11 +53,17 @@ function AppRouter() {
           <Route path={appPaths.location} element={<LocationManagement />} />
           <Route path={`${appPaths.location}/:id`} element={<LocationForm mode="create" />} />
           <Route path={appPaths.users} element={<UserManagement />} />
-          <Route path={appPaths.user} element={<UserForm mode="create" />} />
-          <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
+          <Route path={`${appPaths.users}/add`} element={<UserForm mode="create" />} />
+          <Route path={`${appPaths.users}/:id`} element={<UserForm mode="update" />} />
           <Route path={appPaths.waybil} element={<Waybill />} />
           <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
           <Route path={appPaths.transaction} element={<TransactionHistory />} />
+          <Route path={`${appPaths.transaction}/:id`} element={<Transaction />} />
+          <Route path={appPaths.incident} element={<Incidents />} />
+          <Route path={`${appPaths.incident}/new`} element={<IncidentForm />} />
+          <Route path={`${appPaths.incident}/preview`} element={<IncidentPreview />} />
+          <Route path={`${appPaths.activity}`} element={<ActivityLogs />} />
+          <Route path={`${appPaths.commission}`} element={<CommisionTracker />} />
         </Route>
         {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>

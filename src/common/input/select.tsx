@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Select } from "@radix-ui/themes";
-import { ArrowDown } from "iconsax-react";
 
 interface SelectComponentProps {
   label?: string;
@@ -43,7 +42,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     alignItems: "center",
     position: "relative" as const,
     width: "100%",
-    border: "1px solid",
+    // border: "1px solid",
     borderColor: error ? "#ef4444" : isFocused ? "#2C7743" : "#CBD5E1",
     borderRadius: "6px",
     transition: "all 0.2s ease-in-out",
@@ -54,7 +53,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   const triggerStyles = {
     padding: "0.75rem 1rem",
     paddingLeft: leftIcon ? "2.5rem" : "1rem",
-    paddingRight: "2.5rem",
+    paddingRight: "1rem",
     fontSize: "1rem",
     width: "100%",
     border: "none",
@@ -150,7 +149,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           >
-            <Select.Value placeholder={placeholder || "Select option"} />
+            {/* <Select.Value placeholder={placeholder || "Select option"} /> */}
           </Select.Trigger>
 
           <Select.Content style={contentStyles} position="popper">

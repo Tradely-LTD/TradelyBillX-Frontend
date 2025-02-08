@@ -62,35 +62,30 @@ function UserForm({ mode, userId }: Props) {
             onChange={() => {}}
             label="Role Assignment"
             className="my-2"
-            triggerStyle={{ width: "100%", height: "45px" }}
             options={[{ label: "one", value: "1" }]}
           />
           <SelectComponent
             onChange={() => {}}
             label="Union"
             className="my-2"
-            triggerStyle={{ width: "100%", height: "45px" }}
             options={[{ label: "one", value: "1" }]}
           />
           <SelectComponent
             onChange={() => {}}
             label="State"
             className="my-2"
-            triggerStyle={{ width: "100%", height: "45px" }}
             options={[{ label: "one", value: "1" }]}
           />
           <SelectComponent
             onChange={() => {}}
             label="LGA"
             className="my-2"
-            triggerStyle={{ width: "100%", height: "45px" }}
             options={[{ label: "one", value: "1" }]}
           />
           <SelectComponent
             onChange={() => {}}
             label="Town/City"
             className="my-2"
-            triggerStyle={{ width: "100%", height: "45px" }}
             options={[{ label: "one", value: "1" }]}
           />
           <Input placeholder="Create" label="Create Password" type="password" />

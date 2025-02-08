@@ -1,8 +1,3 @@
-export interface Step {
-  label: string;
-  component: React.ComponentType;
-}
-
 export interface FormValues {
   driverName: string;
   driverPhone: string;

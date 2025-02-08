@@ -7,9 +7,20 @@ interface TextProps {
   block?: boolean;
   color?: string;
   secondaryColor?: boolean;
+  className?: string;
 }
 
-const Text = ({ children, color, block, h1, h2, h3, style, secondaryColor }: TextProps) => {
+const Text = ({
+  children,
+  color,
+  block,
+  h1,
+  h2,
+  h3,
+  className,
+  style,
+  secondaryColor,
+}: TextProps) => {
   const baseStyle = {
     color: color ? color : secondaryColor ? "#64748B " : "#15191E",
     fontSize: h1 ? "24px" : h2 ? "18px" : h3 ? "16px" : "14px",
@@ -20,7 +31,11 @@ const Text = ({ children, color, block, h1, h2, h3, style, secondaryColor }: Tex
 
   const combinedStyle = { ...baseStyle, ...style };
 
-  return <span style={combinedStyle}>{children}</span>;
+  return (
+    <span className={className} style={combinedStyle}>
+      {children}
+    </span>
+  );
 };
 
 export default Text;

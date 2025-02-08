@@ -1,5 +1,7 @@
+import { Step } from "@/type";
 import React from "react";
-import { Step } from "../types";
+import ArrowRight from "../../../public/ArrowRight.svg";
+import Passed from "../../../public/Passed.svg";
 
 interface StepperProps {
   steps: Step[];
@@ -12,7 +14,7 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
       {steps.map((step, index) => (
         <div key={index} className="flex items-center  ">
           {index < currentStep ? (
-            <img src="Passed.svg" className="h-[20px] w-[20px] mx-[10px]" />
+            <img src={Passed} className="h-[20px] w-[20px] mx-[10px]" />
           ) : (
             <div
               className={`w-7 h-7 rounded-full flex items-center justify-center  ${
@@ -35,7 +37,7 @@ const Stepper: React.FC<StepperProps> = ({ steps, currentStep }) => {
             {step.label}
           </span>
           {index < steps.length - 1 && (
-            <img src="ArrowRight.svg" className="h-[20px]  w-[20px] mx-[20px]" />
+            <img src={ArrowRight} className="h-[20px]  w-[20px] mx-[20px]" />
           )}
         </div>
       ))}

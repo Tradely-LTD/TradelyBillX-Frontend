@@ -7,6 +7,11 @@ export type StatusType =
   | "User"
   | "Agent"
   | "Allowed"
+  | "Pending"
+  | "Success"
+  | "Resolved"
+  | "Progress"
+  | "Open"
   | "Restricated"
   | boolean;
 
@@ -57,6 +62,7 @@ const StatusPill = styled.div<{
   ${({ status }) => {
     switch (status) {
       case "Super Admin":
+      case "Progress":
         return `
           background: #E7F6FE;
           color: #0EA4E9;
@@ -67,12 +73,20 @@ const StatusPill = styled.div<{
             color: #EAB208;
             &::before { background: #EAB208; }
           `;
+      case "Success":
+      case "Resolved":
+        return `background: #ECF9F6;
+            color: #40C4AA;
+            &::before { background: #40C4AA; }
+          `;
       case "Allowed":
         return `background: #ECF9F6;
             color: #40C4AA;
             &::before { background: #40C4AA; }
           `;
       case "Restricated":
+      case "Open":
+      case "Pending":
         return `background: #FEE7EB;
             color: #F43F5D;
             &::before { background: #F43F5D; }

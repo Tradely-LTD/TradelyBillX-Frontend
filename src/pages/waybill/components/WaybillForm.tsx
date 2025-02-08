@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
-import Stepper from "./Stepper";
-import { Step, FormValues } from "../types";
+import Stepper from "../../../common/Stepper/Stepper";
+import { FormValues } from "../types";
 import Input from "@/common/input/input";
 import Button from "@/common/button/button";
 import SelectComponent from "@/common/input/select";
-import { Calendar, Clock, Edit2 } from "iconsax-react";
+import { Calendar, Clock } from "iconsax-react";
 import PaymentDetailsForm from "./products/PaymentDetailsForm";
 import { ProductDetails } from "./products/ProductDetails";
+import { Step } from "@/type";
 
 const DriverVehicleInfo: React.FC = () => (
   <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between gap-[20px] flex-1">
