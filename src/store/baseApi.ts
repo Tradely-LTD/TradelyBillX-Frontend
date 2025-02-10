@@ -13,9 +13,9 @@ import { logout, setAuth } from "@/pages/auth/authSlice";
 export const baseQuery = fetchBaseQuery({
   baseUrl: urls.API_BASE_URL,
   prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState)?.auth?.loginResponse?.Authorization ?? "";
+    const token = (getState() as RootState)?.auth?.loginResponse?.token ?? "";
     if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
+      headers.set("Authorization", `${token}`);
     }
     return headers;
   },
@@ -29,7 +29,7 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   const result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    const refreshToken = (api.getState() as RootState)?.auth?.loginResponse?.Authorization ?? "";
+    const refreshToken = (api.getState() as RootState)?.auth?.loginResponse?.token ?? "";
     // the refresh token endpoint is not available at the moment
     const refreshResult = await baseQuery(
       {

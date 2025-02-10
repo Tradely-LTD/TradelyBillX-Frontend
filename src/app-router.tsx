@@ -19,6 +19,7 @@ import IncidentForm from "./pages/incident/components/incident-form";
 import IncidentPreview from "./pages/incident/components/incident-preview";
 import ActivityLogs from "./pages/ActivityLogs/activity-logs";
 import CommisionTracker from "./pages/commission/commission";
+import WaybillsList from "./pages/waybill/waybills-list";
 function AppRouter() {
   return (
     <BrowserRouter>
@@ -56,6 +57,7 @@ function AppRouter() {
           <Route path={`${appPaths.users}/add`} element={<UserForm mode="create" />} />
           <Route path={`${appPaths.users}/:id`} element={<UserForm mode="update" />} />
           <Route path={appPaths.waybil} element={<Waybill />} />
+          <Route path={`${appPaths.waybil}/list`} element={<WaybillsList />} />
           <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
           <Route path={appPaths.transaction} element={<TransactionHistory />} />
           <Route path={`${appPaths.transaction}/:id`} element={<Transaction />} />
