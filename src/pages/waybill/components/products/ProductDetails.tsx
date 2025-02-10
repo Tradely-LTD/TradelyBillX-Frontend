@@ -2,11 +2,18 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { ProductItemRow } from "./ProductItemRow";
 import { ProductForm } from "./ProductForm";
+import { useFormContext } from "../../formContext";
 
 export const ProductDetails: React.FC = () => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingItemId, setEditingItemId] = useState(null);
+  const {
+    register,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useFormContext();
 
   const handleAddItem = () => {
     setShowForm(true);
@@ -19,6 +26,7 @@ export const ProductDetails: React.FC = () => {
     } else {
       const newItem = { id: Date.now(), ...values };
       setItems([...items, newItem]);
+      setValue("products", items);
     }
     setShowForm(false);
     setEditingItemId(null);
