@@ -51,7 +51,7 @@ function AppRouter() {
           />
           <Route path={appPaths.configuration} element={<Configuration />} />
           <Route path={appPaths.location} element={<LocationManagement />} />
-          <Route path={`${appPaths.location}/:id`} element={<LocationForm mode="create" />} />
+          <Route path={`${appPaths.location}/add`} element={<LocationForm />} />
           <Route path={appPaths.users} element={<UserManagement />} />
           <Route path={`${appPaths.users}/add`} element={<UserForm mode="create" />} />
           <Route path={`${appPaths.users}/:id`} element={<UserForm mode="update" />} />

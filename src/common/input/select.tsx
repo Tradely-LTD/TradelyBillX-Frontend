@@ -5,8 +5,8 @@ interface SelectComponentProps {
   label?: string;
   value?: string;
   defaultValue?: string;
-  options: { label: string; value: string }[];
-  onChange: (value: string) => void;
+  options: { label: string; value: string; id?: string }[];
+  onChange: (value: string, id?: string) => void; // Modified to include id
   className?: string;
   disabled?: boolean;
   required?: boolean;
@@ -14,6 +14,7 @@ interface SelectComponentProps {
   fullWidth?: boolean;
   placeholder?: string;
   leftIcon?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 const SelectComponent: React.FC<SelectComponentProps> = ({
@@ -29,8 +30,15 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   fullWidth = false,
   placeholder,
   leftIcon,
+  isLoading = false,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+
+  // Handler to find and return both value and id
+  const handleChange = (selectedValue: string) => {
+    const selectedOption = options.find((opt) => opt.value === selectedValue);
+    onChange(selectedValue, selectedOption?.id);
+  };
 
   const containerStyles = {
     position: "relative" as const,
@@ -42,7 +50,6 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     alignItems: "center",
     position: "relative" as const,
     width: "100%",
-    // border: "1px solid",
     borderColor: error ? "#ef4444" : isFocused ? "#2C7743" : "#CBD5E1",
     borderRadius: "6px",
     transition: "all 0.2s ease-in-out",
@@ -60,10 +67,11 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     outline: "none",
     borderRadius: "6px",
     backgroundColor: "transparent",
-    cursor: disabled ? "not-allowed" : "pointer",
+    cursor: disabled || isLoading ? "not-allowed" : "pointer",
     fontWeight: 300,
     height: "40px",
     color: value ? "#000" : "#64748b",
+    opacity: isLoading ? 0.7 : 1,
   };
 
   const iconStyles = {
@@ -86,7 +94,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   const rightIconStyles = {
     ...iconStyles,
     right: "0.75rem",
-    pointerEvents: "none",
+    pointerEvents: "none" as const,
   };
 
   const labelStyles = {
@@ -126,6 +134,20 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     },
   };
 
+  const loadingOverlayStyles = {
+    position: "absolute" as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    borderRadius: "6px",
+    pointerEvents: "none" as const,
+  };
+
   return (
     <div style={containerStyles} className={className}>
       {label && (
@@ -139,10 +161,10 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         {leftIcon && <span style={leftIconStyles}>{leftIcon}</span>}
 
         <Select.Root
-          onValueChange={onChange}
+          onValueChange={handleChange}
           value={value}
           defaultValue={defaultValue}
-          disabled={disabled}
+          disabled={disabled || isLoading}
         >
           <Select.Trigger
             style={triggerStyles}
@@ -162,6 +184,12 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
             </Select.Group>
           </Select.Content>
         </Select.Root>
+
+        {isLoading && (
+          <div style={loadingOverlayStyles}>
+            <span style={{ fontSize: "0.875rem", color: "#64748b" }}>Loading...</span>
+          </div>
+        )}
       </div>
 
       {error && <div style={errorStyles}>{error}</div>}
