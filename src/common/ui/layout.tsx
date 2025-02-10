@@ -11,6 +11,7 @@ import {
   PieChart,
   Settings2,
   Users,
+  MapIcon,
 } from "lucide-react";
 import Input from "../input/input";
 import { appPaths } from "../../utils/app-paths";
@@ -33,6 +34,12 @@ const menuItems = [
     label: "User Management",
     path: "/users",
     description: "Manage system users and permissions",
+  },
+  {
+    icon: MapIcon,
+    label: "Location Management",
+    path: "/location",
+    description: " ",
   },
   {
     icon: FileText,
