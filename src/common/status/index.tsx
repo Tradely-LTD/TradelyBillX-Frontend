@@ -7,12 +7,19 @@ export type StatusType =
   | "User"
   | "Agent"
   | "Allowed"
-  | "Pending"
   | "Success"
   | "Resolved"
   | "Progress"
   | "Open"
   | "Restricated"
+  | "IN_TRANSIT"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "PENDING"
+  | "PROCESSING"
+  | "COMPLETED"
+  | "FAILED"
+  | "REFUNDED"
   | boolean;
 
 interface StatusIndicatorProps {
@@ -75,6 +82,7 @@ const StatusPill = styled.div<{
           `;
       case "Success":
       case "Resolved":
+      case "IN_TRANSIT":
         return `background: #ECF9F6;
             color: #40C4AA;
             &::before { background: #40C4AA; }
@@ -86,7 +94,7 @@ const StatusPill = styled.div<{
           `;
       case "Restricated":
       case "Open":
-      case "Pending":
+      case "PENDING":
         return `background: #FEE7EB;
             color: #F43F5D;
             &::before { background: #F43F5D; }

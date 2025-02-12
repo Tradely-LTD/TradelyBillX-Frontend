@@ -56,7 +56,9 @@ interface WaybillsResponse {
     deliveryState: string;
     deliveryLGA: string;
     deliveryTown: string;
-
+    shipmentStatus: "IN_TRANSIT" | "DELIVERED" | "CANCELLED";
+    paymentStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "REFUNDED";
+    incidentStatus: "SAFE" | "REPORTED" | "REVIEWING" | "RESOLVED";
     // products: [];
     goodsOwnerName: string;
     goodsReceiverName: string;

@@ -1,20 +1,12 @@
 import Input from "@/common/input/input";
 import { ChangeEvent } from "react";
-import { useFormContext } from "../../formContext";
+import { useFormContext } from "../formContext";
 
 export const DriverVehicleInfo = () => {
-  //   const {
-  //     register,
-  //     setValue,
-  //     clearErrors,
-  //     getValues,
-  //     formState: { errors },
-  //   } = useForm({
-  //     resolver: yupResolver(wayBillSchema),
-  //   });
   const {
     register,
     setValue,
+    watch,
     clearErrors,
     formState: { errors },
   } = useFormContext();
@@ -40,6 +32,7 @@ export const DriverVehicleInfo = () => {
             }}
             label="Driver's Name"
             name="driverName"
+            value={watch("driverName")}
             placeholder="Victor Osimhen"
           />
           <Input
@@ -52,6 +45,7 @@ export const DriverVehicleInfo = () => {
             label="Driver's Phone Number"
             name="driverPhone"
             placeholder="+234 00-000-000"
+            value={watch("driverPhone")}
           />
           <Input
             {...register("vehicleNumber")}
@@ -63,6 +57,7 @@ export const DriverVehicleInfo = () => {
             label="Vehicle Number"
             name="vehicleNumber"
             placeholder="Type vehicle number"
+            value={watch("vehicleNumber")}
           />
         </div>
       </div>

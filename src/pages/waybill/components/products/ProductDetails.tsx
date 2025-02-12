@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { ProductItemRow } from "./ProductItemRow";
 import { ProductForm } from "./ProductForm";
-import { useFormContext } from "../../formContext";
+import { useFormContext } from "../formContext";
 
 export const ProductDetails: React.FC = () => {
   const [items, setItems] = useState([]);

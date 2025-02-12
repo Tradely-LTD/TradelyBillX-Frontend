@@ -4,9 +4,10 @@ import { DriverVehicleInfo } from "./driver/driver-from";
 import { ShipmentDetails } from "./shipment/shipment";
 import PaymentDetailsForm from "./products/PaymentDetailsForm";
 import { ProductDetails } from "./products/ProductDetails";
-import { FormProvider, useFormContext } from "../formContext";
 import { useCreateWayBillsMutation } from "../waybill.api";
 import { useNavigate } from "react-router-dom";
+import { useUserSlice } from "@/pages/auth/authSlice";
+import { useFormContext } from "./formContext";
 
 const WaybillForm: React.FC = () => {
   const [step, setStep] = useState(0);
@@ -14,7 +15,7 @@ const WaybillForm: React.FC = () => {
   const { getValues } = useFormContext();
   const navigate = useNavigate();
   const [createWayBill, { isLoading, isSuccess }] = useCreateWayBillsMutation();
-
+  const { loginResponse } = useUserSlice();
   const handleNext = () => {
     setStep((prev) => prev + 1);
   };
@@ -53,8 +54,14 @@ const WaybillForm: React.FC = () => {
             <Button
               loading={isLoading}
               onClick={() => {
-                createWayBill(getValues());
-                console.log(getValues());
+                // console.log({ ...getValues(), createdBy: loginResponse?.user.id });
+                createWayBill({
+                  ...getValues(),
+                  paymentStatus: "PENDING",
+                  shipmentStatus: "IN_TRANSIT",
+                  incidentStatus: "SAFE",
+                  createdBy: loginResponse?.user.id,
+                });
               }}
               type="submit"
             >

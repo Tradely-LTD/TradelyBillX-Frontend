@@ -12,6 +12,7 @@ import {
   Settings2,
   Users,
   MapIcon,
+  LogOut,
 } from "lucide-react";
 import Input from "../input/input";
 import { appPaths } from "../../utils/app-paths";
@@ -77,6 +78,12 @@ const menuItems = [
     path: "/commission",
     description: "Track and manage delivery commissions",
   },
+  {
+    icon: LogOut,
+    label: "Logout",
+    path: "/login",
+    description: "Logout",
+  },
 ];
 
 function Layout() {
@@ -132,10 +139,14 @@ function Layout() {
                   ${isPathActive(item.path) ? "bg-green-50 text-green-700" : "hover:bg-gray-100"}
                   transition-all duration-200 ease-in-out`}
               >
-                <item.icon className="h-5 w-5" />
+                <item.icon
+                  className={`h-5 w-5
+                ${item.label === "Logout" ? "text-red-500" : ""} `}
+                />
                 <span
                   className={`ml-3 transition-opacity duration-200 font-[500]
-                  ${isSidebarCollapsed ? "opacity-0 hidden" : "opacity-100"}`}
+                  ${isSidebarCollapsed ? "opacity-0 hidden" : "opacity-100"}
+                  ${item.label === "Logout" ? "text-red-500" : ""}`}
                 >
                   {item.label}
                 </span>

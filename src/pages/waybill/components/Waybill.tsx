@@ -1,4 +1,4 @@
-import WaybillForm from "./components/WaybillForm";
+import WaybillForm from "./WaybillForm";
 import { FormProvider } from "./formContext";
 
 export default function Waybill() {

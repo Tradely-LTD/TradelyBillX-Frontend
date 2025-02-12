@@ -88,7 +88,7 @@ export interface LoginResponse {
 }
 
 export interface AuthUser {
-  userId: string;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
