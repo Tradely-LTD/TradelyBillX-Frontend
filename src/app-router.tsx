@@ -10,7 +10,7 @@ import UserForm from "./pages/users/components/user-form";
 import LocationManagement from "./pages/location/location-management";
 import LocationForm from "./pages/location/components/location-form";
 
-import Waybill from "./pages/waybill/Waybill";
+import Waybill from "./pages/waybill/components/Waybill";
 import Register from "./pages/auth/register/register";
 import TransactionHistory from "./pages/transaction/transaction-history";
 import Transaction from "./pages/transaction/transaction";
@@ -20,6 +20,8 @@ import IncidentPreview from "./pages/incident/components/incident-preview";
 import ActivityLogs from "./pages/ActivityLogs/activity-logs";
 import CommisionTracker from "./pages/commission/commission";
 import WaybillsList from "./pages/waybill/waybills-list";
+import WaybillReceipt from "./pages/components/waybill-receipt";
+import WaybillPreview from "./pages/waybill/waybill-preview";
 function AppRouter() {
   return (
     <BrowserRouter>
@@ -58,12 +60,14 @@ function AppRouter() {
           <Route path={`${appPaths.users}/:id`} element={<UserForm mode="update" />} />
           <Route path={appPaths.waybil} element={<Waybill />} />
           <Route path={`${appPaths.waybil}/list`} element={<WaybillsList />} />
+          <Route path={`${appPaths.waybil}/:id`} element={<WaybillPreview />} />
           <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
           <Route path={appPaths.transaction} element={<TransactionHistory />} />
           <Route path={`${appPaths.transaction}/:id`} element={<Transaction />} />
           <Route path={appPaths.incident} element={<Incidents />} />
           <Route path={`${appPaths.incident}/new`} element={<IncidentForm />} />
           <Route path={`${appPaths.incident}/preview`} element={<IncidentPreview />} />
+          <Route path={`${appPaths.receipt}/:id`} element={<WaybillReceipt />} />
           <Route path={`${appPaths.activity}`} element={<ActivityLogs />} />
           <Route path={`${appPaths.commission}`} element={<CommisionTracker />} />
         </Route>

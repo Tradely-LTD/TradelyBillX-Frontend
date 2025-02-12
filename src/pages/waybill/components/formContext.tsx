@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { WayBillFormData, wayBillSchema } from "./types";
+import { WayBillFormData, wayBillSchema } from "../types";
 
 // type FormContextType = UseFormReturn;
 

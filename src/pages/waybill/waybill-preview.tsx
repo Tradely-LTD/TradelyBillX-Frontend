@@ -1,14 +1,10 @@
 import { CircleCheck, Copy, Ship } from "lucide-react";
-import { useFormContext } from "../formContext";
 import Text from "@/common/text/text";
 import Button from "@/common/button/button";
 import { Card } from "iconsax-react";
 import StatusIndicator from "@/common/status";
 
-const PaymentDetailsForm = () => {
-  const { watch } = useFormContext();
-  const formValues = watch();
-
+const WaybillPreview = () => {
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
       <div className="bg-white my-3 border border-gray-200 rounded-md p-3">
@@ -18,13 +14,13 @@ const PaymentDetailsForm = () => {
               <Text h3>Drive and Vehicle Information</Text>
               <div className="flex gap-3">
                 <div>
-                  <LabelData title="Driver's Name" value={formValues.driverName} />
+                  <LabelData title="Driver's Name" value={"John Doe"} />
                 </div>
                 <div>
-                  <LabelData title="Driver's Phone Number" value={formValues.driverPhone} />
+                  <LabelData title="Driver's Phone Number" value={"0805324233"} />
                 </div>
                 <div>
-                  <LabelData title="Vehicle Number" value={formValues.vehicleNumber} />
+                  <LabelData title="Vehicle Number" value={"45234-423"} />
                 </div>
               </div>
             </div>
@@ -35,13 +31,13 @@ const PaymentDetailsForm = () => {
             <div className="flex justify-between my-3">
               <Text color="#64748B">Transaction ID</Text>
               <p className="flex gap-2 font-semibold text-[#2C7743]">
-                {formValues.transactionId || "TRX001"} <Copy color="green" />
+                {"TRX001"} <Copy color="green" />
               </p>
             </div>
             <div className="flex justify-between">
               <Text color="#64748B">Receipt</Text>
               <p className="flex gap-2 font-semibold text-[#2C7743]">
-                {formValues.receiptNumber || "32414"} <Copy color="green" />
+                {"32414"} <Copy color="green" />
               </p>
             </div>
           </div>
@@ -54,7 +50,7 @@ const PaymentDetailsForm = () => {
               <Text style={{ display: "flex", gap: 3, alignItems: "center" }}>
                 <Ship size="16" /> Shipment Status
               </Text>
-              <StatusIndicator status={formValues?.shipmentStatus || "Pending"} />
+              <StatusIndicator status={"PENDING"} />
             </div>
 
             <Text
@@ -69,19 +65,19 @@ const PaymentDetailsForm = () => {
               <Ship size="16" /> Loading Location
             </Text>
             <div className="flex gap-2">
-              <LabelData title="State" value={formValues.loadingState} />
-              <LabelData title="LGA" value={formValues.loadingLGA} />
-              <LabelData title="Town/City" value={formValues.loadingTown} />
-              <LabelData title="Market/Location" value={formValues.loadingMarket} />
+              <LabelData title="State" value={"Abuja"} />
+              <LabelData title="LGA" value={"FCT"} />
+              <LabelData title="Town/City" value={"Town"} />
+              <LabelData title="Market/Location" value={"Market"} />
             </div>
 
             <div className="bg-[#F7F8FB] py-2 rounded-md">
               <Text h3>Delivery Location</Text>
               <div className="flex gap-2">
-                <LabelData title="State" value={formValues.deliveryState} />
-                <LabelData title="LGA" value={formValues.deliveryLGA} />
-                <LabelData title="Town/City" value={formValues.deliveryTown} />
-                <LabelData title="Market/Location" value={formValues.deliveryMarket} />
+                <LabelData title="State" value={"Abuja"} />
+                <LabelData title="LGA" value={"Abuja"} />
+                <LabelData title="Town/City" value={"Abuja"} />
+                <LabelData title="Market/Location" value={"Abuja"} />
               </div>
             </div>
 
@@ -91,8 +87,8 @@ const PaymentDetailsForm = () => {
                   <Ship size="16" /> Departure
                 </Text>
                 <div className="flex gap-2">
-                  <LabelData title="Date" value={formValues.departureDate} />
-                  <LabelData title="Time" value={formValues.departureTime} />
+                  <LabelData title="Date" value={"formValues.departureDate"} />
+                  <LabelData title="Time" value={"formValues.departureTime"} />
                 </div>
               </div>
               <div className="bg-[#F7F8FB] py-2 rounded-md">
@@ -100,8 +96,8 @@ const PaymentDetailsForm = () => {
                   <Ship size="16" /> Arrival
                 </Text>
                 <div className="flex gap-2">
-                  <LabelData title="Date" value={formValues.arrivalDate} />
-                  <LabelData title="Time" value={formValues.arrivalTime} />
+                  <LabelData title="Date" value={"formValues.arrivalDate"} />
+                  <LabelData title="Time" value={"formValues.arrivalTime"} />
                 </div>
               </div>
             </div>
@@ -112,13 +108,11 @@ const PaymentDetailsForm = () => {
               Product Information
             </Text>
             <div className="">
-              {(
-                formValues.products || [
-                  { name: "Corn", unit: "Kilogram", amount: "800 kg" },
-                  { name: "Wheat", unit: "Kilogram", amount: "500 kg" },
-                  { name: "Rice", unit: "Ton", amount: "10 TON" },
-                ]
-              ).map((product, index) => (
+              {[
+                { name: "Corn", unit: "Kilogram", amount: "800 kg" },
+                { name: "Wheat", unit: "Kilogram", amount: "500 kg" },
+                { name: "Rice", unit: "Ton", amount: "10 TON" },
+              ].map((product, index) => (
                 <ProductCard
                   key={index}
                   number={(index + 1).toString()}
@@ -134,20 +128,20 @@ const PaymentDetailsForm = () => {
               <Text h3>Payment Summary</Text>
               <div className="flex items-center justify-between my-2">
                 <Text block>Item Total</Text>
-                <Text style={{ fontWeight: "600" }}>{formValues.products?.length || 0} Items</Text>
+                <Text style={{ fontWeight: "600" }}>{0} Items</Text>
               </div>
               <div className="flex items-center justify-between my-2">
                 <Text block>Item Price</Text>
-                <Text style={{ fontWeight: "600" }}>{formValues.itemPrice || "0"} NGN</Text>
+                <Text style={{ fontWeight: "600" }}>{"0"} NGN</Text>
               </div>
               <div className="flex items-center justify-between my-2">
                 <Text block>Waybill Fee</Text>
-                <Text style={{ fontWeight: "600" }}>{formValues.waybillFee || "5,196"} NGN</Text>
+                <Text style={{ fontWeight: "600" }}>{"5,196"} NGN</Text>
               </div>
               <hr className="border-dotted border-[2px]" />
               <div className="flex items-center justify-between my-2">
                 <Text block>Total Price</Text>
-                <Text style={{ fontWeight: "600" }}>{formValues.totalPrice || "0"} NGN</Text>
+                <Text style={{ fontWeight: "600" }}>{"0"} NGN</Text>
               </div>
             </div>
           </div>
@@ -159,12 +153,12 @@ const PaymentDetailsForm = () => {
             <div className="bg-white p-3 rounded-md flex items-center justify-between">
               <div className="flex gap-2">
                 <Card />
-                <Text>{formValues.cardNumber || "454362526452"}</Text>
+                <Text>{"454362526452"}</Text>
               </div>
-              <Text>{formValues.cardExpiry || "12/28"}</Text>
+              <Text>{"12/28"}</Text>
               <CircleCheck fill="green" color="white" />
             </div>
-            <div className="flex flex-col items-center gap-4">
+            {/* <div className="flex flex-col items-center gap-4">
               <div className="flex items-center gap-1">
                 <input type="checkbox" className="w-4 h-4 text-green-600" />
                 <span className="text-sm">
@@ -181,7 +175,7 @@ const PaymentDetailsForm = () => {
               <button className="w-full max-w-md bg-green-600 text-white py-3 px-6 rounded-lg font-medium">
                 Proceed to Payment
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
@@ -244,4 +238,4 @@ const LabelData = ({ title, value }: { title: string; value: string }) => {
   );
 };
 
-export default PaymentDetailsForm;
+export default WaybillPreview;

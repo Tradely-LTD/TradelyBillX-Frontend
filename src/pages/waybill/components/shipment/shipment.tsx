@@ -2,16 +2,8 @@ import { Calendar, Clock } from "iconsax-react";
 
 import Input from "@/common/input/input";
 import SelectComponent from "@/common/input/select";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import React, { ChangeEvent, useState } from "react";
-import {
-  useGetLGAsQuery,
-  useGetStatesQuery,
-  useGetTownsQuery,
-} from "@/pages/location/location.api";
-import { wayBillSchema } from "../../types";
-import { useFormContext } from "../../formContext";
+import { useFormContext } from "../formContext";
 import { useShipmentLocation } from "../../useShipmentLocation";
 
 export const ShipmentDetails: React.FC = () => {
@@ -42,6 +34,7 @@ export const ShipmentDetails: React.FC = () => {
     register,
     setValue,
     clearErrors,
+    watch,
     formState: { errors },
   } = useFormContext();
 
@@ -77,7 +70,8 @@ export const ShipmentDetails: React.FC = () => {
                 setSelectedState(value);
                 setSelectedStateId(id);
               }}
-              value={selectedState}
+              // value={selectedState}
+              value={watch("loadingState")}
               isLoading={isStatesLoading}
               label="Select state"
             />
@@ -100,7 +94,8 @@ export const ShipmentDetails: React.FC = () => {
                 setSelectedLGA(value);
                 setSelectedLGAId(id ?? "");
               }}
-              value={selectedLGA}
+              // value={selectedLGA}
+              value={watch("loadingLGA")}
               isLoading={isLGALoading || isFetchingLGA}
               disabled={!selectedState}
             />
@@ -122,7 +117,8 @@ export const ShipmentDetails: React.FC = () => {
                 setValue("loadingTown", value);
                 setSelectedTown(value ?? "");
               }}
-              value={selectedTown}
+              // value={selectedTown}
+              value={watch("loadingTown")}
               isLoading={isLoadingTown}
               disabled={!selectedLGA}
             />
@@ -136,6 +132,7 @@ export const ShipmentDetails: React.FC = () => {
               }}
               label="Market/Location"
               placeholder="Type full address"
+              value={watch("loadingMarket")}
             />
           </div>
 
@@ -156,7 +153,8 @@ export const ShipmentDetails: React.FC = () => {
                 setSelectedDeliveryState(value);
                 setSelectedDeliveryStateId(id);
               }}
-              value={selectedDeliveryState}
+              // value={selectedDeliveryState}
+              value={watch("deliveryState")}
               isLoading={isStatesLoading}
               label="Select state"
             />
@@ -179,7 +177,8 @@ export const ShipmentDetails: React.FC = () => {
                 setSelectedDeliveryLGA(value);
                 setSelectedDeliveryLGAId(id ?? "");
               }}
-              value={selectedDeliveryLGA}
+              // value={selectedDeliveryLGA}
+              value={watch("deliveryLGA")}
               isLoading={isLGALoading || isFetchingLGA}
               disabled={!selectedDeliveryState}
             />
@@ -201,7 +200,8 @@ export const ShipmentDetails: React.FC = () => {
                 setValue("deliveryTown", value);
                 setSelectedDeliveryTown(value ?? "");
               }}
-              value={selectedDeliveryTown}
+              // value={selectedDeliveryTown}
+              value={watch("deliveryTown")}
               isLoading={isLoadingTown}
               disabled={!selectedDeliveryLGA}
             />
@@ -214,6 +214,7 @@ export const ShipmentDetails: React.FC = () => {
                 setValue("deliveryMarket", e.target.value);
                 clearErrors("deliveryMarket");
               }}
+              value={watch("deliveryMarket")}
               placeholder="Type full address"
             />
             <div className="space-y-6">
@@ -228,6 +229,7 @@ export const ShipmentDetails: React.FC = () => {
                         placeholder="dd/mm/yyyy"
                         rightIcon={<Calendar size="20" color="#64748b" variant="Bold" />}
                         {...register("departureDate")}
+                        value={watch("departureDate")}
                         error={errors.departureDate?.message}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                           setValue("departureDate", e.target.value);
@@ -240,6 +242,7 @@ export const ShipmentDetails: React.FC = () => {
                         label="Time"
                         type="time"
                         placeholder="00:00"
+                        value={watch("departureTime")}
                         rightIcon={<Clock size="20" color="#64748b" variant="Bold" />}
                         {...register("departureTime")}
                         error={errors.departureTime?.message}
@@ -262,6 +265,7 @@ export const ShipmentDetails: React.FC = () => {
                         placeholder="dd/mm/yyyy"
                         rightIcon={<Calendar size="20" color="#64748b" variant="Bold" />}
                         {...register("arrivalDate")}
+                        value={watch("arrivalDate")}
                         error={errors.arrivalDate?.message}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                           setValue("arrivalDate", e.target.value);
@@ -274,6 +278,7 @@ export const ShipmentDetails: React.FC = () => {
                         label="Time"
                         type="time"
                         {...register("arrivalTime")}
+                        value={watch("arrivalTime")}
                         error={errors.arrivalTime?.message}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                           setValue("arrivalTime", e.target.value);
@@ -313,6 +318,7 @@ export const ShipmentDetails: React.FC = () => {
               }}
               label="Goods Owner's Name"
               name="loadingMarket"
+              value={watch("goodsOwnerName")}
               placeholder="Type full name"
             />
 
@@ -320,6 +326,7 @@ export const ShipmentDetails: React.FC = () => {
               label="Goods Receiver's Name"
               placeholder="Type full name"
               {...register("goodsReceiverName")}
+              value={watch("goodsReceiverName")}
               error={errors.arrivalDate?.message}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setValue("goodsReceiverName", e.target.value);

@@ -25,4 +25,5 @@ export const appPaths = {
   incident: "incidents",
   activity: "activity",
   commission: "commission",
+  receipt: "receipt",
 };

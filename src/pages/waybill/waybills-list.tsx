@@ -3,10 +3,13 @@ import StatsCard from "@/common/cards/StatsCard";
 import { TabButton, TabContainer } from "@/common/tab";
 import Text from "@/common/text/text";
 import { Sort } from "iconsax-react";
-import { Filter, Pencil, Trash2 } from "lucide-react";
+import { Eye, Filter, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useGetWaybillsQuery } from "./waybill.api";
 import StatusIndicator from "@/common/status";
+import { formatID } from "@/utils/helper";
+import { appPaths } from "@/utils/app-paths";
+import { useNavigate } from "react-router-dom";
 
 const chartData = Array.from({ length: 20 }, (_, i) => ({
   name: i,
@@ -17,7 +20,7 @@ function WaybillsList() {
   const [activeTab, setActiveTab] = useState("all");
   const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
   //   const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   const { data } = useGetWaybillsQuery();
 
   const handleSwitchTab = (value: string) => {
@@ -122,7 +125,7 @@ function WaybillsList() {
 
       <div>
         <table className="min-w-full bg-white border rounded-lg">
-          <thead className="bg-[#F7F8FB] rounded-tl-2xl rounded-tr-2xl p-3">
+          <thead className="bg-[#F7F8FB] text-left rounded-tl-2xl rounded-tr-2xl p-3">
             <tr>
               <th className="py-2 px-4 border-b">
                 <div className="flex items-center gap-2">
@@ -143,25 +146,25 @@ function WaybillsList() {
             </tr>
           </thead>
           <tbody>
-            {data?.data?.map((tx, index) => (
+            {data?.data?.map((tx) => (
               <tr key={tx.arrivalDate} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">{tx.id}</td>
+                <td className="py-2 px-4 border-b"> {formatID(tx.id)}</td>
                 <td className="py-2 px-4 border-b">{tx.loadingState}</td>
                 <td className="py-2 px-4 border-b">{tx.deliveryState}</td>
                 <td className="py-2 px-4 border-b">
-                  <StatusIndicator status={"Pending"} />
+                  <StatusIndicator status={tx.paymentStatus} />
                 </td>
                 <td className="py-2 px-4 border-b">
-                  <StatusIndicator status={"Success"} />
+                  <StatusIndicator status={tx.shipmentStatus} />
                 </td>
                 <td className="py-2 px-4 border-b">{tx.arrivalDate}</td>
                 <td className="py-2 px-4 border-b">
                   <div className="flex gap-2">
                     <button
-                      //   onClick={() => navigate(`${appPaths.transaction}/123`)}
+                      onClick={() => navigate(`${appPaths.waybil}/123`)}
                       className="p-1 text-gray-500 hover:text-gray-700"
                     >
-                      <Pencil size={18} />
+                      <Eye size={18} />
                     </button>
                     <button className="p-1 text-gray-500 hover:text-gray-700">
                       <Trash2 size={18} />
