@@ -116,9 +116,9 @@ const PaymentDetailsForm = () => {
                 <ProductCard
                   key={index}
                   number={(index + 1).toString()}
-                  title={product.productType}
-                  quantity={product.unit}
-                  value={product.quantity ?? 0}
+                  quantity={product.productName}
+                  title={product.unit}
+                  value={product?.quantity ?? "0"}
                 />
               ))}
             </div>
@@ -207,7 +207,7 @@ const ProductCard = ({
   title: string;
   quantity: string;
   value: string;
-  number: string;
+  number: string | number;
 }) => {
   return (
     <div className="flex items-center my-2 justify-between p-2 rounded-md bg-white">

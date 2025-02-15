@@ -4,7 +4,7 @@ import Button from "@/common/button/button";
 import { Card } from "iconsax-react";
 import StatusIndicator from "@/common/status";
 import { useGetWaybillQuery } from "./waybill.api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "@/common/loader/loader";
 import { formatID } from "@/utils/helper";
 import { QRCodeSVG } from "qrcode.react";
@@ -12,6 +12,7 @@ import urls from "@/utils/config";
 
 const WaybillPreview = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const waybill = waybillData?.data;
   const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
@@ -60,22 +61,14 @@ const WaybillPreview = () => {
                 </div>
               </div>
               <div className="flex gap-2 my-3">
-                <Button className="!h-[35px]" leftIcon={<Download size={16} />}>
-                  Download Waybill
-                </Button>
                 <Button
-                  variant="ghost"
-                  className="!bg-white !border !border-[gray] !h-[35px]"
-                  leftIcon={<Printer size={16} />}
+                  onClick={() => {
+                    navigate(`/receipt/${id}`);
+                  }}
+                  className="!h-[35px]"
+                  leftIcon={<Download size={16} />}
                 >
-                  Print
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="!bg-white !border !border-[gray] !h-[35px]"
-                  leftIcon={<Share2 size={16} />}
-                >
-                  Share
+                  Download/Print Waybill
                 </Button>
               </div>
             </div>
@@ -95,7 +88,7 @@ const WaybillPreview = () => {
               </div>
             </div>
           </div>
-          <div>
+          <div className="w-[30%]">
             <div className="bg-[#F7F8FB] p-2 rounded-md ">
               <Text h3>Transaction ID</Text>
               <div className="flex justify-between my-3">
@@ -121,7 +114,7 @@ const WaybillPreview = () => {
                     number={(index + 1).toString()}
                     title={product.productName}
                     quantity={product.unit}
-                    value={product.quantity ?? 0}
+                    value={product.quantity}
                   />
                 ))}
               </div>

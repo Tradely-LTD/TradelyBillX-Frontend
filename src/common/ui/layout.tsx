@@ -1,126 +1,70 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
-import {
-  Menu,
-  Bell,
-  BarChart2,
-  FileText,
-  DollarSign,
-  AlertTriangle,
-  Activity,
-  PieChart,
-  Settings2,
-  Users,
-  MapIcon,
-  LogOut,
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, Bell } from "lucide-react";
 import Input from "../input/input";
-import { appPaths } from "../../utils/app-paths";
 
-const menuItems = [
-  {
-    icon: BarChart2,
-    label: "Dashboard",
-    path: "/",
-    description: "Overview of key metrics and performance",
-  },
-  {
-    icon: Settings2,
-    label: "System Configuration",
-    path: appPaths.configuration,
-    description: "Manage system settings and preferences",
-  },
-  {
-    icon: Users,
-    label: "User Management",
-    path: "/users",
-    description: "Manage system users and permissions",
-  },
-  {
-    icon: MapIcon,
-    label: "Location Management",
-    path: "/location",
-    description: " ",
-  },
-  {
-    icon: FileText,
-    label: "Waybill",
-    path: "/waybill",
-    hasSubmenu: true,
-    submenuItems: [
-      { label: "Create Waybill", path: "/waybill" },
-      { label: "View All Waybills", path: "/waybill/list" },
-      { label: "Pending Waybills", path: "/waybill/pending" },
-    ],
-    description: "Manage shipping documents and tracking",
-  },
-  {
-    icon: DollarSign,
-    label: "Transaction History",
-    path: appPaths.transaction,
-    description: "View and manage financial transactions",
-  },
-  {
-    icon: AlertTriangle,
-    label: "Incident Reporting",
-    path: "/incidents",
-    description: "Report and track delivery incidents",
-  },
-  {
-    icon: Activity,
-    label: "Activity Logs",
-    path: "/activity",
-    description: "System and user activity monitoring",
-  },
-  {
-    icon: PieChart,
-    label: "Commission Tracker",
-    path: "/commission",
-    description: "Track and manage delivery commissions",
-  },
-  {
-    icon: LogOut,
-    label: "Logout",
-    path: "/login",
-    description: "Logout",
-  },
-];
+import { getMenuItems, UserRoles } from "./menuItems";
+import { useUserSlice } from "@/pages/auth/authSlice";
 
 function Layout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
+  const { loginResponse } = useUserSlice();
+  const roleMapping = {
+    superadmin: UserRoles.SUPER_ADMIN,
+    admin: UserRoles.ADMIN,
+    agent: UserRoles.AGENT,
+  };
 
-  const handleMenuClick = (item) => {
+  const userType = roleMapping[loginResponse?.user.role || "agent"] || UserRoles.AGENT;
+  const menuItems = getMenuItems(userType);
+
+  const handleMenuClick = (item: any) => {
     if (item.hasSubmenu) {
       setExpandedSubmenu(expandedSubmenu === item.label ? null : item.label);
     } else {
       navigate(item.path);
+      if (isMobile) setIsSidebarCollapsed(true); // Collapse sidebar on mobile after navigation
     }
   };
 
-  // Helper function to check if a path is active
-  const isPathActive = (itemPath) => {
+  const isPathActive = (itemPath: string) => {
     if (itemPath === "/") {
       return location.pathname === "/";
     }
     return location.pathname.startsWith(itemPath);
   };
 
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth >= 768) {
+        setIsSidebarCollapsed(false); // Always show sidebar on larger screens
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="flex h-screen bg-white">
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-full bg-white transition-all duration-300 ease-in-out
-        ${isSidebarCollapsed ? "w-16" : "w-64"} border-r border-gray-200`}
+        className={`fixed left-0 top-0 h-full bg-white transition-all duration-300 ease-in-out z-50
+        ${isSidebarCollapsed || isMobile ? "w-16" : "w-64"} 
+        ${isMobile && !isSidebarCollapsed ? "hidden" : ""} border-r border-gray-200`}
       >
         {/* Logo */}
         <div className="flex items-center h-16 px-4 border-b border-gray-200">
           <img src="../vite.svg" alt="Logo" className="h-8 w-8" />
           <span
             className={`ml-2 font-semibold text-xl transition-opacity duration-200
-            ${isSidebarCollapsed ? "opacity-0" : "opacity-100"}`}
+            ${isSidebarCollapsed || isMobile ? "opacity-0" : "opacity-100"}`}
           >
             AUFCDN
           </span>
@@ -128,7 +72,11 @@ function Layout() {
 
         {/* Navigation Menu */}
         <nav className="p-2">
-          <p className={`px-4 py-2 text-sm text-gray-500 ${isSidebarCollapsed ? "hidden" : ""}`}>
+          <p
+            className={`px-4 py-2 text-sm text-gray-500 ${
+              isSidebarCollapsed || isMobile ? "hidden" : ""
+            }`}
+          >
             Main Menu
           </p>
           {menuItems.map((item, index) => (
@@ -145,12 +93,12 @@ function Layout() {
                 />
                 <span
                   className={`ml-3 transition-opacity duration-200 font-[500]
-                  ${isSidebarCollapsed ? "opacity-0 hidden" : "opacity-100"}
+                  ${isSidebarCollapsed || isMobile ? "opacity-0 hidden" : "opacity-100"}
                   ${item.label === "Logout" ? "text-red-500" : ""}`}
                 >
                   {item.label}
                 </span>
-                {item.hasSubmenu && !isSidebarCollapsed && (
+                {item.hasSubmenu && !isSidebarCollapsed && !isMobile && (
                   <Menu
                     className={`h-4 w-4 ml-auto transform transition-transform duration-200 
                     ${expandedSubmenu === item.label ? "rotate-180" : ""}`}
@@ -158,24 +106,27 @@ function Layout() {
                 )}
               </div>
               {/* Submenu */}
-              {item.hasSubmenu && expandedSubmenu === item.label && !isSidebarCollapsed && (
-                <div className="ml-8 mt-1">
-                  {item.submenuItems.map((subItem, subIndex) => (
-                    <div
-                      key={subIndex}
-                      onClick={() => navigate(subItem.path)}
-                      className={`px-4 py-2 text-sm rounded-lg cursor-pointer
+              {item.hasSubmenu &&
+                expandedSubmenu === item.label &&
+                !isSidebarCollapsed &&
+                !isMobile && (
+                  <div className="ml-8 mt-1">
+                    {item.submenuItems.map((subItem, subIndex) => (
+                      <div
+                        key={subIndex}
+                        onClick={() => navigate(subItem.path)}
+                        className={`px-4 py-2 text-sm rounded-lg cursor-pointer
                         ${
                           isPathActive(subItem.path)
                             ? "bg-green-50 text-green-700"
                             : "hover:bg-gray-100"
                         }`}
-                    >
-                      {subItem.label}
-                    </div>
-                  ))}
-                </div>
-              )}
+                      >
+                        {subItem.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
             </div>
           ))}
         </nav>
@@ -183,8 +134,16 @@ function Layout() {
 
       {/* Main Content */}
       <main
-        className={`flex-1 transition-all duration-300 ease-in-out bg-white
-        ${isSidebarCollapsed ? "ml-16" : "ml-64"}`}
+        className={`flex-1 transition-all duration-300 ease-in-out bg-white w-full
+        ${
+          isMobile
+            ? isSidebarCollapsed
+              ? "ml-16" // Sidebar is collapsed on mobile
+              : "ml-0" // Sidebar is hidden on mobile
+            : isSidebarCollapsed
+            ? "ml-16" // Sidebar is collapsed on desktop
+            : "ml-64" // Sidebar is expanded on desktop
+        }`}
       >
         {/* Top Header */}
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
