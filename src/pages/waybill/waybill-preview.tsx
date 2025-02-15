@@ -1,44 +1,130 @@
-import { CircleCheck, Copy, Ship } from "lucide-react";
+import { CircleCheck, Copy, Download, Printer, Share2, Ship } from "lucide-react";
 import Text from "@/common/text/text";
 import Button from "@/common/button/button";
 import { Card } from "iconsax-react";
 import StatusIndicator from "@/common/status";
+import { useGetWaybillQuery } from "./waybill.api";
+import { useParams } from "react-router-dom";
+import { Loader } from "@/common/loader/loader";
+import { formatID } from "@/utils/helper";
+import { QRCodeSVG } from "qrcode.react";
+import urls from "@/utils/config";
 
 const WaybillPreview = () => {
+  const { id } = useParams();
+  const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
+  const waybill = waybillData?.data;
+  const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
+  console.log(qrcode);
+  if (isFetching || isLoading) {
+    return <Loader />;
+  }
+  if (!waybill) {
+    return <p>Not found</p>;
+  }
+
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
       <div className="bg-white my-3 border border-gray-200 rounded-md p-3">
         <div className="flex gap-5">
           <div className="w-[70%]">
+            <div className="bg-[#F7F8FB] p-3 rounded-md  flex flex-col justify-between mb-4">
+              <Text h3>Waybill Information</Text>
+              <div className="flex gap-3 ">
+                <div className="p-3 rounded-md border bg-white">
+                  <QRCodeSVG value={qrcode} size={100} level="H" />
+                </div>
+                <div className="w-full flex flex-col gap-3">
+                  <div className="flex gap-2 items-start justify-between">
+                    <div>
+                      <Text>Waybill ID</Text>
+                    </div>
+                    <div className="flex gap-4">
+                      {formatID(waybill.id)}
+                      <Text className="!flex items-center gap-2" color="green">
+                        <Copy size={14} color="green" /> Copy
+                      </Text>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 items-start justify-between">
+                    <div>
+                      <Text>Waybill Number</Text>
+                    </div>
+                    <div className="flex gap-4">
+                      {formatID(waybill.id)}
+                      <Text className="!flex items-center gap-2" color="green">
+                        <Copy size={14} color="green" /> Copy
+                      </Text>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2 my-3">
+                <Button className="!h-[35px]" leftIcon={<Download size={16} />}>
+                  Download Waybill
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="!bg-white !border !border-[gray] !h-[35px]"
+                  leftIcon={<Printer size={16} />}
+                >
+                  Print
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="!bg-white !border !border-[gray] !h-[35px]"
+                  leftIcon={<Share2 size={16} />}
+                >
+                  Share
+                </Button>
+              </div>
+            </div>
+
             <div className="bg-[#F7F8FB] p-3 rounded-md flex flex-col justify-between">
               <Text h3>Drive and Vehicle Information</Text>
               <div className="flex gap-3">
                 <div>
-                  <LabelData title="Driver's Name" value={"John Doe"} />
+                  <LabelData title="Driver's Name" value={waybill?.driverName} />
                 </div>
                 <div>
-                  <LabelData title="Driver's Phone Number" value={"0805324233"} />
+                  <LabelData title="Driver's Phone Number" value={waybill?.driverPhone} />
                 </div>
                 <div>
-                  <LabelData title="Vehicle Number" value={"45234-423"} />
+                  <LabelData title="Vehicle Number" value={waybill.vehicleNumber} />
                 </div>
               </div>
             </div>
           </div>
-
-          <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
-            <Text h3>Transaction ID</Text>
-            <div className="flex justify-between my-3">
-              <Text color="#64748B">Transaction ID</Text>
-              <p className="flex gap-2 font-semibold text-[#2C7743]">
-                {"TRX001"} <Copy color="green" />
-              </p>
+          <div>
+            <div className="bg-[#F7F8FB] p-2 rounded-md ">
+              <Text h3>Transaction ID</Text>
+              <div className="flex justify-between my-3">
+                <Text color="#64748B">Transaction ID</Text>
+                <p className="flex gap-2 font-semibold text-[#2C7743]">
+                  {formatID(waybill.id)} <Copy color="green" />
+                </p>
+              </div>
+              <div className="flex justify-between">
+                <Text color="#64748B">Receipt</Text>
+                <p className="flex gap-2 font-semibold text-[#2C7743]">
+                  {formatID(waybill.id)} <Copy color="green" />
+                </p>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <Text color="#64748B">Receipt</Text>
-              <p className="flex gap-2 font-semibold text-[#2C7743]">
-                {"32414"} <Copy color="green" />
-              </p>
+            <div className="bg-[#F7F8FB] p-2 rounded-md ">
+              <Text h3>Products</Text>
+
+              <div className="">
+                {waybill?.products?.map((product, index) => (
+                  <ProductCard
+                    key={index}
+                    number={(index + 1).toString()}
+                    title={product.productName}
+                    quantity={product.unit}
+                    value={product.quantity ?? 0}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -50,7 +136,7 @@ const WaybillPreview = () => {
               <Text style={{ display: "flex", gap: 3, alignItems: "center" }}>
                 <Ship size="16" /> Shipment Status
               </Text>
-              <StatusIndicator status={"PENDING"} />
+              <StatusIndicator status={waybill.shipmentStatus} />
             </div>
 
             <Text
@@ -65,19 +151,19 @@ const WaybillPreview = () => {
               <Ship size="16" /> Loading Location
             </Text>
             <div className="flex gap-2">
-              <LabelData title="State" value={"Abuja"} />
-              <LabelData title="LGA" value={"FCT"} />
-              <LabelData title="Town/City" value={"Town"} />
-              <LabelData title="Market/Location" value={"Market"} />
+              <LabelData title="State" value={waybill.loadingState} />
+              <LabelData title="LGA" value={waybill.loadingLGA} />
+              <LabelData title="Town/City" value={waybill.loadingTown} />
+              <LabelData title="Market/Location" value={waybill.loadingMarket} />
             </div>
 
             <div className="bg-[#F7F8FB] py-2 rounded-md">
               <Text h3>Delivery Location</Text>
               <div className="flex gap-2">
-                <LabelData title="State" value={"Abuja"} />
-                <LabelData title="LGA" value={"Abuja"} />
-                <LabelData title="Town/City" value={"Abuja"} />
-                <LabelData title="Market/Location" value={"Abuja"} />
+                <LabelData title="State" value={waybill.deliveryState} />
+                <LabelData title="LGA" value={waybill.deliveryLGA} />
+                <LabelData title="Town/City" value={waybill.deliveryTown} />
+                <LabelData title="Market/Location" value={waybill.deliveryMarket} />
               </div>
             </div>
 
@@ -87,8 +173,8 @@ const WaybillPreview = () => {
                   <Ship size="16" /> Departure
                 </Text>
                 <div className="flex gap-2">
-                  <LabelData title="Date" value={"formValues.departureDate"} />
-                  <LabelData title="Time" value={"formValues.departureTime"} />
+                  <LabelData title="Date" value={waybill.departureDate} />
+                  <LabelData title="Time" value={waybill.departureTime} />
                 </div>
               </div>
               <div className="bg-[#F7F8FB] py-2 rounded-md">
@@ -96,8 +182,8 @@ const WaybillPreview = () => {
                   <Ship size="16" /> Arrival
                 </Text>
                 <div className="flex gap-2">
-                  <LabelData title="Date" value={"formValues.arrivalDate"} />
-                  <LabelData title="Time" value={"formValues.arrivalTime"} />
+                  <LabelData title="Date" value={waybill.arrivalDate} />
+                  <LabelData title="Time" value={waybill.arrivalTime} />
                 </div>
               </div>
             </div>
@@ -105,43 +191,24 @@ const WaybillPreview = () => {
 
           <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
             <Text h3 block>
-              Product Information
+              Goods Information
             </Text>
-            <div className="">
-              {[
-                { name: "Corn", unit: "Kilogram", amount: "800 kg" },
-                { name: "Wheat", unit: "Kilogram", amount: "500 kg" },
-                { name: "Rice", unit: "Ton", amount: "10 TON" },
-              ].map((product, index) => (
-                <ProductCard
-                  key={index}
-                  number={(index + 1).toString()}
-                  title={product.name}
-                  quantity={product.unit}
-                  value={product.amount}
-                />
-              ))}
+            <div className="bg-white p-3 rounded-md my-2">
+              <LabelData title="Goods Owner" value={waybill.goodsOwnerName} />
+              <LabelData title="Goods Receiver" value={waybill.goodsReceiverName} />
             </div>
+
             <hr />
 
             <div>
               <Text h3>Payment Summary</Text>
               <div className="flex items-center justify-between my-2">
-                <Text block>Item Total</Text>
-                <Text style={{ fontWeight: "600" }}>{0} Items</Text>
+                <Text block>Payment Status</Text>
+                <StatusIndicator status={waybill.paymentStatus} />
               </div>
               <div className="flex items-center justify-between my-2">
-                <Text block>Item Price</Text>
-                <Text style={{ fontWeight: "600" }}>{"0"} NGN</Text>
-              </div>
-              <div className="flex items-center justify-between my-2">
-                <Text block>Waybill Fee</Text>
-                <Text style={{ fontWeight: "600" }}>{"5,196"} NGN</Text>
-              </div>
-              <hr className="border-dotted border-[2px]" />
-              <div className="flex items-center justify-between my-2">
-                <Text block>Total Price</Text>
-                <Text style={{ fontWeight: "600" }}>{"0"} NGN</Text>
+                <Text block>Incident Status</Text>
+                <StatusIndicator status={waybill.incidentStatus} />
               </div>
             </div>
           </div>
@@ -153,29 +220,10 @@ const WaybillPreview = () => {
             <div className="bg-white p-3 rounded-md flex items-center justify-between">
               <div className="flex gap-2">
                 <Card />
-                <Text>{"454362526452"}</Text>
+                <Text>{"**** **** **** " + waybill.id.slice(-4)}</Text>
               </div>
-              <Text>{"12/28"}</Text>
               <CircleCheck fill="green" color="white" />
             </div>
-            {/* <div className="flex flex-col items-center gap-4">
-              <div className="flex items-center gap-1">
-                <input type="checkbox" className="w-4 h-4 text-green-600" />
-                <span className="text-sm">
-                  By clicking this, I agree to AUFCDN{" "}
-                  <a href="#" className="text-blue-500">
-                    Terms & Conditions
-                  </a>{" "}
-                  and{" "}
-                  <a href="#" className="text-blue-500">
-                    Privacy Policy
-                  </a>
-                </span>
-              </div>
-              <button className="w-full max-w-md bg-green-600 text-white py-3 px-6 rounded-lg font-medium">
-                Proceed to Payment
-              </button>
-            </div> */}
           </div>
 
           <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
@@ -194,6 +242,17 @@ const WaybillPreview = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const LabelData = ({ title, value }: { title: string; value: string }) => {
+  return (
+    <div className="my-2">
+      <Text color="#64748B">{title}</Text>
+      <Text block h3>
+        {value}
+      </Text>
     </div>
   );
 };
@@ -223,17 +282,6 @@ const ProductCard = ({
         </div>
       </div>
       <Text block>{value}</Text>
-    </div>
-  );
-};
-
-const LabelData = ({ title, value }: { title: string; value: string }) => {
-  return (
-    <div>
-      <Text color="#64748B">{title}</Text>
-      <Text block h3>
-        {value}
-      </Text>
     </div>
   );
 };

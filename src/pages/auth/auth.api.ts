@@ -14,7 +14,6 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(_, { queryFulfilled, dispatch }) {
         try {
           const { data: registerData } = await queryFulfilled; // Extract response
-          console.log("LLLL::", registerData);
           // Assuming registerData contains authToken and user details
           dispatch(
             setAuth({
@@ -67,6 +66,18 @@ export const authApi = baseApi.injectEndpoints({
         url: "/password-reset",
         method: Methods.Post,
         data,
+      }),
+    }),
+    getUsers: builder.query<{ data: AuthUser[]; success: boolean }, void>({
+      query: () => ({
+        url: "auth/users",
+        method: Methods.Get,
+      }),
+    }),
+    getUser: builder.query<{ data: AuthUser; success: boolean }, { id: string }>({
+      query: ({ id }) => ({
+        url: `auth/user/${id}`,
+        method: Methods.Get,
       }),
     }),
     verifyEmail: builder.mutation<any, string>({
@@ -148,4 +159,6 @@ export const {
   useLogoutMutation,
   usePasswordResetMutation,
   useRegisterMutation,
+  useGetUserQuery,
+  useGetUsersQuery,
 } = authApi;

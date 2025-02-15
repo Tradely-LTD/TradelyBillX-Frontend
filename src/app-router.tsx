@@ -22,6 +22,11 @@ import CommisionTracker from "./pages/commission/commission";
 import WaybillsList from "./pages/waybill/waybills-list";
 import WaybillReceipt from "./pages/components/waybill-receipt";
 import WaybillPreview from "./pages/waybill/waybill-preview";
+import withRoleAccess from "./common/router-helper/withRole";
+import { Unauthorized } from "./pages/components/unauthorized-component";
+
+const WaybillComponent = withRoleAccess("agent")(Waybill);
+
 function AppRouter() {
   return (
     <BrowserRouter>
@@ -58,7 +63,7 @@ function AppRouter() {
           <Route path={appPaths.users} element={<UserManagement />} />
           <Route path={`${appPaths.users}/add`} element={<UserForm mode="create" />} />
           <Route path={`${appPaths.users}/:id`} element={<UserForm mode="update" />} />
-          <Route path={appPaths.waybil} element={<Waybill />} />
+          <Route path={appPaths.waybil} element={<WaybillComponent />} />
           <Route path={`${appPaths.waybil}/list`} element={<WaybillsList />} />
           <Route path={`${appPaths.waybil}/:id`} element={<WaybillPreview />} />
           <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
@@ -70,6 +75,7 @@ function AppRouter() {
           <Route path={`${appPaths.receipt}/:id`} element={<WaybillReceipt />} />
           <Route path={`${appPaths.activity}`} element={<ActivityLogs />} />
           <Route path={`${appPaths.commission}`} element={<CommisionTracker />} />
+          <Route path={`${appPaths.unauthorized}`} element={<Unauthorized />} />
         </Route>
         {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>

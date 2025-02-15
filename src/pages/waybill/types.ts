@@ -32,9 +32,15 @@ export interface WayBillFormData {
   deliveryLGA: string;
   deliveryTown: string;
 
-  // products: [];
+  products?: {
+    id: string | number;
+    productName: string;
+    unit: string;
+    quantity: number;
+  }[];
   goodsOwnerName: string;
   goodsReceiverName: string;
+  shipmentStatus: string;
 }
 
 export const wayBillSchema = yup.object().shape({
@@ -55,7 +61,21 @@ export const wayBillSchema = yup.object().shape({
   deliveryLGA: yup.string().required("Delivery LGA is required"),
   deliveryTown: yup.string().required("Delivery town is required"),
   // products: yup.array().of(yup.object()).min(1, "At least one product is required"),
+  products: yup
+    .array()
+    .of(
+      yup.object().shape({
+        productName: yup.string().required("Product Name is required"),
+        unit: yup.string().required("Unit is required"),
+        quantity: yup
+          .number()
+          .required("Quantity is required")
+          .min(0, "Quantity must be greater than or equal to 0"),
+      })
+    )
+    .min(1, "At least one product is required"),
 
   goodsOwnerName: yup.string().required("Good Owners Name is required"),
   goodsReceiverName: yup.string().required("Good Receiver Name is required"),
+  shipmentStatus: yup.string().required("Shipment Status is required"),
 });

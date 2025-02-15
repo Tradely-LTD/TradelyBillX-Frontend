@@ -11,6 +11,13 @@ export const wayBillApi = baseApi.injectEndpoints({
       }),
       providesTags: ["WAYBILL"],
     }),
+    getWaybill: builder.query<{ success: boolean; data: Waybill }, { id: string }>({
+      query: ({ id }) => ({
+        url: `/waybill/${id}`,
+        method: Methods.Get,
+      }),
+      providesTags: ["WAYBILL"],
+    }),
 
     createWayBills: builder.mutation({
       query: (data) => ({
@@ -36,32 +43,34 @@ export const wayBillApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateWayBillsMutation, useGetWaybillsQuery } = wayBillApi;
+export const { useCreateWayBillsMutation, useGetWaybillQuery, useGetWaybillsQuery } = wayBillApi;
 
 interface WaybillsResponse {
-  data: {
-    driverName: string;
-    driverPhone: string;
-    vehicleNumber: string;
-    loadingMarket: string;
-    deliveryMarket: string;
-    departureDate: string;
-    departureTime: string;
-    arrivalDate: string;
-    arrivalTime: string;
-    loadingState: string;
-    loadingLGA: string;
-    loadingTown: string;
-    id: string;
-    deliveryState: string;
-    deliveryLGA: string;
-    deliveryTown: string;
-    shipmentStatus: "IN_TRANSIT" | "DELIVERED" | "CANCELLED";
-    paymentStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "REFUNDED";
-    incidentStatus: "SAFE" | "REPORTED" | "REVIEWING" | "RESOLVED";
-    // products: [];
-    goodsOwnerName: string;
-    goodsReceiverName: string;
-  }[];
+  data: Waybill[];
   message: string;
+}
+
+interface Waybill {
+  driverName: string;
+  driverPhone: string;
+  vehicleNumber: string;
+  loadingMarket: string;
+  deliveryMarket: string;
+  departureDate: string;
+  departureTime: string;
+  arrivalDate: string;
+  arrivalTime: string;
+  loadingState: string;
+  loadingLGA: string;
+  loadingTown: string;
+  id: string;
+  deliveryState: string;
+  deliveryLGA: string;
+  deliveryTown: string;
+  shipmentStatus: "IN_TRANSIT" | "DELIVERED" | "CANCELLED";
+  paymentStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "REFUNDED";
+  incidentStatus: "SAFE" | "REPORTED" | "REVIEWING" | "RESOLVED";
+  products: [];
+  goodsOwnerName: string;
+  goodsReceiverName: string;
 }

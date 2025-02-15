@@ -119,7 +119,7 @@ function Transaction() {
                   <LabelData title="Vehicle Number" value="ABC-123" />
                 </div>
               </div>
-            </div>{" "}
+            </div>
           </div>
 
           <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">

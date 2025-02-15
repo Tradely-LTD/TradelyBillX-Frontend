@@ -112,19 +112,13 @@ const PaymentDetailsForm = () => {
               Product Information
             </Text>
             <div className="">
-              {(
-                formValues.products || [
-                  { name: "Corn", unit: "Kilogram", amount: "800 kg" },
-                  { name: "Wheat", unit: "Kilogram", amount: "500 kg" },
-                  { name: "Rice", unit: "Ton", amount: "10 TON" },
-                ]
-              ).map((product, index) => (
+              {formValues?.products?.map((product, index) => (
                 <ProductCard
                   key={index}
                   number={(index + 1).toString()}
-                  title={product.name}
+                  title={product.productType}
                   quantity={product.unit}
-                  value={product.amount}
+                  value={product.quantity ?? 0}
                 />
               ))}
             </div>
