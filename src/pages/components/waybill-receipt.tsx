@@ -10,11 +10,13 @@ import { QRCodeSVG } from "qrcode.react";
 // import html2canvas from "html2canvas";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
+import urls from "@/utils/config";
 
 const WaybillReceipt = () => {
   const { id } = useParams();
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const data = waybillData?.data;
+  const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
   const componentRef = useRef<HTMLDivElement | null>(null);
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
@@ -72,7 +74,7 @@ const WaybillReceipt = () => {
 
         <div className="flex flex-wrap w-full  flex-col md:flex-row-reverse justify-between items-center">
           <div className="p-3 my-2  w-[100%] md:w-[40%]   flex flex-row-reverse justify-between gap-1 items-center border rounded-md bg-white">
-            <QRCodeSVG value={"qrcode"} size={90} level="H" />
+            <QRCodeSVG value={qrcode} size={90} level="H" />
             <div>
               <Text secondaryColor className=" rounded-md my-2">
                 Date Issued
