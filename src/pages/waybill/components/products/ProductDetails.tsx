@@ -1,53 +1,69 @@
 import { useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
-import { ProductItemRow } from "./ProductItemRow";
-import { ProductForm } from "./ProductForm";
+import { Trash2 } from "lucide-react";
 import { useFormContext } from "../formContext";
 
+interface Product {
+  id: number;
+  productName: string;
+  unit: string;
+  quantity: number;
+}
+
+const productOptions = ["Rice", "Corn", "Wheat"];
+const unitOptions = ["Kilogram", "TON"];
+
 export const ProductDetails: React.FC = () => {
-  const [items, setItems] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [editingItemId, setEditingItemId] = useState(null);
-  const {
-    register,
-    setValue,
-    clearErrors,
-    formState: { errors },
-  } = useFormContext();
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
+    productName: "",
+    unit: "",
+    quantity: 0,
+  });
+  const [editProduct, setEditProduct] = useState<Omit<Product, "id">>({
+    productName: "",
+    unit: "",
+    quantity: 0,
+  });
 
-  const handleAddItem = () => {
-    setShowForm(true);
-    setEditingItemId(null);
-  };
+  const { setValue, getValues, watch } = useFormContext();
+  const products = watch("products") || []; // Use watch to reactively get form values
 
-  const handleSubmit = (values) => {
-    if (editingItemId !== null) {
-      setItems(items.map((item) => (item.id === editingItemId ? { ...item, ...values } : item)));
-    } else {
-      const newItem = { id: Date.now(), ...values };
-      setItems([...items, newItem]);
-      setValue("products", items);
+  const handleAdd = () => {
+    if (newProduct.productName && newProduct.unit && newProduct.quantity > 0) {
+      const newItem = { id: Date.now(), ...newProduct };
+      const updatedItems = [...products, newItem];
+      setValue("products", updatedItems);
+      setNewProduct({ productName: "", unit: "", quantity: 0 });
     }
-    setShowForm(false);
-    setEditingItemId(null);
   };
 
-  const handleDeleteItem = (id) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
-
-  const handleEditItem = (id) => {
-    const itemToEdit = items.find((item) => item.id === id);
-    if (itemToEdit) {
-      setEditingItemId(id);
-      setShowForm(true);
+  const startEdit = (id: number) => {
+    const item = products.find((item) => item.id === id);
+    if (item) {
+      setEditingId(id);
+      setEditProduct(item);
     }
+  };
+
+  const saveEdit = () => {
+    if (editingId !== null) {
+      const updatedItems = products.map((item) =>
+        item.id === editingId ? { ...item, ...editProduct } : item
+      );
+      setValue("products", updatedItems);
+      setEditingId(null);
+    }
+  };
+
+  const deleteItem = (id: number) => {
+    const updatedItems = products.filter((item) => item.id !== id);
+    setValue("products", updatedItems);
   };
 
   return (
-    <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between gap-[20px] flex-1">
+    <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between flex-col gap-[20px] flex-1">
       <div className="flex gap-3 mb-6">
-        <img src="truck.png" className="h-[48px] w-[48px]" />
+        <img src="truck.png" alt="Truck" className="h-[48px] w-[48px]" />
         <div>
           <div className="text-lg font-semibold">Product Information</div>
           <div className="text-gray-500">
@@ -58,54 +74,129 @@ export const ProductDetails: React.FC = () => {
       </div>
 
       <div className="space-y-4 w-[60%]">
-        {/* Render existing items */}
-        {items.map((item, index) => (
-          <ProductItemRow
-            key={item.id} // Use a unique key for each item
-            index={index + 1}
-            productName={item.productType}
-            unit={item.unit}
-            quantity={item.quantity}
-            onEdit={() => handleEditItem(item.id)} // Pass the item ID to edit
-            onDelete={() => handleDeleteItem(item.id)} // Pass the item ID to delete
-          />
+        {products.map((item) => (
+          <div key={item.id} className="flex gap-4 items-center flex-wrap md:flex-nowrap">
+            {editingId === item?.id ? (
+              <>
+                <select
+                  value={editProduct.productName}
+                  onChange={(e) => setEditProduct({ ...editProduct, productName: e.target.value })}
+                  className="p-2 rounded border border-gray-200 flex-1"
+                >
+                  <option value="">Select product</option>
+                  {productOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={editProduct.unit}
+                  onChange={(e) => setEditProduct({ ...editProduct, unit: e.target.value })}
+                  className="p-2 rounded border border-gray-200 flex-1"
+                >
+                  <option value="">Select unit</option>
+                  {unitOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+
+                <div className="flex items-center gap-2 flex-1">
+                  <input
+                    type="number"
+                    value={editProduct.quantity}
+                    onChange={(e) =>
+                      setEditProduct({ ...editProduct, quantity: Number(e.target.value) })
+                    }
+                    className="w-full p-2 rounded border border-green-500"
+                  />
+                  <span>{editProduct.unit === "TON" ? "TON" : "Kg"}</span>
+                </div>
+
+                <button
+                  onClick={saveEdit}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setEditingId(null)}
+                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="flex-1">{item.productName}</div>
+                <div className="flex-1">
+                  {item.quantity} {item.unit === "TON" ? "TON" : "Kg"}
+                </div>
+                <button
+                  onClick={() => startEdit(item.id)}
+                  className="text-blue-600 hover:text-blue-700"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => deleteItem(item?.id)}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </>
+            )}
+          </div>
         ))}
 
-        {/* Render the form if showForm is true */}
-        {showForm && (
-          <ProductForm
-            itemNumber={items.length + 1} // Display the next item number
-            initialValues={
-              editingItemId !== null
-                ? items.find((item) => item.id === editingItemId)
-                : { productType: "", unit: "", quantity: "" }
-            }
-            onSubmit={handleSubmit}
-            onDelete={() => {
-              if (editingItemId !== null) {
-                handleDeleteItem(editingItemId); // Delete the item being edited
-              }
-              setShowForm(false); // Hide the form
-              setEditingItemId(null); // Reset editing state
-            }}
-            onCancel={() => {
-              setShowForm(false);
-              setEditingItemId(null);
-            }}
-          />
-        )}
-
-        {/* Show "More Item" button if the form is not visible */}
-        {!showForm && (
-          <button
-            type="button"
-            onClick={handleAddItem}
-            className="mt-4 flex items-center gap-2 text-green-600 font-medium"
+        {/* Always visible add form */}
+        <div className="flex gap-4 items-center">
+          <select
+            value={newProduct.productName}
+            onChange={(e) => setNewProduct({ ...newProduct, productName: e.target.value })}
+            className="p-2 rounded border border-gray-200 flex-1"
           >
-            <Plus className="w-5 h-5" />
-            More Item
+            <option value="">Select product</option>
+            {productOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={newProduct.unit}
+            onChange={(e) => setNewProduct({ ...newProduct, unit: e.target.value })}
+            className="p-2 rounded border border-gray-200 flex-1"
+          >
+            <option value="">Select unit</option>
+            {unitOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+
+          <div className="flex items-center gap-2 flex-1">
+            <input
+              type="number"
+              value={newProduct.quantity}
+              onChange={(e) => setNewProduct({ ...newProduct, quantity: Number(e.target.value) })}
+              className="w-full p-2 rounded border border-green-500"
+            />
+            <span>{newProduct.unit === "TON" ? "TON" : "Kg"}</span>
+          </div>
+
+          <button
+            onClick={handleAdd}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            Add
           </button>
-        )}
+        </div>
       </div>
     </div>
   );

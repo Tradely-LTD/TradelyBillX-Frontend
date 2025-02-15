@@ -1,11 +1,12 @@
+import { capitalizeFirstLetter } from "@/utils/helper";
 import React from "react";
 import styled from "styled-components";
 
 export type StatusType =
-  | "Admin"
-  | "Super Admin"
-  | "User"
-  | "Agent"
+  | "admin"
+  | "superadmin"
+  | "user"
+  | "agent"
   | "Allowed"
   | "Success"
   | "Resolved"
@@ -20,6 +21,10 @@ export type StatusType =
   | "COMPLETED"
   | "FAILED"
   | "REFUNDED"
+  | "SAFE"
+  | "REPORTED"
+  | "REVIEWING"
+  | "RESOLVED"
   | boolean;
 
 interface StatusIndicatorProps {
@@ -37,7 +42,7 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status = "Admin", pal
 
   return (
     <StatusPill status={displayStatus} pale={pale}>
-      {displayStatus}
+      {capitalizeFirstLetter(displayStatus)}
     </StatusPill>
   );
 };

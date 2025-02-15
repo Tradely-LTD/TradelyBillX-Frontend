@@ -28,6 +28,9 @@ const WaybillForm: React.FC = () => {
       navigate("/waybill/list");
     }
   }, [isSuccess]);
+
+  console.log(getValues());
+
   return (
     <>
       <div className="mt-4">

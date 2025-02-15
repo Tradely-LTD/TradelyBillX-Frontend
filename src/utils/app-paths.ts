@@ -26,4 +26,5 @@ export const appPaths = {
   activity: "activity",
   commission: "commission",
   receipt: "receipt",
+  unauthorized: "unauthorized",
 };

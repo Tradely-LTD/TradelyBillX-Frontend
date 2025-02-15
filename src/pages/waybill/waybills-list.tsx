@@ -10,6 +10,8 @@ import StatusIndicator from "@/common/status";
 import { formatID } from "@/utils/helper";
 import { appPaths } from "@/utils/app-paths";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "@/common/loader/loader";
+import EmptyState from "../components/empty-state";
 
 const chartData = Array.from({ length: 20 }, (_, i) => ({
   name: i,
@@ -21,7 +23,7 @@ function WaybillsList() {
   const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
   //   const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { data } = useGetWaybillsQuery();
+  const { data, isLoading, isFetching } = useGetWaybillsQuery();
 
   const handleSwitchTab = (value: string) => {
     setActiveTab(value);
@@ -123,59 +125,66 @@ function WaybillsList() {
         </div>
       </div>
 
-      <div>
-        <table className="min-w-full bg-white border rounded-lg">
-          <thead className="bg-[#F7F8FB] text-left rounded-tl-2xl rounded-tr-2xl p-3">
-            <tr>
-              <th className="py-2 px-4 border-b">
-                <div className="flex items-center gap-2">
-                  {/* <Checkbox
-                    checked={selectedItems.length === data?.data?.length}
-                    onCheckedChange={handleBulkSelection}
-                    id="select-all"
-                  /> */}
-                  <label htmlFor="select-all">Waybill Id</label>
-                </div>
-              </th>
-              <th className="py-2 px-4 border-b">Origin</th>
-              <th className="py-2 px-4 border-b">Destination</th>
-              <th className="py-2 px-4 border-b">Payment Status</th>
-              <th className="py-2 px-4 border-b">Shipment Status</th>
-              <th className="py-2 px-4 border-b">Arrival Date </th>
-              <th className="py-2 px-4 border-b">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.data?.map((tx) => (
-              <tr key={tx.arrivalDate} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b"> {formatID(tx.id)}</td>
-                <td className="py-2 px-4 border-b">{tx.loadingState}</td>
-                <td className="py-2 px-4 border-b">{tx.deliveryState}</td>
-                <td className="py-2 px-4 border-b">
-                  <StatusIndicator status={tx.paymentStatus} />
-                </td>
-                <td className="py-2 px-4 border-b">
-                  <StatusIndicator status={tx.shipmentStatus} />
-                </td>
-                <td className="py-2 px-4 border-b">{tx.arrivalDate}</td>
-                <td className="py-2 px-4 border-b">
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => navigate(`${appPaths.waybil}/123`)}
-                      className="p-1 text-gray-500 hover:text-gray-700"
-                    >
-                      <Eye size={18} />
-                    </button>
-                    <button className="p-1 text-gray-500 hover:text-gray-700">
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {isLoading || isFetching ? (
+        <>
+          <Loader />
+        </>
+      ) : (
+        <>
+          {data?.data.length ? (
+            <div>
+              <table className="min-w-full bg-white border rounded-lg">
+                <thead className="bg-[#F7F8FB] text-left rounded-tl-2xl rounded-tr-2xl p-3">
+                  <tr>
+                    <th className="py-2 px-4 border-b">
+                      <div className="flex items-center gap-2">
+                        <label htmlFor="select-all">Waybill Id</label>
+                      </div>
+                    </th>
+                    <th className="py-2 px-4 border-b">Origin</th>
+                    <th className="py-2 px-4 border-b">Destination</th>
+                    <th className="py-2 px-4 border-b">Payment Status</th>
+                    <th className="py-2 px-4 border-b">Shipment Status</th>
+                    <th className="py-2 px-4 border-b">Arrival Date </th>
+                    <th className="py-2 px-4 border-b">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.data?.map((tx) => (
+                    <tr key={tx.arrivalDate} className="hover:bg-gray-50">
+                      <td className="py-2 px-4 border-b"> {formatID(tx.id)}</td>
+                      <td className="py-2 px-4 border-b">{tx.loadingState}</td>
+                      <td className="py-2 px-4 border-b">{tx.deliveryState}</td>
+                      <td className="py-2 px-4 border-b">
+                        <StatusIndicator status={tx.paymentStatus} />
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <StatusIndicator status={tx.shipmentStatus} />
+                      </td>
+                      <td className="py-2 px-4 border-b">{tx.arrivalDate}</td>
+                      <td className="py-2 px-4 border-b">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => navigate(`${appPaths.waybil}/${tx.id}`)}
+                            className="p-1 text-gray-500 hover:text-gray-700"
+                          >
+                            <Eye size={18} />
+                          </button>
+                          <button className="p-1 text-gray-500 hover:text-gray-700">
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState onButtonClick={() => navigate(-1)} />
+          )}
+        </>
+      )}
     </div>
   );
 }

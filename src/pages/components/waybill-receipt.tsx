@@ -1,55 +1,37 @@
 import { Clock, MapPin, Truck, User, Phone } from "lucide-react";
+import { useGetWaybillQuery } from "../waybill/waybill.api";
+import { useParams } from "react-router-dom";
+import { Loader } from "@/common/loader/loader";
 
 const WaybillReceipt = () => {
-  // Sample data - replace with actual waybill data
-  const sampleWaybill = {
-    id: "WB-123456",
-    arrivalDate: "2025-02-15",
-    arrivalTime: "14:00",
-    departureDate: "2025-02-14",
-    departureTime: "09:00",
-    deliveryLGA: "Ikeja",
-    deliveryMarket: "Computer Village",
-    deliveryState: "Lagos",
-    deliveryTown: "Ikeja",
-    loadingLGA: "Aba North",
-    loadingMarket: "Ariaria Market",
-    loadingState: "Abia",
-    loadingTown: "Aba",
-    driverName: "John Doe",
-    driverPhone: "+234 801 234 5678",
-    goodsOwnerName: "Alice Smith",
-    goodsReceiverName: "Bob Johnson",
-    vehicleNumber: "ABC-123-XY",
-    incidentStatus: "SAFE",
-    paymentStatus: "COMPLETED",
-    shipmentStatus: "IN_TRANSIT",
-  };
-  const waybill = null;
+  const { id } = useParams();
+  const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
+  const data = waybillData?.data;
 
-  const data = waybill || sampleWaybill;
-
+  if (isFetching || isLoading) {
+    return <Loader />;
+  }
   return (
     <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
       {/* Header */}
       <div className="text-center mb-6 border-b pb-4">
         <h1 className="text-2xl font-bold text-gray-800">Waybill Receipt</h1>
-        <p className="text-gray-600">Waybill ID: {data.id}</p>
+        <p className="text-gray-600">Waybill ID: {data?.id}</p>
       </div>
 
       {/* Status Section */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="text-center p-2 bg-blue-50 rounded">
           <p className="text-sm text-gray-600">Shipment Status</p>
-          <p className="font-semibold text-blue-600">{data.shipmentStatus}</p>
+          <p className="font-semibold text-blue-600">{data?.shipmentStatus}</p>
         </div>
         <div className="text-center p-2 bg-green-50 rounded">
           <p className="text-sm text-gray-600">Payment Status</p>
-          <p className="font-semibold text-green-600">{data.paymentStatus}</p>
+          <p className="font-semibold text-green-600">{data?.paymentStatus}</p>
         </div>
         <div className="text-center p-2 bg-purple-50 rounded">
           <p className="text-sm text-gray-600">Incident Status</p>
-          <p className="font-semibold text-purple-600">{data.incidentStatus}</p>
+          <p className="font-semibold text-purple-600">{data?.incidentStatus}</p>
         </div>
       </div>
 
@@ -61,10 +43,10 @@ const WaybillReceipt = () => {
             <span className="font-semibold">Pickup Location</span>
           </div>
           <div className="pl-6 space-y-1">
-            <p className="text-sm">Market: {data.loadingMarket}</p>
-            <p className="text-sm">State: {data.loadingState}</p>
-            <p className="text-sm">LGA: {data.loadingLGA}</p>
-            <p className="text-sm">Town: {data.loadingTown}</p>
+            <p className="text-sm">Market: {data?.loadingMarket}</p>
+            <p className="text-sm">State: {data?.loadingState}</p>
+            <p className="text-sm">LGA: {data?.loadingLGA}</p>
+            <p className="text-sm">Town: {data?.loadingTown}</p>
           </div>
         </div>
         <div className="space-y-2">
@@ -73,10 +55,10 @@ const WaybillReceipt = () => {
             <span className="font-semibold">Delivery Location</span>
           </div>
           <div className="pl-6 space-y-1">
-            <p className="text-sm">Market: {data.deliveryMarket}</p>
-            <p className="text-sm">State: {data.deliveryState}</p>
-            <p className="text-sm">LGA: {data.deliveryLGA}</p>
-            <p className="text-sm">Town: {data.deliveryTown}</p>
+            <p className="text-sm">Market: {data?.deliveryMarket}</p>
+            <p className="text-sm">State: {data?.deliveryState}</p>
+            <p className="text-sm">LGA: {data?.deliveryLGA}</p>
+            <p className="text-sm">Town: {data?.deliveryTown}</p>
           </div>
         </div>
       </div>
@@ -89,8 +71,8 @@ const WaybillReceipt = () => {
             <span className="font-semibold">Departure</span>
           </div>
           <div className="pl-6">
-            <p className="text-sm">Date: {data.departureDate}</p>
-            <p className="text-sm">Time: {data.departureTime}</p>
+            <p className="text-sm">Date: {data?.departureDate}</p>
+            <p className="text-sm">Time: {data?.departureTime}</p>
           </div>
         </div>
         <div className="space-y-2">
@@ -99,8 +81,8 @@ const WaybillReceipt = () => {
             <span className="font-semibold">Arrival</span>
           </div>
           <div className="pl-6">
-            <p className="text-sm">Date: {data.arrivalDate}</p>
-            <p className="text-sm">Time: {data.arrivalTime}</p>
+            <p className="text-sm">Date: {data?.arrivalDate}</p>
+            <p className="text-sm">Time: {data?.arrivalTime}</p>
           </div>
         </div>
       </div>
@@ -113,14 +95,14 @@ const WaybillReceipt = () => {
               <User size={16} className="text-gray-500" />
               <span className="font-semibold">Goods Owner</span>
             </div>
-            <p className="text-sm pl-6">{data.goodsOwnerName}</p>
+            <p className="text-sm pl-6">{data?.goodsOwnerName}</p>
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <User size={16} className="text-gray-500" />
               <span className="font-semibold">Goods Receiver</span>
             </div>
-            <p className="text-sm pl-6">{data.goodsReceiverName}</p>
+            <p className="text-sm pl-6">{data?.goodsReceiverName}</p>
           </div>
         </div>
         <div className="space-y-1">
@@ -129,10 +111,10 @@ const WaybillReceipt = () => {
             <span className="font-semibold">Driver Details</span>
           </div>
           <div className="pl-6 flex gap-4">
-            <p className="text-sm">{data.driverName}</p>
+            <p className="text-sm">{data?.driverName}</p>
             <div className="flex items-center gap-1">
               <Phone size={14} className="text-gray-500" />
-              <p className="text-sm">{data.driverPhone}</p>
+              <p className="text-sm">{data?.driverPhone}</p>
             </div>
           </div>
         </div>
@@ -143,7 +125,7 @@ const WaybillReceipt = () => {
         <div className="flex items-center gap-2">
           <Truck size={16} className="text-gray-500" />
           <span className="font-semibold">Vehicle Number:</span>
-          <span className="text-sm">{data.vehicleNumber}</span>
+          <span className="text-sm">{data?.vehicleNumber}</span>
         </div>
       </div>
     </div>

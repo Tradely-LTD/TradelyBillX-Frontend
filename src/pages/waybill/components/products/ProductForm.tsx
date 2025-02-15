@@ -6,10 +6,11 @@ interface ProductFormProps {
   initialValues?: {
     productType: string;
     unit: string;
-    quantity: string;
+    quantity: number;
   };
-  onSubmit: (values: { productType: string; unit: string; quantity: string }) => void;
+  onSubmit: (values: { productType: string; unit: string; quantity: number }) => void;
   onDelete?: () => void;
+  onCancel?: () => void;
 }
 
 export const ProductForm = ({
@@ -17,7 +18,7 @@ export const ProductForm = ({
   initialValues = {
     productType: "",
     unit: "",
-    quantity: "",
+    quantity: 0,
   },
   onSubmit,
   onDelete,
@@ -29,7 +30,7 @@ export const ProductForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formValues);
+    // onSubmit(formValues);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
