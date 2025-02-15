@@ -18,23 +18,23 @@ export const locationApi = baseApi.injectEndpoints({
       }),
       providesTags: ["LOCATION"],
     }),
-    getLGAs: builder.query<StateResponse, { stateId: string }>({
+    getLGAs: builder.query<TownResponse, { stateId: string }>({
       query: ({ stateId }) => ({
         url: `/location/lgas/state/${stateId}`,
         method: Methods.Get,
       }),
       providesTags: ["LOCATION"],
     }),
-    getTowns: builder.query<StateResponse, { lgaId: string }>({
+    getTowns: builder.query<TownResponse, { lgaId: string }>({
       query: ({ lgaId }) => ({
         url: `/location/towns/lga/${lgaId}`,
         method: Methods.Get,
       }),
       providesTags: ["LOCATION"],
     }),
-    createTowns: builder.mutation<StateResponse, RequestPayload>({
+    createTowns: builder.mutation<TownResponse, RequestPayload>({
       query: (data) => ({
-        url: `/location/towns/`,
+        url: `/location/towns`,
         method: Methods.Post,
         body: data,
       }),
@@ -54,11 +54,33 @@ export const locationApi = baseApi.injectEndpoints({
         }
       },
     }),
-    updateTowns: builder.mutation<StateResponse, RequestPayloadTown>({
+    updateTowns: builder.mutation<TownResponse, RequestPayloadTown>({
       query: ({ id, ...rest }) => ({
-        url: `/location//towns/${id}`,
+        url: `/location/towns/${id}`,
         method: Methods.Put,
         body: rest,
+      }),
+      invalidatesTags: ["LOCATION"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          toast.success("Updated Successfully", {
+            position: "top-right",
+          });
+        } catch (err: any) {
+          const errorMessage =
+            err.error.data.error || err?.error || "Failed to update the town/city";
+          toast.error(errorMessage, {
+            position: "top-right",
+          });
+        }
+      },
+    }),
+    updateState: builder.mutation<StateResponse, any>({
+      query: ({ id, ...rest }) => ({
+        url: `/location/states/${id}`,
+        method: Methods.Patch,
+        body: { ...rest, stateId: id },
       }),
       invalidatesTags: ["LOCATION"],
       async onQueryStarted(_, { queryFulfilled }) {
@@ -108,6 +130,7 @@ export const {
   useGetTownsQuery,
   useUpdateTownsMutation,
   useDeleteTownsMutation,
+  useUpdateStateMutation,
 } = locationApi;
 
 interface RequestPayload {
@@ -145,12 +168,30 @@ interface LocationsResponse {
   }[];
   message: string;
 }
-interface StateResponse {
+export interface State {
+  allow_price_edit: boolean;
+  aufcdn_percentage: string;
+  aufcdn_recipient_code: string;
+  constant_price: string;
+  enable_internal_revenue: boolean;
+  government_percentage: string;
+  government_recipient_code: string;
+  id: string;
+  label: string;
+  status_allowed: boolean;
+  tradely_percentage: string;
+  value: string;
+}
+interface TownResponse {
   data: {
     id: string;
     label: string;
     value: string;
     status_allowed: boolean;
   }[];
+  message: string;
+}
+interface StateResponse {
+  data: State[];
   message: string;
 }
