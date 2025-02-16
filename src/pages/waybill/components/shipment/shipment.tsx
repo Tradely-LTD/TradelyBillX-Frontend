@@ -30,8 +30,20 @@ export const ShipmentDetails: React.FC = () => {
     lgasData,
     towns,
   } = useShipmentLocation({
-    selectedLGAId: selectedLGAId || selectedDeliveryLGAId,
-    selectedStateId: selectedStateId || selectedDeliveryStateId,
+    selectedLGAId: selectedLGAId,
+    selectedStateId: selectedStateId,
+  });
+  const {
+    statesData: DeliveryStates,
+    isFetchingLGA: isFetchingLGADelivery,
+    isStatesLoading: isLoadingState,
+    isLGALoading: isLoadingLGADelivery,
+    isLoadingTown: isLoadingTownDelivery,
+    lgasData: lgaDelivery,
+    towns: townsDelivery,
+  } = useShipmentLocation({
+    selectedLGAId: selectedDeliveryLGAId,
+    selectedStateId: selectedDeliveryStateId,
   });
   const {
     register,
@@ -145,8 +157,8 @@ export const ShipmentDetails: React.FC = () => {
             <h3 className="font-medium">Delivery Location</h3>
             <SelectComponent
               options={
-                statesData?.data?.length
-                  ? statesData.data.map((state) => ({
+                DeliveryStates?.data?.length
+                  ? DeliveryStates.data.map((state) => ({
                       label: state.label,
                       value: state.value,
                       id: state.id,
@@ -160,15 +172,15 @@ export const ShipmentDetails: React.FC = () => {
               }}
               // value={selectedDeliveryState}
               value={watch("deliveryState")}
-              isLoading={isStatesLoading}
+              isLoading={isLoadingState}
               label="Select state"
             />
 
             <SelectComponent
               label="Select LGA"
               options={
-                lgasData?.data?.length
-                  ? lgasData.data.map((lga) => ({
+                lgaDelivery?.data?.length
+                  ? lgaDelivery.data.map((lga) => ({
                       label: lga.label,
                       value: lga.value,
                       id: lga.id,
@@ -184,15 +196,15 @@ export const ShipmentDetails: React.FC = () => {
               }}
               // value={selectedDeliveryLGA}
               value={watch("deliveryLGA")}
-              isLoading={isLGALoading || isFetchingLGA}
+              isLoading={isLoadingLGADelivery || isFetchingLGADelivery}
               disabled={!selectedDeliveryState}
             />
 
             <SelectComponent
               label="Select town/city"
               options={
-                towns?.data?.length
-                  ? towns.data.map((lga) => ({
+                townsDelivery?.data?.length
+                  ? townsDelivery.data.map((lga) => ({
                       label: lga.label,
                       value: lga.value,
                       id: lga.id,
@@ -207,7 +219,7 @@ export const ShipmentDetails: React.FC = () => {
               }}
               // value={selectedDeliveryTown}
               value={watch("deliveryTown")}
-              isLoading={isLoadingTown}
+              isLoading={isLoadingTownDelivery}
               disabled={!selectedDeliveryLGA}
             />
 
