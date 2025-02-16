@@ -5,6 +5,8 @@ import SelectComponent from "@/common/input/select";
 import React, { ChangeEvent, useState } from "react";
 import { useFormContext } from "../formContext";
 import { useShipmentLocation } from "../../useShipmentLocation";
+import { setCurrentState } from "../../waybill.slice";
+import { useDispatch } from "react-redux";
 
 export const ShipmentDetails: React.FC = () => {
   const [selectedState, setSelectedState] = useState<any | null>(null);
@@ -12,6 +14,7 @@ export const ShipmentDetails: React.FC = () => {
   const [selectedTown, setSelectedTown] = useState<string>("");
   const [selectedLGA, setSelectedLGA] = useState<any | null>(null);
   const [selectedLGAId, setSelectedLGAId] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
   const [selectedDeliveryState, setSelectedDeliveryState] = useState<any | null>(null);
   const [selectedDeliveryStateId, setSelectedDeliveryStateId] = useState<any | null>(null);
@@ -62,13 +65,15 @@ export const ShipmentDetails: React.FC = () => {
                       label: state.label,
                       value: state.value,
                       id: state.id,
+                      state,
                     }))
                   : [{ label: "No States available", value: "no data ", id: "" }]
               }
-              onChange={(value, id) => {
+              onChange={(value, id, rest) => {
                 setValue("loadingState", value);
                 setSelectedState(value);
                 setSelectedStateId(id);
+                dispatch(setCurrentState({ state: rest.state }));
               }}
               // value={selectedState}
               value={watch("loadingState")}

@@ -5,8 +5,8 @@ interface SelectComponentProps {
   label?: string;
   value?: string;
   defaultValue?: string;
-  options: { label: string; value: string; id?: string }[];
-  onChange: (value: string, id?: string) => void; // Modified to include id
+  options: { label: string; value: string; id?: string; [key: string]: any }[]; // Allow additional properties
+  onChange: (value: string, id?: string, rest?: any) => void; // Modified to include id and rest
   className?: string;
   disabled?: boolean;
   required?: boolean;
@@ -34,10 +34,13 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  // Handler to find and return both value and id
+  // Handler to find and return value, id, and additional data
   const handleChange = (selectedValue: string) => {
     const selectedOption = options.find((opt) => opt.value === selectedValue);
-    onChange(selectedValue, selectedOption?.id);
+    if (selectedOption) {
+      const { id, ...rest } = selectedOption; // Destructure id and rest of the properties
+      onChange(selectedValue, id, rest); // Pass value, id, and additional data
+    }
   };
 
   const containerStyles = {

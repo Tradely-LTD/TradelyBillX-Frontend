@@ -16,7 +16,7 @@ const WaybillPreview = () => {
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const waybill = waybillData?.data;
   const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
-  console.log(qrcode);
+
   if (isFetching || isLoading) {
     return <Loader />;
   }
@@ -90,19 +90,19 @@ const WaybillPreview = () => {
           </div>
           <div className="w-[30%]">
             <div className="bg-[#F7F8FB] p-2 rounded-md ">
-              <Text h3>Transaction ID</Text>
+              <Text h3>Transaction Details</Text>
               <div className="flex justify-between my-3">
-                <Text color="#64748B">Transaction ID</Text>
+                <Text color="#64748B">Transaction Ref</Text>
                 <p className="flex gap-2 font-semibold text-[#2C7743]">
-                  {formatID(waybill.id)} <Copy color="green" />
+                  {formatID(waybill.transactionReference)} <Copy color="green" />
                 </p>
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <Text color="#64748B">Receipt</Text>
                 <p className="flex gap-2 font-semibold text-[#2C7743]">
                   {formatID(waybill.id)} <Copy color="green" />
                 </p>
-              </div>
+              </div> */}
             </div>
             <div className="bg-[#F7F8FB] p-2 rounded-md ">
               <Text h3>Products</Text>
@@ -208,18 +208,7 @@ const WaybillPreview = () => {
         </div>
 
         <div className="flex gap-5 my-4 items-start">
-          <div className="bg-[#F7F8FB] p-3 rounded-md w-[70%] flex flex-col justify-between">
-            <Text h3>Payment Method</Text>
-            <div className="bg-white p-3 rounded-md flex items-center justify-between">
-              <div className="flex gap-2">
-                <Card />
-                <Text>{"**** **** **** " + waybill.id.slice(-4)}</Text>
-              </div>
-              <CircleCheck fill="green" color="white" />
-            </div>
-          </div>
-
-          <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
+          <div className="bg-[#F7F8FB] p-2 rounded-md w-full">
             <Text h3 block>
               Help
             </Text>
