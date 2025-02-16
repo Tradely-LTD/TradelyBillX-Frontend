@@ -8,7 +8,7 @@ export type StatusType =
   | "user"
   | "agent"
   | "Allowed"
-  | "Success"
+  | "SUCCESS"
   | "Resolved"
   | "Progress"
   | "Open"
@@ -35,7 +35,7 @@ interface StatusIndicatorProps {
 const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status = "Admin", pale = false }) => {
   let displayStatus: Exclude<StatusType, boolean>;
   if (typeof status === "boolean") {
-    displayStatus = status ? "Admin" : "User";
+    displayStatus = status ? "admin" : "user";
   } else {
     displayStatus = status;
   }
@@ -73,19 +73,19 @@ const StatusPill = styled.div<{
 
   ${({ status }) => {
     switch (status) {
-      case "Super Admin":
+      case "superadmin":
       case "Progress":
         return `
           background: #E7F6FE;
           color: #0EA4E9;
           &::before { background: #0EA4E9; }
         `;
-      case "Admin":
+      case "admin":
         return `background: #FEF8E6;
             color: #EAB208;
             &::before { background: #EAB208; }
           `;
-      case "Success":
+      case "SUCCESS":
       case "Resolved":
       case "IN_TRANSIT":
         return `background: #ECF9F6;
@@ -105,8 +105,8 @@ const StatusPill = styled.div<{
             &::before { background: #F43F5D; }
           `;
 
-      case "User":
-      case "Agent":
+      case "user":
+      case "agent":
         return `
           background: #F0F2F4;
           color: #64748B;

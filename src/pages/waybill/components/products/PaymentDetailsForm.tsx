@@ -1,13 +1,22 @@
-import { CircleCheck, Copy, Ship } from "lucide-react";
+import { Copy, Ship } from "lucide-react";
 import { useFormContext } from "../formContext";
 import Text from "@/common/text/text";
 import Button from "@/common/button/button";
-import { Card } from "iconsax-react";
+
 import StatusIndicator from "@/common/status";
+import PaystackPayment from "../paystack";
+import { useStateSlice } from "../../waybill.slice";
+import Input from "@/common/input/input";
+import { useState } from "react";
+import { useUserSlice } from "@/pages/auth/authSlice";
 
 const PaymentDetailsForm = () => {
   const { watch } = useFormContext();
   const formValues = watch();
+  const { state } = useStateSlice();
+  const [agentAmount, setAmount] = useState(0);
+  const { loginResponse } = useUserSlice();
+  const totalAmount = agentAmount + Number(state?.constant_price);
 
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
@@ -126,38 +135,42 @@ const PaymentDetailsForm = () => {
 
             <div>
               <Text h3>Payment Summary</Text>
-              <div className="flex items-center justify-between my-2">
+              {/* <div className="flex items-center justify-between my-2">
                 <Text block>Item Total</Text>
                 <Text style={{ fontWeight: "600" }}>{formValues.products?.length || 0} Items</Text>
-              </div>
+              </div> */}
               <div className="flex items-center justify-between my-2">
-                <Text block>Item Price</Text>
-                <Text style={{ fontWeight: "600" }}>{formValues.itemPrice || "0"} NGN</Text>
+                <Text block>Agent Service Fee</Text>
+                <Text style={{ fontWeight: "600" }}>{agentAmount} NGN</Text>
               </div>
               <div className="flex items-center justify-between my-2">
                 <Text block>Waybill Fee</Text>
-                <Text style={{ fontWeight: "600" }}>{formValues.waybillFee || "5,196"} NGN</Text>
+                <Text style={{ fontWeight: "600" }}>{state?.constant_price} NGN</Text>
               </div>
               <hr className="border-dotted border-[2px]" />
               <div className="flex items-center justify-between my-2">
                 <Text block>Total Price</Text>
-                <Text style={{ fontWeight: "600" }}>{formValues.totalPrice || "0"} NGN</Text>
+                <Text style={{ fontWeight: "600" }}>{totalAmount || "0"} NGN</Text>
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex gap-5 my-4 items-start">
-          <div className="bg-[#F7F8FB] p-3 rounded-md w-[70%] flex flex-col justify-between">
-            <Text h3>Payment Method</Text>
-            <div className="bg-white p-3 rounded-md flex items-center justify-between">
-              <div className="flex gap-2">
-                <Card />
-                <Text>{formValues.cardNumber || "454362526452"}</Text>
-              </div>
-              <Text>{formValues.cardExpiry || "12/28"}</Text>
-              <CircleCheck fill="green" color="white" />
-            </div>
+          <div>
+            {state?.allow_price_edit && (
+              <>
+                <div className="bg-white p-3 rounded-md ">
+                  <Input
+                    label="Agent Service Fee"
+                    value={agentAmount}
+                    onChange={(e) => {
+                      setAmount(Number(e.target.value));
+                    }}
+                  />
+                </div>
+              </>
+            )}
             <div className="flex flex-col items-center gap-4">
               <div className="flex items-center gap-1">
                 <input type="checkbox" className="w-4 h-4 text-green-600" />
@@ -172,9 +185,12 @@ const PaymentDetailsForm = () => {
                   </a>
                 </span>
               </div>
-              <button className="w-full max-w-md bg-green-600 text-white py-3 px-6 rounded-lg font-medium">
-                Proceed to Payment
-              </button>
+              <PaystackPayment
+                amount={totalAmount}
+                email={loginResponse?.user?.email ?? ""}
+                reference={""}
+                stateId={state?.id ?? ""}
+              />
             </div>
           </div>
 

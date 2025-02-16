@@ -12,17 +12,19 @@ import {
 import storage from "redux-persist/lib/storage";
 import { baseApi } from "./baseApi";
 import { authSlice, AuthState } from "@/pages/auth/authSlice";
+import { StateProps, StateSlice } from "@/pages/waybill/waybill.slice";
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: [authSlice.name],
+  whitelist: [authSlice.name, StateSlice.name],
 };
 
 const rootReducer = combineReducers({
   [baseApi.reducerPath]: baseApi.reducer,
   [authSlice.name]: authSlice.reducer,
+  [StateSlice.name]: StateSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -41,6 +43,7 @@ export const persistor = persistStore(store);
 
 export type RootState = {
   auth: AuthState;
+  state: StateProps;
   [baseApi.reducerPath]: ReturnType<typeof baseApi.reducer>;
 };
 
