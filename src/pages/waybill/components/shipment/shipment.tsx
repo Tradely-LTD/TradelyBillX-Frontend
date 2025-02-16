@@ -54,8 +54,8 @@ export const ShipmentDetails: React.FC = () => {
   } = useFormContext();
 
   return (
-    <div className="flex flex-col rounded-[15px] border border-[#F0F2F4] p-[20px] ">
-      <div className="flex justify-between gap-[20px] flex-1">
+    <div className="flex flex-col rounded-[15px] border border-[#F0F2F4] flex-wrap p-[20px] ">
+      <div className="flex justify-between gap-[20px] flex-wrap md:flex-nowrap flex-1">
         <div className="flex gap-[10px]">
           <img src="logistics.png" className="h-[48px] w-[48px]" />
           <div>
@@ -67,7 +67,7 @@ export const ShipmentDetails: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-[20px] w-1/2">
+        <div className="flex flex-col gap-[20px] md:w-1/2 w-full">
           <div className="space-y-4">
             <h3 className="font-medium">Loading Location</h3>
             <SelectComponent
@@ -313,7 +313,7 @@ export const ShipmentDetails: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex justify-between gap-[20px] flex-1 mt-[30px]">
+      <div className="flex justify-between gap-[20px] flex-wrap md:flex-nowrap  flex-1 mt-[30px]">
         <div className="flex gap-[10px]">
           <img src="child.png" className="h-[48px] w-[48px]" />
           <div>
@@ -324,7 +324,7 @@ export const ShipmentDetails: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-[20px] w-1/2">
+        <div className="flex flex-col gap-[20px]  md:w-1/2 w-full ">
           <div className="space-y-4">
             <Input
               {...register("goodsOwnerName")}

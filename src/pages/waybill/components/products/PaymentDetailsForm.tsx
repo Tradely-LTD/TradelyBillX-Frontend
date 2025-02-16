@@ -21,8 +21,8 @@ const PaymentDetailsForm = () => {
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
       <div className="bg-white my-3 border border-gray-200 rounded-md p-3">
-        <div className="flex gap-5">
-          <div className="w-[70%]">
+        <div className="flex gap-5 flex-wrap md:flex-nowrap">
+          <div className="w-full md:w-[70%] ">
             <div className="bg-[#F7F8FB] p-3 rounded-md flex flex-col justify-between">
               <Text h3>Drive and Vehicle Information</Text>
               <div className="flex gap-3">
@@ -39,7 +39,7 @@ const PaymentDetailsForm = () => {
             </div>
           </div>
 
-          <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
+          <div className="bg-[#F7F8FB] p-2 rounded-md w-full md:w-[30%]">
             <Text h3>Transaction ID</Text>
             <div className="flex justify-between my-3">
               <Text color="#64748B">Transaction ID</Text>
@@ -56,8 +56,8 @@ const PaymentDetailsForm = () => {
           </div>
         </div>
 
-        <div className="flex gap-5 my-4 items-start">
-          <div className="bg-[#F7F8FB] p-3 rounded-md w-[70%] flex flex-col justify-between">
+        <div className="flex gap-5 my-4 items-start flex-wrap md:flex-nowrap">
+          <div className="bg-[#F7F8FB] p-3 rounded-md w-full md:w-[70%] flex flex-col justify-between">
             <Text h3>Shipment Information</Text>
             <div className="bg-[white] p-2 my-3 flex justify-between rounded-md">
               <Text style={{ display: "flex", gap: 3, alignItems: "center" }}>
@@ -116,7 +116,7 @@ const PaymentDetailsForm = () => {
             </div>
           </div>
 
-          <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
+          <div className="bg-[#F7F8FB] p-2 rounded-md w-full md:w-[30%]">
             <Text h3 block>
               Product Information
             </Text>
@@ -156,7 +156,7 @@ const PaymentDetailsForm = () => {
           </div>
         </div>
 
-        <div className="flex gap-5 my-4 items-start">
+        <div className="flex gap-5 my-4 items-start justify-between flex-wrap md:flex-nowrap">
           <div>
             {state?.allow_price_edit && (
               <>
@@ -194,7 +194,7 @@ const PaymentDetailsForm = () => {
             </div>
           </div>
 
-          <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
+          <div className="bg-[#F7F8FB] p-2 rounded-md w-full md:w-[30%]">
             <Text h3 block>
               Help
             </Text>

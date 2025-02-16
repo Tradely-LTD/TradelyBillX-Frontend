@@ -73,9 +73,12 @@ export const ProductDetails: React.FC = () => {
         </div>
       </div>
 
-      <div className="space-y-4 w-[60%]">
+      <div className="space-y-4 ">
         {products.map((item) => (
-          <div key={item.id} className="flex gap-4 items-center flex-wrap md:flex-nowrap">
+          <div
+            key={item.id}
+            className="flex gap-4  border-b p-2 items-center flex-wrap md:flex-nowrap"
+          >
             {editingId === item?.id ? (
               <>
                 <select
@@ -153,7 +156,7 @@ export const ProductDetails: React.FC = () => {
         ))}
 
         {/* Always visible add form */}
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center flex-wrap w-full">
           <select
             value={newProduct.productName}
             onChange={(e) => setNewProduct({ ...newProduct, productName: e.target.value })}
@@ -180,7 +183,7 @@ export const ProductDetails: React.FC = () => {
             ))}
           </select>
 
-          <div className="flex items-center gap-2 flex-1">
+          <div className="flex items-center gap-2 ">
             <input
               type="number"
               value={newProduct.quantity}
