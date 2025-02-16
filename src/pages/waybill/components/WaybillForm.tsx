@@ -13,7 +13,7 @@ const WaybillForm: React.FC = () => {
     trigger,
     formState: { errors },
   } = useFormContext();
-  // const driversError = errors.driverName || errors.driverPhone || errors.vehicleNumber;
+  
 
   const handleNext = async () => {
     let fieldsToValidate = [];
