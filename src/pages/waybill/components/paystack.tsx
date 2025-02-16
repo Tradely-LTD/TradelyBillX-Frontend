@@ -36,7 +36,7 @@ const PaystackPayment = ({ amount, stateId, email, reference }: Props) => {
   const config = {
     email,
     amount: paymentConfig?.amount || 0,
-    publicKey: "pk_test_acd82313c5945d37a69e9e06195f153984cc70e0",
+    publicKey: "pk_test_dec2039127e6a19857b73b6c0c44302d8593252a",
     split_code: paymentConfig?.split_code,
     reference,
   };
