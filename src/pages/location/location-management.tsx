@@ -210,6 +210,7 @@ const LocationManagement = () => {
                   <th className="py-2 px-4 border-b">S/N</th>
                   <th className="py-2 px-4 border-b">City/Town</th>
                   <th className="py-2 px-4 border-b">Gov't %</th>
+                  <th className="py-2 px-4 border-b">AUFCDN %</th>
                   <th className="py-2 px-4 border-b">Allow agent</th>
                   <th className="py-2 px-4 border-b">Internal Revenue</th>
                   <th className="py-2 px-4 border-b">Action</th>
@@ -222,6 +223,7 @@ const LocationManagement = () => {
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">{item.value}</td>
                     <td className="py-2 px-4 border-b">{item.government_percentage}%</td>
+                    <td className="py-2 px-4 border-b">{item.aufcdn_percentage}%</td>
                     <td className="py-2 px-4 border-b">
                       <StatusIndicator
                         status={item?.allow_price_edit ? "Allowed" : "Restricated"}

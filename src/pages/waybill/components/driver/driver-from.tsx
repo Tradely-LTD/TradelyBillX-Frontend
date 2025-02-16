@@ -12,7 +12,7 @@ export const DriverVehicleInfo = () => {
   } = useFormContext();
   return (
     <>
-      <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex justify-between gap-[20px] flex-1">
+      <div className="rounded-[15px] border border-[#F0F2F4] p-[20px] flex flex-wrap md:flex-nowrap justify-between gap-[20px] flex-1">
         <div className="flex gap-[10px]">
           <img src="truck.png" className="h-[48px] w-[48px]" />
           <div>
@@ -22,7 +22,7 @@ export const DriverVehicleInfo = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-[20px] w-1/2">
+        <div className="flex flex-col gap-[20px] w-full   md:w-1/2">
           <Input
             {...register("driverName")}
             error={errors.driverName?.message}

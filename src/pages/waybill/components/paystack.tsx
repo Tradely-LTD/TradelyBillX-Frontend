@@ -5,6 +5,7 @@ import { useCreateWayBillsMutation } from "../waybill.api";
 import { useUserSlice } from "@/pages/auth/authSlice";
 import { useFormContext } from "./formContext";
 import { useNavigate } from "react-router-dom";
+import urls from "@/utils/config";
 
 interface Props {
   amount: number;
@@ -51,7 +52,7 @@ const PaystackPayment = ({ amount, stateId, email, reference }: Props) => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/payment/initiate-payment", {
+      const response = await fetch(`${urls.API_BASE_URL}/payment/initiate-payment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,14 +106,14 @@ const PaystackPayment = ({ amount, stateId, email, reference }: Props) => {
   }, [paymentConfig, initializePaystackPayment]);
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full  mx-auto">
       <div>
         {error && (
           <div className="mb-4 text-red-600 bg-red-50 p-3 rounded">
             <div>{error}</div>
           </div>
         )}
-        <Button onClick={initializePayment} disabled={isLoading} className="w-full">
+        <Button onClick={initializePayment} disabled={isLoading} className="!w-full">
           {isLoading || isCreatingWaybill ? "Initializing..." : "Pay Now"}
         </Button>
       </div>

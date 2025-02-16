@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeSlash } from "iconsax-react"; // Import from iconsax
 
 interface InputProps {
-  type?: "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "date";
+  type?: "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "date" | "time";
   placeholder?: string;
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;

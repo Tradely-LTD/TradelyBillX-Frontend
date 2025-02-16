@@ -1,7 +1,6 @@
-import { CircleCheck, Copy, Download, Printer, Share2, Ship } from "lucide-react";
+import { Copy, Download, Ship } from "lucide-react";
 import Text from "@/common/text/text";
 import Button from "@/common/button/button";
-import { Card } from "iconsax-react";
 import StatusIndicator from "@/common/status";
 import { useGetWaybillQuery } from "./waybill.api";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,13 +26,13 @@ const WaybillPreview = () => {
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
       <div className="bg-white my-3 border border-gray-200 rounded-md p-3">
-        <div className="flex gap-5">
-          <div className="w-[70%]">
+        <div className="flex gap-5 flex-wrap md:flex-nowrap">
+          <div className="w-full md:w-[70%] ">
             <div className="bg-[#F7F8FB] p-3 rounded-md  flex flex-col justify-between mb-4">
               <Text h3>Waybill Information</Text>
-              <div className="flex gap-3 ">
+              <div className="flex flex-wrap gap-3 ">
                 <div className="p-3 rounded-md border bg-white">
-                  <QRCodeSVG value={qrcode} size={100} level="H" />
+                  <QRCodeSVG value={qrcode} size={90} level="H" />
                 </div>
                 <div className="w-full flex flex-col gap-3">
                   <div className="flex gap-2 items-start justify-between">
@@ -41,7 +40,7 @@ const WaybillPreview = () => {
                       <Text>Waybill ID</Text>
                     </div>
                     <div className="flex gap-4">
-                      {formatID(waybill.id)}
+                      {formatID(waybill?.id)}
                       <Text className="!flex items-center gap-2" color="green">
                         <Copy size={14} color="green" /> Copy
                       </Text>
@@ -52,7 +51,7 @@ const WaybillPreview = () => {
                       <Text>Waybill Number</Text>
                     </div>
                     <div className="flex gap-4">
-                      {formatID(waybill.id)}
+                      {formatID(waybill?.id)}
                       <Text className="!flex items-center gap-2" color="green">
                         <Copy size={14} color="green" /> Copy
                       </Text>
@@ -83,18 +82,18 @@ const WaybillPreview = () => {
                   <LabelData title="Driver's Phone Number" value={waybill?.driverPhone} />
                 </div>
                 <div>
-                  <LabelData title="Vehicle Number" value={waybill.vehicleNumber} />
+                  <LabelData title="Vehicle Number" value={waybill?.vehicleNumber} />
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-[30%]">
+          <div className="bg-[#F7F8FB] p-2 rounded-md w-full md:w-[30%]">
             <div className="bg-[#F7F8FB] p-2 rounded-md ">
               <Text h3>Transaction Details</Text>
               <div className="flex justify-between my-3">
                 <Text color="#64748B">Transaction Ref</Text>
                 <p className="flex gap-2 font-semibold text-[#2C7743]">
-                  {formatID(waybill.transactionReference)} <Copy color="green" />
+                  {formatID(waybill?.transactionReference ?? "")} <Copy color="green" />
                 </p>
               </div>
               {/* <div className="flex justify-between">
@@ -122,8 +121,8 @@ const WaybillPreview = () => {
           </div>
         </div>
 
-        <div className="flex gap-5 my-4 items-start">
-          <div className="bg-[#F7F8FB] p-3 rounded-md w-[70%] flex flex-col justify-between">
+        <div className="flex gap-5 my-4 items-start md:flex-nowrap  flex-wrap">
+          <div className="bg-[#F7F8FB] p-3 rounded-md w-full md:w-[70%] flex flex-col justify-between">
             <Text h3>Shipment Information</Text>
             <div className="bg-[white] p-2 my-3 flex justify-between rounded-md">
               <Text style={{ display: "flex", gap: 3, alignItems: "center" }}>
@@ -182,7 +181,7 @@ const WaybillPreview = () => {
             </div>
           </div>
 
-          <div className="bg-[#F7F8FB] p-2 rounded-md w-[30%]">
+          <div className="bg-[#F7F8FB] p-2 rounded-md w-full md:w-[30%]">
             <Text h3 block>
               Goods Information
             </Text>
