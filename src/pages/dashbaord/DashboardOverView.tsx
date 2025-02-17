@@ -11,6 +11,8 @@ import {
   Legend,
 } from "recharts";
 import AnimatedPieChart from "../../common/ui/AnimatedPieChart";
+import { StatusCard } from "../components/StatusCard";
+import { useEffect, useRef, useState } from "react";
 
 const data = [
   { name: "01 Oct", payment: 100.5, commission: 38.1 },
@@ -43,19 +45,19 @@ const CardContent = ({ className = "", children }) => (
 
 // Payment Stats Card Component
 const PaymentStatsCard = () => (
-  <div className="grid grid-cols-2 gap-[10px] p-8 rounded-lg my-6">
-    <div className="space-y-2 w-[90%] bg-gray-50 p-[20px] rounded-lg">
-      <p className="text-gray-600 text-lg">Payments Made</p>
-      <p className="text-4xl font-bold text-gray-900">100.538.149 NGN</p>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-8 rounded-lg my-6">
+    <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
+      <p className="text-gray-600 text-base sm:text-lg">Payments Made</p>
+      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">100.538.149 NGN</p>
       <div className="flex items-center text-green-500">
-        <span className="text-sm">+5% last month</span>
+        <span className="text-xs sm:text-sm">+5% last month</span>
       </div>
     </div>
-    <div className="space-y-2 w-[90%] bg-gray-50 p-[20px] rounded-lg">
-      <p className="text-gray-600 text-lg">Commission Earned</p>
-      <p className="text-4xl font-bold text-gray-900">20.000.000 NGN</p>
+    <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
+      <p className="text-gray-600 text-base sm:text-lg">Commission Earned</p>
+      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">20.000.000 NGN</p>
       <div className="flex items-center text-green-500">
-        <span className="text-sm">+5% last month</span>
+        <span className="text-xs sm:text-sm">+5% last month</span>
       </div>
     </div>
   </div>
@@ -63,8 +65,6 @@ const PaymentStatsCard = () => (
 
 // Dashboard Component
 const DashboardOverview = () => {
-  // Sample data for line charts
-  console.log("dash");
   const chartData = Array.from({ length: 20 }, (_, i) => ({
     name: i,
     value: Math.floor(Math.random() * 50) + 50,
@@ -104,7 +104,30 @@ const DashboardOverview = () => {
     { status: "In Progress", percentage: 35, color: "rgb(59, 130, 246)" },
     { status: "Resolved", percentage: 25, color: "rgb(45, 212, 191)" },
   ];
+  const [chartDimensions, setChartDimensions] = useState({ width: 350, height: 300 });
+  const containerRef = useRef(null);
 
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        // Set responsive width while maintaining aspect ratio
+        const newWidth = Math.max(containerWidth - 40, 280); // Minimum width of 280px
+        const newHeight = Math.max(newWidth * 0.9, 250); // Maintain aspect ratio with minimum height
+
+        setChartDimensions({ width: newWidth, height: newHeight });
+      }
+    };
+
+    // Initial sizing
+    updateDimensions();
+
+    // Add resize listener
+    window.addEventListener("resize", updateDimensions);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -125,7 +148,7 @@ const DashboardOverview = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statsCards.map((stat, index) => (
-          <Card key={index} className=" max-w-[300px] h-[130px]">
+          <Card key={index} className="h-[130px]">
             <CardContent>
               <div className="flex flex-row justify-between">
                 <div className="w-[60%]  flex h-auto flex-col gap-[5px]">
@@ -153,61 +176,16 @@ const DashboardOverview = () => {
       </div>
 
       {/* Status Charts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Waybills Status */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Waybills Status</CardTitle>
-          </CardHeader>
-          <CardContent className="flex gap-[50px] items-center">
-            <AnimatedPieChart data={waybillStatus} />
-            <div className="space-y-4">
-              {waybillStatus.map((status, index) => (
-                <div key={index} className="flex flex-col items-center space-x-2">
-                  <div className="flex items-center gap-[10px]">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: status.color }}
-                    />
-                    <span className="text-gray-600">{status.status}</span>
-                  </div>
-                  <span className="font-semibold">{status.percentage}%</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Incidents Status */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Incidents Status</CardTitle>
-          </CardHeader>
-          <CardContent className="flex gap-[50px] items-center">
-            <AnimatedPieChart data={incidentStatus} />
-            <div className="space-y-4">
-              {incidentStatus.map((status, index) => (
-                <div key={index} className="flex flex-col items-center space-x-2">
-                  <div className="flex items-center gap-[10px]">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: status.color }}
-                    />
-                    <span className="text-gray-600">{status.status}</span>
-                  </div>
-                  <span className="font-semibold">{status.percentage}%</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <StatusCard title="Waybills Status" statusData={waybillStatus} />
+        <StatusCard title="Incidents Status" statusData={incidentStatus} />
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-bold mb-4">Payment & Commission</h2>
 
-        <BarChart
-          width={window.innerWidth - 350}
+        {/* <BarChart
+          width={350}
           height={300}
           data={data}
           margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
@@ -219,7 +197,35 @@ const DashboardOverview = () => {
           <Legend />
           <Bar dataKey="payment" fill="#8884d8" />
           <Bar dataKey="commission" fill="#82ca9d" />
-        </BarChart>
+        </BarChart> */}
+        <div ref={containerRef} className="w-full overflow-x-auto">
+          <div className="min-w-[280px]">
+            {/* Ensures minimum width for legibility */}
+            <BarChart
+              width={chartDimensions.width}
+              height={400}
+              data={data}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 768 ? 12 : 14 }} />
+              <YAxis tick={{ fontSize: window.innerWidth < 768 ? 12 : 14 }} />
+              <Tooltip />
+              <Legend
+                wrapperStyle={{
+                  fontSize: window.innerWidth < 768 ? "12px" : "14px",
+                }}
+              />
+              <Bar dataKey="payment" fill="#8884d8" />
+              <Bar dataKey="commission" fill="#82ca9d" />
+            </BarChart>
+          </div>
+        </div>
         <PaymentStatsCard />
       </div>
     </div>

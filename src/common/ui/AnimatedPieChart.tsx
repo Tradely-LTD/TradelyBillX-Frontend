@@ -1,10 +1,41 @@
 import { useEffect, useState } from "react";
 
-const AnimatedPieChart = ({ data, size = 200 }) => {
+const AnimatedPieChart = ({ data, size: propSize = 200 }) => {
   const [animationProgress, setAnimationProgress] = useState(0);
+  const [chartSize, setChartSize] = useState(propSize);
 
+  // Responsive size calculation
   useEffect(() => {
-    const duration = 1000; // Animation duration in ms
+    const updateSize = () => {
+      // Get the smallest of viewport width/height or provided size
+      const viewportSize = Math.min(window.innerWidth, window.innerHeight);
+      const maxSize = Math.min(propSize, viewportSize * 0.8); // 80% of viewport
+      const minSize = 120; // Minimum size for legibility
+
+      // Responsive size calculation
+      if (window.innerWidth < 640) {
+        // Mobile
+        setChartSize(Math.max(minSize, viewportSize * 0.6));
+      } else if (window.innerWidth < 1024) {
+        // Tablet
+        setChartSize(Math.max(minSize, Math.min(maxSize, viewportSize * 0.4)));
+      } else {
+        // Desktop
+        setChartSize(Math.max(minSize, maxSize));
+      }
+    };
+
+    // Initial size calculation
+    updateSize();
+
+    // Add resize listener
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, [propSize]);
+
+  // Animation effect
+  useEffect(() => {
+    const duration = 1000;
     const startTime = performance.now();
 
     const animate = (currentTime) => {
@@ -21,20 +52,25 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
     requestAnimationFrame(animate);
   }, []);
 
-  const radius = size / 2;
+  const radius = chartSize / 2;
   const centerX = radius;
   const centerY = radius;
-  const innerRadius = radius * 0.65; // Slightly larger inner radius for cleaner look
-  const strokeWidth = 2;
+  const innerRadius = radius * 0.65;
+  const strokeWidth = Math.max(1, chartSize / 100); // Responsive stroke width
 
-  let startAngle = -90; // Start from top
+  let startAngle = -90;
   let totalValue = 0;
 
+  // Calculate responsive text sizes
+  const totalFontSize = `${Math.max(16, chartSize / 8)}px`;
+  const labelFontSize = `${Math.max(12, chartSize / 16)}px`;
+
   return (
-    <div className="relative">
+    <div className="relative w-full flex justify-center items-center">
       <svg
-        width={size}
-        height={size}
+        width={chartSize}
+        height={chartSize}
+        viewBox={`0 0 ${chartSize} ${chartSize}`}
         className="transform transition-transform duration-500 hover:scale-105"
       >
         {/* Background circle */}
@@ -58,7 +94,6 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
           startAngle += angle;
           totalValue += segmentPercentage;
 
-          // Calculate segment path
           const startX =
             centerX + Math.cos((currentStartAngle * Math.PI) / 180) * (radius - strokeWidth);
           const startY =
@@ -73,18 +108,18 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
           const largeArcFlag = angle > 180 ? 1 : 0;
 
           const pathData = `
-              M ${centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)} ${
-                centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)
-              }
-              L ${startX} ${startY}
-              A ${radius - strokeWidth} ${radius - strokeWidth} 0 ${largeArcFlag} 1 ${endX} ${endY}
-              L ${
-                centerX + innerRadius * Math.cos(((currentStartAngle + angle) * Math.PI) / 180)
-              } ${centerY + innerRadius * Math.sin(((currentStartAngle + angle) * Math.PI) / 180)}
-              A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${
-                centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)
-              } ${centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)}
-            `;
+            M ${centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)} ${
+            centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)
+          }
+            L ${startX} ${startY}
+            A ${radius - strokeWidth} ${radius - strokeWidth} 0 ${largeArcFlag} 1 ${endX} ${endY}
+            L ${centerX + innerRadius * Math.cos(((currentStartAngle + angle) * Math.PI) / 180)} ${
+            centerY + innerRadius * Math.sin(((currentStartAngle + angle) * Math.PI) / 180)
+          }
+            A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${
+            centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)
+          } ${centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)}
+          `;
 
           return (
             <g key={index}>
@@ -102,7 +137,7 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
           );
         })}
 
-        {/* Center circle for cleaner inner edge */}
+        {/* Center circle */}
         <circle
           cx={centerX}
           cy={centerY}
@@ -112,10 +147,14 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
         />
       </svg>
 
-      {/* Legend */}
+      {/* Centered text */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-        <div className="text-2xl font-bold">{Math.round(totalValue)}%</div>
-        <div className="text-sm text-gray-500">Total</div>
+        <div style={{ fontSize: 18 }} className="font-bold">
+          {Math.round(totalValue)}%
+        </div>
+        <div style={{ fontSize: labelFontSize }} className="text-gray-500">
+          Total
+        </div>
       </div>
     </div>
   );
