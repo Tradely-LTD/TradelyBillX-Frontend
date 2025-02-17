@@ -1,16 +1,17 @@
-import { Clock, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { useGetWaybillQuery } from "../waybill/waybill.api";
 import { useParams } from "react-router-dom";
 import { Loader } from "@/common/loader/loader";
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import Text from "@/common/text/text";
-import { formatID } from "@/utils/helper";
+import { formatID, thousandFormatter } from "@/utils/helper";
 import { QRCodeSVG } from "qrcode.react";
 // import html2canvas from "html2canvas";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import urls from "@/utils/config";
+import { Calendar2 } from "iconsax-react";
 
 const WaybillReceipt = () => {
   const { id } = useParams();
@@ -134,7 +135,7 @@ const WaybillReceipt = () => {
 
         <div className="border p-3 rounded-md min-w-full  flex flex-col justify-between mb-4">
           <Text className="bg-[#F7F8FB] p-3 rounded-md my-2" h3>
-            Shipment Status
+            Shipment Information
           </Text>
 
           <div className="">
@@ -177,7 +178,7 @@ const WaybillReceipt = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-1 border-t  py-2">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Clock size={16} className="text-blue-500" />
+                <Calendar2 size={16} />
                 <span className="font-semibold">Departure</span>
               </div>
 
@@ -188,7 +189,7 @@ const WaybillReceipt = () => {
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Clock size={16} className="text-green-500" />
+                <Calendar2 size={16} />
                 <span className="font-semibold">Arrival</span>
               </div>
               <div className="pl-6">
@@ -217,6 +218,21 @@ const WaybillReceipt = () => {
                 );
               })}
             </div>
+          </div>
+        </div>
+        <div className="border p-3 rounded-md min-w-full  flex flex-col justify-between mb-4">
+          <Text className="bg-[#F7F8FB] p-3 rounded-md my-2" h3>
+            Payment Information
+          </Text>
+          <div>
+            {/* <FlexLabel
+              title="Item Total"
+              value={data?.products?.length.toString() ?? ("" as string)}
+            /> */}
+            <FlexLabel title="Waybill Fee" value={thousandFormatter(data?.waybillFee ?? 0)} />
+            <FlexLabel title="Agent Service Fee" value={thousandFormatter(data?.agentFee ?? 0)} />
+            <hr className="border-dotted border-[1px]" />
+            <FlexLabel title="Total Price" value={thousandFormatter(data?.totalAmount ?? 0)} />
           </div>
         </div>
 
@@ -252,16 +268,6 @@ const WaybillReceipt = () => {
           </div>
         </div>
       </div> */}
-
-        {/* Vehicle Details */}
-
-        {/* <div className="border-t pt-4">
-        <div className="flex items-center gap-2">
-          <Truck size={16} className="text-gray-500" />
-          <span className="font-semibold">Vehicle Number:</span>
-          <span className="text-sm">{data?.vehicleNumber}</span>
-        </div>
-      </div> */}
       </div>
     </>
   );
@@ -272,6 +278,16 @@ export default WaybillReceipt;
 const LabelData = ({ title, value }: { title: string; value: string }) => {
   return (
     <div className="my-2">
+      <p className="text-gray-600">{title}</p>
+      <Text block h3>
+        {value}
+      </Text>
+    </div>
+  );
+};
+const FlexLabel = ({ title, value }: { title: string; value: string }) => {
+  return (
+    <div className="my-2 flex justify-between">
       <p className="text-gray-600">{title}</p>
       <Text block h3>
         {value}

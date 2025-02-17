@@ -79,4 +79,8 @@ interface Waybill {
   goodsOwnerName: string;
   goodsReceiverName: string;
   createdAt: string;
+
+  waybillFee: number;
+  agentFee: number;
+  totalAmount: number;
 }

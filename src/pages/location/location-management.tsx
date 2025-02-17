@@ -449,7 +449,7 @@ const LocationManagement = () => {
               </div>
 
               <Input
-                label="Constant Price"
+                label="Fixed Waybill Price"
                 type="number"
                 value={editingState.constant_price}
                 onChange={(e) =>
