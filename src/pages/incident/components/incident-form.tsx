@@ -3,7 +3,7 @@ import Text from "@/common/text/text";
 import EmergencyIcon from "@/assets/emergency-siren.svg";
 import FileIcon from "@/assets/file-folder.svg";
 import { useState } from "react";
-import { Save, Trash2, UploadCloud } from "lucide-react";
+import { Save, Trash2 } from "lucide-react";
 import Button from "@/common/button/button";
 import { useNavigate } from "react-router-dom";
 import { appPaths } from "@/utils/app-paths";

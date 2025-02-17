@@ -13,7 +13,7 @@ const productOptions = ["Rice", "Corn", "Wheat"];
 const unitOptions = ["Kilogram", "TON"];
 
 export const ProductDetails: React.FC = () => {
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
     productName: "",
     unit: "",
@@ -25,7 +25,7 @@ export const ProductDetails: React.FC = () => {
     quantity: 0,
   });
 
-  const { setValue, getValues, watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
   const products = watch("products") || []; // Use watch to reactively get form values
 
   const handleAdd = () => {
@@ -37,10 +37,10 @@ export const ProductDetails: React.FC = () => {
     }
   };
 
-  const startEdit = (id: number) => {
+  const startEdit = (id: string | number) => {
     const item = products.find((item) => item.id === id);
     if (item) {
-      setEditingId(id);
+      setEditingId(id as string);
       setEditProduct(item);
     }
   };
@@ -55,7 +55,7 @@ export const ProductDetails: React.FC = () => {
     }
   };
 
-  const deleteItem = (id: number) => {
+  const deleteItem = (id: number | string) => {
     const updatedItems = products.filter((item) => item.id !== id);
     setValue("products", updatedItems);
   };
@@ -139,13 +139,13 @@ export const ProductDetails: React.FC = () => {
                   {item.quantity} {item.unit === "TON" ? "TON" : "Kg"}
                 </div>
                 <button
-                  onClick={() => startEdit(item.id)}
+                  onClick={() => startEdit(item.id ?? "")}
                   className="text-blue-600 hover:text-blue-700"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => deleteItem(item?.id)}
+                  onClick={() => deleteItem(item.id ?? "")}
                   className="text-red-500 hover:text-red-600"
                 >
                   <Trash2 className="w-4 h-4" />

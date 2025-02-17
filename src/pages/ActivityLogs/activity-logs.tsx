@@ -5,7 +5,6 @@ import Text from "@/common/text/text";
 import { Sort } from "iconsax-react";
 import { useState } from "react";
 import StatusIndicator from "@/common/status";
-import { useNavigate } from "react-router-dom";
 import BillIcon from "@/assets/Bill List.svg";
 import MoneyIcon from "@/assets/Money Bag.svg";
 import ShieldIcon from "@/assets/Shield Warning.svg";
@@ -38,87 +37,19 @@ const statsCards = [
   },
 ];
 
-// Updated transaction data to match table headers
-const transactions = [
-  {
-    id: "INC12345",
-    incidentId: "INCD67890",
-    waybillId: "WB67890",
-    incidentType: "Vehicle Breakdown",
-    status: "Open",
-    dateTime: "2023-10-15 14:30",
-  },
-  {
-    id: "INC12346",
-    incidentId: "INCD67891",
-    waybillId: "WB67891",
-    incidentType: "Accident",
-    status: "Progress",
-    dateTime: "2023-10-14 10:15",
-  },
-  {
-    id: "INC12347",
-    incidentId: "INCD67892",
-    waybillId: "WB67892",
-    incidentType: "Cargo Damage",
-    status: "Resolved",
-    dateTime: "2023-10-13 09:00",
-  },
-];
-
 function ActivityLogs() {
   const [activeTab, setActiveTab] = useState("all");
-  // const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<"dateTime" | "incidentType" | null>(null);
-  // const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
-  // const navigate = useNavigate();
-  // Handle tab switching
+
   const handleSwitchTab = (value: string) => {
     setActiveTab(value);
     // setFilterByStatus(value === "all" ? null : value);
   };
 
-  // Handle bulk selection
-  // const handleBulkSelection = (checked: boolean) => {
-  //   if (checked) {
-  //     setSelectedItems(transactions.map((tx) => tx.id));
-  //   } else {
-  //     setSelectedItems([]);
-  //   }
-  // };
-
-  // Handle individual selection
-  // const handleIndividualSelection = (id: string) => {
-  //   setSelectedItems((prev) => {
-  //     if (prev.includes(id)) {
-  //       return prev.filter((item) => item !== id);
-  //     } else {
-  //       return [...prev, id];
-  //     }
-  //   });
-  // };
-
   // Handle sorting
   const handleSort = (key: "dateTime" | "incidentType") => {
     setSortBy(key);
   };
-
-  // Handle filtering
-  // const handleFilter = () => {
-  //   alert("Custom filter logic can be implemented here.");
-  // };
-
-  // Filter and sort transactions based on state
-  // const filteredTransactions = transactions
-  //   .filter((tx) => (filterByStatus ? tx.status.toLowerCase() === filterByStatus : true))
-  //   .sort((a, b) => {
-  //     if (sortBy === "dateTime") {
-  //       return new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime();
-  //     } else if (sortBy === "incidentType") {
-  //       return a.incidentType.localeCompare(b.incidentType);
-  //     }
-  //     return 0;
-  //   });
 
   return (
     <div>
@@ -177,14 +108,6 @@ function ActivityLogs() {
           >
             Sort by
           </Button>
-          {/* <Button
-            className="!w-[100px] !h-[40px] !text-[#64748B]"
-            variant="outlined"
-            leftIcon={<Filter />}
-            onClick={handleFilter}
-          >
-            Filter
-          </Button> */}
         </div>
       </div>
 

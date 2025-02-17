@@ -33,7 +33,7 @@ export interface WayBillFormData {
   deliveryTown: string;
 
   products?: {
-    id: string | number;
+    id?: string | number;
     productName: string;
     unit: string;
     quantity: number;
@@ -41,6 +41,7 @@ export interface WayBillFormData {
   goodsOwnerName: string;
   goodsReceiverName: string;
   shipmentStatus: string;
+  transactionReference: string;
 }
 
 export const wayBillSchema = yup.object().shape({
@@ -78,4 +79,5 @@ export const wayBillSchema = yup.object().shape({
   goodsOwnerName: yup.string().required("Good Owners Name is required"),
   goodsReceiverName: yup.string().required("Good Receiver Name is required"),
   shipmentStatus: yup.string().required("Shipment Status is required"),
+  transactionReference: yup.string().required("Shipment Status is required"),
 });

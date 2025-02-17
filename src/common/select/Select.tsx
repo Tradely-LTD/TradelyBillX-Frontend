@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowDown } from 'iconsax-react';
+import React, { useState } from "react";
+import { ArrowDown } from "iconsax-react";
 
 interface SelectProps {
   placeholder?: string;
@@ -21,14 +21,14 @@ interface SelectProps {
 }
 
 function Select({
-  placeholder = '',
+  placeholder = "",
   value,
   classNameWrapper,
   onChange,
   name,
   disabled = false,
   required = false,
-  className = '',
+  className = "",
   error,
   label,
   fullWidth = false,
@@ -41,75 +41,75 @@ function Select({
   const [isFocused, setIsFocused] = useState(false);
 
   const containerStyles = {
-    position: 'relative' as const,
-    width: fullWidth ? '100%' : 'auto',
+    position: "relative" as const,
+    width: fullWidth ? "100%" : "auto",
   };
 
   const selectWrapperStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    position: 'relative' as const,
-    width: '100%',
-    border: '1px solid',
-    borderColor: error ? '#ef4444' : isFocused ? '#2C7743' : '#CBD5E1',
-    borderRadius: '6px',
-    transition: 'all 0.2s ease-in-out',
-    backgroundColor: disabled ? '#f3f4f6' : 'white',
-    marginBottom: '10px',
+    display: "flex",
+    alignItems: "center",
+    position: "relative" as const,
+    width: "100%",
+    border: "1px solid",
+    borderColor: error ? "#ef4444" : isFocused ? "#2C7743" : "#CBD5E1",
+    borderRadius: "6px",
+    transition: "all 0.2s ease-in-out",
+    backgroundColor: disabled ? "#f3f4f6" : "white",
+    marginBottom: "10px",
   };
 
   const selectStyles = {
-    padding: '0.75rem 1rem',
-    paddingLeft: leftIcon ? '2.5rem' : '1rem',
-    paddingRight: '2.5rem',
-    fontSize: '1rem',
-    width: '100%',
-    border: 'none',
-    outline: 'none',
-    borderRadius: '30px',
-    backgroundColor: 'transparent',
-    cursor: disabled ? 'not-allowed' : 'pointer',
+    padding: "0.75rem 1rem",
+    paddingLeft: leftIcon ? "2.5rem" : "1rem",
+    paddingRight: "2.5rem",
+    fontSize: "1rem",
+    width: "100%",
+    border: "none",
+    outline: "none",
+    borderRadius: "30px",
+    backgroundColor: "transparent",
+    cursor: disabled ? "not-allowed" : "pointer",
     fontWeight: 300,
-    height: '40px',
-    appearance: 'none' as const,
-    color: value ? '#000' : '#64748b',
+    height: "40px",
+    appearance: "none" as const,
+    color: value ? "#000" : "#64748b",
   };
 
   const iconStyles = {
-    position: 'absolute' as const,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    color: '#64748b',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '1.5rem',
-    height: '1.5rem',
+    position: "absolute" as const,
+    top: "50%",
+    transform: "translateY(-50%)",
+    color: "#64748b",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "1.5rem",
+    height: "1.5rem",
   };
 
   const leftIconStyles = {
     ...iconStyles,
-    left: '0.75rem',
+    left: "0.75rem",
   };
 
   const rightIconStyles = {
     ...iconStyles,
-    right: '0.75rem',
-    pointerEvents: 'none',
+    right: "0.75rem",
+    // pointerEvents: 'none',
   };
 
   const labelStyles = {
-    display: 'block',
-    marginBottom: '0.2rem',
-    fontSize: '0.875rem',
-    fontWeight: '500',
-    color: '#374151',
+    display: "block",
+    marginBottom: "0.2rem",
+    fontSize: "0.875rem",
+    fontWeight: "500",
+    color: "#374151",
   };
 
   const errorStyles = {
-    fontSize: '0.75rem',
-    color: '#ef4444',
-    marginTop: '0.25rem',
+    fontSize: "0.75rem",
+    color: "#ef4444",
+    marginTop: "0.25rem",
     fontWeight: 500,
   };
 
@@ -128,7 +128,7 @@ function Select({
       {label && (
         <label style={labelStyles}>
           {label}
-          {required && <span style={{ color: '#ef4444' }}> *</span>}
+          {required && <span style={{ color: "#ef4444" }}> *</span>}
         </label>
       )}
       <div style={containerStyles}>
@@ -144,7 +144,8 @@ function Select({
             onFocus={handleFocus}
             onBlur={handleBlur}
             style={selectStyles}
-            {...rest}>
+            {...rest}
+          >
             {placeholder && (
               <option value="" disabled>
                 {placeholder}

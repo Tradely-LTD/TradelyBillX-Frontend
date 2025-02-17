@@ -1,7 +1,7 @@
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 interface cardProps {
   title: string;
-  value: string;
+  value: string | number;
   change: string;
   data: any;
 }

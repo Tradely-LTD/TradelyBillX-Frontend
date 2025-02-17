@@ -83,7 +83,13 @@ function WaybillsList() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statsCards.map((stat, index) => (
-          <StatsCard key={index} {...stat} />
+          <StatsCard
+            change={stat.change}
+            data={stat.data}
+            title={stat.title}
+            value={stat?.value ?? ""}
+            key={index}
+          />
         ))}
       </div>
 

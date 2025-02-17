@@ -158,16 +158,6 @@ function Layout() {
               {menuItems.find((item) => isPathActive(item.path))?.label || "Dashboard"}
             </h1>
           </div>
-
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Input className="h-[40px]" placeholder="Search here..." />
-            </div>
-            <button className="p-2 rounded-lg hover:bg-gray-100 relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-            </button>
-          </div>
         </header>
 
         {/* Page Content */}
