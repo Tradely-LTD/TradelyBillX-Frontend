@@ -8,8 +8,13 @@ export const formatDate = (dateString: string) => {
   return formats;
 };
 
-export const thousandFormatter = (num: number) => new Intl.NumberFormat().format(num);
-
+// export const thousandFormatter = (num: number) => new Intl.NumberFormat().format(num);
+export const thousandFormatter = (value: number) => {
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(value);
+};
 export const capitalizeFirstLetter = (input: string): string => {
   return input.length > 0 ? input.charAt(0).toUpperCase() + input.slice(1).toLowerCase() : input;
 };

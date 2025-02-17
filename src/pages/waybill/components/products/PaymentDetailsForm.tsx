@@ -9,6 +9,7 @@ import { useStateSlice } from "../../waybill.slice";
 import Input from "@/common/input/input";
 import { useState } from "react";
 import { useUserSlice } from "@/pages/auth/authSlice";
+import { thousandFormatter } from "@/utils/helper";
 
 const PaymentDetailsForm = () => {
   const { watch } = useFormContext();
@@ -63,7 +64,7 @@ const PaymentDetailsForm = () => {
               <Text style={{ display: "flex", gap: 3, alignItems: "center" }}>
                 <Ship size="16" /> Shipment Status
               </Text>
-              <StatusIndicator status={formValues.shipmentStatus as any} />
+              <StatusIndicator status={(formValues.shipmentStatus as any) ?? "Progress"} />
             </div>
 
             <Text
@@ -141,7 +142,7 @@ const PaymentDetailsForm = () => {
               </div> */}
               <div className="flex items-center justify-between my-2">
                 <Text block>Agent Service Fee</Text>
-                <Text style={{ fontWeight: "600" }}>{agentAmount} NGN</Text>
+                <Text style={{ fontWeight: "600" }}>{thousandFormatter(agentAmount)} NGN</Text>
               </div>
               <div className="flex items-center justify-between my-2">
                 <Text block>Waybill Fee</Text>
@@ -150,7 +151,9 @@ const PaymentDetailsForm = () => {
               <hr className="border-dotted border-[2px]" />
               <div className="flex items-center justify-between my-2">
                 <Text block>Total Price</Text>
-                <Text style={{ fontWeight: "600" }}>{totalAmount || "0"} NGN</Text>
+                <Text style={{ fontWeight: "600" }}>
+                  {thousandFormatter(totalAmount) || "0"} NGN
+                </Text>
               </div>
             </div>
           </div>
@@ -187,6 +190,8 @@ const PaymentDetailsForm = () => {
               </div>
               <PaystackPayment
                 amount={totalAmount}
+                agentFee={agentAmount}
+                waybillFee={state?.constant_price ?? ""}
                 email={loginResponse?.user?.email ?? ""}
                 reference={""}
                 stateId={state?.id ?? ""}
