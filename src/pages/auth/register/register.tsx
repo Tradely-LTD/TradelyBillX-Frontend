@@ -58,7 +58,7 @@ const Register = () => {
   return (
     <div className="flex min-h-screen">
       <div
-        className="w-[70%] bg-cover bg-center bg-no-repeat relative"
+        className="w-[70%] bg-cover bg-center bg-no-repeat relative hidden md:block"
         style={{
           backgroundImage:
             "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('your-background-url')",
@@ -82,7 +82,7 @@ const Register = () => {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-1 grid grid-cols-2 items-center gap-2">
+            <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
               <div>
                 <Input
                   label="First Name"
@@ -111,7 +111,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="mb-1 grid grid-cols-2 items-center gap-2">
+            <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
               <div>
                 <Input
                   label="Email"
@@ -141,7 +141,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="mb-1 grid grid-cols-2 items-center gap-2">
+            <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
               <div>
                 <Input
                   label="Time zone"
@@ -169,7 +169,7 @@ const Register = () => {
                 />
               </div>
             </div>
-            <div className="mb-1 grid grid-cols-2 items-center gap-2">
+            <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
               <div>
                 <Input
                   label="State"
