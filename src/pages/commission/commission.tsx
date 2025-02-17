@@ -2,11 +2,9 @@ import Button from "@/common/button/button";
 import StatsCard from "@/common/cards/StatsCard";
 import Text from "@/common/text/text";
 import { Sort } from "iconsax-react";
-import { Copy, Download, Eye, Filter, Pencil, Printer, Share2, Trash2 } from "lucide-react";
+import { Copy, Download, Eye, Printer } from "lucide-react";
 import { useState } from "react";
 import { Checkbox } from "@radix-ui/themes";
-import { useNavigate } from "react-router-dom";
-import { appPaths } from "@/utils/app-paths";
 import { Modal } from "@/common/modal/modal";
 import { QRCodeSVG } from "qrcode.react";
 import MSGIcon from "@/assets/MSG.svg";
@@ -128,11 +126,6 @@ function CommisionTracker() {
   // Handle sorting
   const handleSort = (key: "dateTime" | "incidentType") => {
     setSortBy(key);
-  };
-
-  // Handle filtering
-  const handleFilter = () => {
-    alert("Custom filter logic can be implemented here.");
   };
 
   // Filter and sort transactions based on state

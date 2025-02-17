@@ -234,7 +234,7 @@ function Incidents() {
                 <td className="py-2 px-4 border-b">{tx.waybillId}</td>
                 <td className="py-2 px-4 border-b">{tx.incidentType}</td>
                 <td className="py-2 px-4 border-b">
-                  <StatusIndicator status={tx.status} />
+                  <StatusIndicator status={tx?.status as any} />
                 </td>
                 <td className="py-2 px-4 border-b">{tx.dateTime}</td>
                 <td className="py-2 px-4 border-b">

@@ -12,7 +12,7 @@ interface CommonModalProps {
 
 export function Modal({
   isOpen,
-  onClose,
+  // onClose,
   header,
   footer,
   children,

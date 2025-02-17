@@ -37,7 +37,7 @@ export const DriverVehicleInfo = () => {
           />
           <Input
             {...register("driverPhone")}
-            error={errors.driverName?.message}
+            error={errors.driverPhone?.message}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setValue("driverPhone", e.target.value);
               clearErrors("driverPhone");
@@ -49,7 +49,7 @@ export const DriverVehicleInfo = () => {
           />
           <Input
             {...register("vehicleNumber")}
-            error={errors.driverName?.message}
+            error={errors.vehicleNumber?.message}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setValue("vehicleNumber", e.target.value);
               clearErrors("vehicleNumber");

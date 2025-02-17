@@ -1,6 +1,10 @@
 import { useGetLGAsQuery, useGetStatesQuery, useGetTownsQuery } from "../location/location.api";
 
-export const useShipmentLocation = ({ selectedStateId, selectedLGAId }) => {
+interface props {
+  selectedStateId: string;
+  selectedLGAId: string;
+}
+export const useShipmentLocation = ({ selectedStateId, selectedLGAId }: props) => {
   const { data: statesData, isLoading: isStatesLoading } = useGetStatesQuery();
   const {
     data: lgasData,

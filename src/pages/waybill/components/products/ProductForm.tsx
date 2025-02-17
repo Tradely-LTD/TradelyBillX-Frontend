@@ -20,7 +20,7 @@ export const ProductForm = ({
     unit: "",
     quantity: 0,
   },
-  onSubmit,
+  // onSubmit,
   onDelete,
 }: ProductFormProps) => {
   const [formValues, setFormValues] = useState(initialValues);

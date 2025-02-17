@@ -44,15 +44,15 @@ const PaymentDetailsForm = () => {
             <div className="flex justify-between my-3">
               <Text color="#64748B">Transaction ID</Text>
               <p className="flex gap-2 font-semibold text-[#2C7743]">
-                {formValues.transactionId || "TRX001"} <Copy color="green" />
+                {formValues.transactionReference || "TRX001"} <Copy color="green" />
               </p>
             </div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <Text color="#64748B">Receipt</Text>
               <p className="flex gap-2 font-semibold text-[#2C7743]">
                 {formValues.receiptNumber || "32414"} <Copy color="green" />
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -63,7 +63,7 @@ const PaymentDetailsForm = () => {
               <Text style={{ display: "flex", gap: 3, alignItems: "center" }}>
                 <Ship size="16" /> Shipment Status
               </Text>
-              <StatusIndicator status={formValues?.shipmentStatus || "Pending"} />
+              <StatusIndicator status={formValues.shipmentStatus as any} />
             </div>
 
             <Text
@@ -124,7 +124,7 @@ const PaymentDetailsForm = () => {
               {formValues?.products?.map((product, index) => (
                 <ProductCard
                   key={index}
-                  number={(index + 1).toString()}
+                  number={index + 1}
                   quantity={product.productName}
                   title={product.unit}
                   value={product?.quantity ?? "0"}
@@ -222,8 +222,8 @@ const ProductCard = ({
 }: {
   title: string;
   quantity: string;
-  value: string;
-  number: string | number;
+  value: string | number;
+  number: number;
 }) => {
   return (
     <div className="flex items-center my-2 justify-between p-2 rounded-md bg-white">

@@ -169,7 +169,7 @@ const LocationManagement = () => {
                     }))
                   : [{ label: "No States available", value: "no data ", id: "" }]
               }
-              onChange={(value, id) => {
+              onChange={(_, id) => {
                 setSelectedState(id);
               }}
               isLoading={isStatesLoading}
@@ -189,7 +189,7 @@ const LocationManagement = () => {
                   ? [{ label: "No LGAs found for this state", value: "no data ", id: "" }]
                   : [{ label: "Select a state first", value: "no data ", id: "" }]
               }
-              onChange={(value, id) => {
+              onChange={(_, id) => {
                 setSelectedLGA(id ?? "");
               }}
               isLoading={isLGALoading || isFetchingLGA}
@@ -226,12 +226,12 @@ const LocationManagement = () => {
                     <td className="py-2 px-4 border-b">{item.aufcdn_percentage}%</td>
                     <td className="py-2 px-4 border-b">
                       <StatusIndicator
-                        status={item?.allow_price_edit ? "Allowed" : "Restricated"}
+                        status={item?.allow_price_edit ? "allowed" : "Restricated"}
                       />
                     </td>
                     <td className="py-2 px-4 border-b">
                       <StatusIndicator
-                        status={item?.enable_internal_revenue ? "Allowed" : "Restricated"}
+                        status={item?.enable_internal_revenue ? "allowed" : "Restricated"}
                       />
                     </td>
                     <td className="py-2 px-4 border-b">
@@ -273,7 +273,7 @@ const LocationManagement = () => {
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">{item.value}</td>
                     <td className="py-2 px-4 border-b">
-                      <StatusIndicator status={item?.status_allowed ? "Allowed" : "Restricated"} />
+                      <StatusIndicator status={item?.status_allowed ? "allowed" : "Restricated"} />
                     </td>
                     <td className="py-2 px-4 border-b">
                       <div className="flex gap-2">

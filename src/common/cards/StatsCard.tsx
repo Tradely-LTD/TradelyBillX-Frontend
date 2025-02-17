@@ -1,5 +1,11 @@
 import { LineChart, Line, ResponsiveContainer } from "recharts";
-function StatsCard({ title, value, change, data }) {
+interface cardProps {
+  title: string;
+  value: string | number;
+  change: string;
+  data: any;
+}
+function StatsCard({ title, value, change, data }: cardProps) {
   return (
     <div>
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm max-w-[300px] h-[130px]">

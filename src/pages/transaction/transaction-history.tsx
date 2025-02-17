@@ -6,7 +6,6 @@ import { Sort } from "iconsax-react";
 import { Filter, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Checkbox } from "@radix-ui/themes";
-import StatusIndicator from "@/common/status";
 import { appPaths } from "@/utils/app-paths";
 import { useNavigate } from "react-router-dom";
 

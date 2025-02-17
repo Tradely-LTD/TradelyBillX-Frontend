@@ -22,6 +22,7 @@ interface InputProps {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   rest?: any;
+  ref?: any;
 }
 
 function Input({
@@ -44,6 +45,7 @@ function Input({
   max,
   leftIcon,
   rightIcon,
+  ref,
   rest,
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -159,6 +161,7 @@ function Input({
             maxLength={maxLength}
             min={min}
             max={max}
+            ref={ref}
             style={inputStyles}
             {...rest}
           />

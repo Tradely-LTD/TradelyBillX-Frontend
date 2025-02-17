@@ -30,7 +30,7 @@ export const ShipmentDetails: React.FC = () => {
     lgasData,
     towns,
   } = useShipmentLocation({
-    selectedLGAId: selectedLGAId,
+    selectedLGAId: selectedLGAId ?? "",
     selectedStateId: selectedStateId,
   });
   const {
@@ -42,7 +42,7 @@ export const ShipmentDetails: React.FC = () => {
     lgasData: lgaDelivery,
     towns: townsDelivery,
   } = useShipmentLocation({
-    selectedLGAId: selectedDeliveryLGAId,
+    selectedLGAId: selectedDeliveryLGAId ?? "",
     selectedStateId: selectedDeliveryStateId,
   });
   const {

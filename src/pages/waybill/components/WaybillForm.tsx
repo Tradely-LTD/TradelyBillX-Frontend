@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState } from "react";
 import Button from "@/common/button/button";
 import { DriverVehicleInfo } from "./driver/driver-from";
@@ -9,25 +10,44 @@ import { useFormContext } from "./formContext";
 const WaybillForm: React.FC = () => {
   const [step, setStep] = useState(0);
   const TOTAL_STEPS = 3;
-  const {
-    trigger,
-    formState: { errors },
-  } = useFormContext();
-  
+  const { trigger } = useFormContext();
 
   const handleNext = async () => {
-    let fieldsToValidate = [];
+    let fieldsToValidate:
+      | string
+      | string[]
+      | readonly (
+          | "driverName"
+          | "driverPhone"
+          | "vehicleNumber"
+          | "loadingMarket"
+          | "deliveryMarket"
+          | "departureDate"
+          | "departureTime"
+          | "arrivalDate"
+          | "arrivalTime"
+          | "loadingState"
+          | "loadingLGA"
+          | "loadingTown"
+          | "deliveryState"
+          | "deliveryLGA"
+          | "deliveryTown"
+          | "products"
+          | "goodsOwnerName"
+          | "goodsReceiverName"
+          | "shipmentStatus"
+          | "transactionReference"
+          | `products.${number}`
+          | `products.${number}.id`
+          | `products.${number}.productName`
+          | `products.${number}.unit`
+          | `products.${number}.quantity`
+        )[]
+      | undefined = [];
 
     if (step === 0) {
       fieldsToValidate = ["driverName", "driverPhone", "vehicleNumber"];
     }
-    // else if (step === 1) {
-    //   fieldsToValidate = ["shipmentType", "destination", "pickupDate"];
-    // } else if (step === 2) {
-    //   fieldsToValidate = ["productName", "quantity", "price"];
-    // } else if (step === 3) {
-    //   fieldsToValidate = ["paymentMethod", "totalAmount"];
-    // }
 
     const isValid = await trigger(fieldsToValidate, { shouldFocus: true });
     if (isValid) {
@@ -68,3 +88,26 @@ const WaybillForm: React.FC = () => {
 };
 
 export default WaybillForm;
+
+/*
+  const stepValidationFields = {
+      0: ["driverName", "driverPhone", "vehicleNumber"],
+      1: [
+        "loadingState",
+        "loadingLGA",
+        "loadingTown",
+        "loadingMarket",
+        "deliveryState",
+        "deliveryLGA",
+        "deliveryTown",
+        "deliveryMarket",
+        "departureDate",
+        "departureTime",
+        "arrivalDate",
+        "arrivalTime",
+      ],
+      2: ["products"],
+      3: ["goodsOwnerName", "goodsReceiverName", "shipmentStatus", "transactionReference"],
+    };
+
+*/

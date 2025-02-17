@@ -110,10 +110,10 @@ const WaybillPreview = () => {
                 {waybill?.products?.map((product, index) => (
                   <ProductCard
                     key={index}
-                    number={(index + 1).toString()}
+                    number={index + 1}
                     title={product.productName}
                     quantity={product.unit}
-                    value={product.quantity}
+                    value={product.quantity.toString()}
                   />
                 ))}
               </div>
@@ -247,7 +247,7 @@ const ProductCard = ({
   title: string;
   quantity: string;
   value: string;
-  number: string;
+  number: number;
 }) => {
   return (
     <div className="flex items-center my-2 justify-between p-2 rounded-md bg-white">

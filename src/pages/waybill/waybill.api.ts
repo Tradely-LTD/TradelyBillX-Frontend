@@ -71,7 +71,12 @@ interface Waybill {
   shipmentStatus: "IN_TRANSIT" | "DELIVERED" | "CANCELLED";
   paymentStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED" | "REFUNDED" | "SUCCESS";
   incidentStatus: "SAFE" | "REPORTED" | "REVIEWING" | "RESOLVED";
-  products: [];
+  products: {
+    quantity: number;
+    productName: string;
+    unit: string;
+  }[];
   goodsOwnerName: string;
   goodsReceiverName: string;
+  createdAt: string;
 }

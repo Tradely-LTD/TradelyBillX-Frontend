@@ -94,11 +94,11 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     left: "0.75rem",
   };
 
-  const rightIconStyles = {
-    ...iconStyles,
-    right: "0.75rem",
-    pointerEvents: "none" as const,
-  };
+  // const rightIconStyles = {
+  //   ...iconStyles,
+  //   right: "0.75rem",
+  //   pointerEvents: "none" as const,
+  // };
 
   const labelStyles = {
     display: "block",
@@ -170,6 +170,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
           disabled={disabled || isLoading}
         >
           <Select.Trigger
+            placeholder={placeholder}
             style={triggerStyles}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}

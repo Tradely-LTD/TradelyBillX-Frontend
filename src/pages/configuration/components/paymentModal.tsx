@@ -13,8 +13,7 @@ export default function PaymentGatewayModal({ onClose, isOpen }: ModalProps) {
     isEnabled: false,
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     onClose();
     console.log("Form submitted:", formData);
     // Add your submission logic here

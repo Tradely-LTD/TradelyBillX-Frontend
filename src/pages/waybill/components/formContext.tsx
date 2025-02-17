@@ -11,7 +11,6 @@ export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const methods = useForm({
     resolver: yupResolver(wayBillSchema),
   });
-  console.log(methods.getValues());
   return <FormContext.Provider value={methods}>{children}</FormContext.Provider>;
 };
 

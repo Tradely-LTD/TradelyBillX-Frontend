@@ -288,7 +288,7 @@ const ProductCard = ({
   unit,
 }: {
   title: string;
-  quantity: string;
+  quantity: number;
   value: string;
   number: string;
   unit: string;
