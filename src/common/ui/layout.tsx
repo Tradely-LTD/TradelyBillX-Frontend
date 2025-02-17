@@ -112,7 +112,7 @@ function Layout() {
               </div>
               {/* Submenu */}
               {item.hasSubmenu && expandedSubmenu === item.label && (
-                <div className={`${isMobile ? "ml-4" : "ml-1"} mt-1`}>
+                <div className={`${isMobile ? "ml-[5px]" : "ml-1"} mt-1`}>
                   {item.submenuItems.map((subItem, subIndex) => (
                     <div
                       key={subIndex}
@@ -130,6 +130,12 @@ function Layout() {
                       {/* {isMobile && subItem.icon && <subItem.icon className="h-4 w-4" />} */}
                       {/* Display text only on larger screens */}
                       {!isMobile && <span className="truncate">{subItem.label}</span>}
+                      {isMobile && (
+                        <subItem.icon
+                          className={`h-[20px] w-[20px]
+                ${item.label === "Logout" ? "text-red-500" : ""} `}
+                        />
+                      )}
                     </div>
                   ))}
                 </div>

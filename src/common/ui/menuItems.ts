@@ -10,6 +10,8 @@ import {
   Users,
   MapIcon,
   LogOut,
+  FilePlus,
+  FileSearch,
 } from "lucide-react";
 
 export const UserRoles = {
@@ -20,7 +22,23 @@ export const UserRoles = {
 
 export type UserRoleType = keyof typeof UserRoles;
 
-export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]) => {
+interface SubmenuItem {
+  label: string;
+  path: string;
+  icon: typeof FileText;
+}
+
+interface MenuItem {
+  icon: typeof FileText;
+  label: string;
+  path: string;
+  description: string;
+  privilege: (typeof UserRoles)[UserRoleType][];
+  hasSubmenu?: boolean;
+  submenuItems?: SubmenuItem[];
+}
+
+export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuItem[] => {
   return [
     {
       icon: BarChart2,
@@ -56,9 +74,16 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]) => {
       path: "/waybill",
       hasSubmenu: true,
       submenuItems: [
-        { label: "Create Waybill", path: "/waybill" },
-        { label: "View All Waybills", path: "/waybill/list" },
-        // { label: "Pending Waybills", path: "/waybill/pending" },
+        {
+          label: "Create Waybill",
+          path: "/waybill",
+          icon: FilePlus,
+        },
+        {
+          label: "View All Waybills",
+          path: "/waybill/list",
+          icon: FileSearch,
+        },
       ],
       description: "Manage shipping documents and tracking",
       privilege: [UserRoles.AGENT, UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
