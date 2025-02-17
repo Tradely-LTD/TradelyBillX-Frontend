@@ -135,9 +135,13 @@ const Info = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   width: 70%;
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
 `;
 
 const Container = styled.div`
   min-height: 100vh;
   display: flex;
+  /* flex-wrap: wrap; */
 `;

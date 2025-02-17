@@ -22,7 +22,7 @@ function Layout() {
   const userType = roleMapping[loginResponse?.user.role || "agent"] || UserRoles.AGENT;
   const menuItems = getMenuItems(userType);
 
-  const handleMenuClick = (item: any) => {
+  const handleMenuClick = (item) => {
     if (item.hasSubmenu) {
       setExpandedSubmenu(expandedSubmenu === item.label ? null : item.label);
     } else {
@@ -31,7 +31,12 @@ function Layout() {
     }
   };
 
-  const isPathActive = (itemPath: string) => {
+  const handleSubmenuClick = (subItem) => {
+    navigate(subItem.path);
+    if (isMobile) setIsSidebarCollapsed(true); // Collapse sidebar on mobile after navigation
+  };
+
+  const isPathActive = (itemPath) => {
     if (itemPath === "/") {
       return location.pathname === "/";
     }
@@ -106,27 +111,29 @@ function Layout() {
                 )}
               </div>
               {/* Submenu */}
-              {item.hasSubmenu &&
-                expandedSubmenu === item.label &&
-                !isSidebarCollapsed &&
-                !isMobile && (
-                  <div className="ml-8 mt-1">
-                    {item.submenuItems.map((subItem, subIndex) => (
-                      <div
-                        key={subIndex}
-                        onClick={() => navigate(subItem.path)}
-                        className={`px-4 py-2 text-sm rounded-lg cursor-pointer
-                        ${
-                          isPathActive(subItem.path)
-                            ? "bg-green-50 text-green-700"
-                            : "hover:bg-gray-100"
-                        }`}
-                      >
-                        {subItem.label}
-                      </div>
-                    ))}
-                  </div>
-                )}
+              {item.hasSubmenu && expandedSubmenu === item.label && (
+                <div className={`${isMobile ? "ml-4" : "ml-1"} mt-1`}>
+                  {item.submenuItems.map((subItem, subIndex) => (
+                    <div
+                      key={subIndex}
+                      onClick={() => handleSubmenuClick(subItem)}
+                      className={`flex items-center  ${
+                        isMobile ? "px-4 py-2 " : "p-3 my-2"
+                      } text-sm rounded-lg cursor-pointer
+                      ${
+                        isPathActive(subItem.path)
+                          ? "bg-green-50 text-green-700"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {/* Display icon only on mobile */}
+                      {/* {isMobile && subItem.icon && <subItem.icon className="h-4 w-4" />} */}
+                      {/* Display text only on larger screens */}
+                      {!isMobile && <span className="truncate">{subItem.label}</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </nav>
