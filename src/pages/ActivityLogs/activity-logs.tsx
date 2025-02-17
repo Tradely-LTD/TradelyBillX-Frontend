@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import BillIcon from "@/assets/Bill List.svg";
 import MoneyIcon from "@/assets/Money Bag.svg";
 import ShieldIcon from "@/assets/Shield Warning.svg";
-import { ArrowUp01, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const chartData = Array.from({ length: 20 }, (_, i) => ({
   name: i,
@@ -68,35 +68,35 @@ const transactions = [
 
 function ActivityLogs() {
   const [activeTab, setActiveTab] = useState("all");
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  // const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<"dateTime" | "incidentType" | null>(null);
-  const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
-  const navigate = useNavigate();
+  // const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
+  // const navigate = useNavigate();
   // Handle tab switching
   const handleSwitchTab = (value: string) => {
     setActiveTab(value);
-    setFilterByStatus(value === "all" ? null : value);
+    // setFilterByStatus(value === "all" ? null : value);
   };
 
   // Handle bulk selection
-  const handleBulkSelection = (checked: boolean) => {
-    if (checked) {
-      setSelectedItems(transactions.map((tx) => tx.id));
-    } else {
-      setSelectedItems([]);
-    }
-  };
+  // const handleBulkSelection = (checked: boolean) => {
+  //   if (checked) {
+  //     setSelectedItems(transactions.map((tx) => tx.id));
+  //   } else {
+  //     setSelectedItems([]);
+  //   }
+  // };
 
   // Handle individual selection
-  const handleIndividualSelection = (id: string) => {
-    setSelectedItems((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
-      } else {
-        return [...prev, id];
-      }
-    });
-  };
+  // const handleIndividualSelection = (id: string) => {
+  //   setSelectedItems((prev) => {
+  //     if (prev.includes(id)) {
+  //       return prev.filter((item) => item !== id);
+  //     } else {
+  //       return [...prev, id];
+  //     }
+  //   });
+  // };
 
   // Handle sorting
   const handleSort = (key: "dateTime" | "incidentType") => {
@@ -104,21 +104,21 @@ function ActivityLogs() {
   };
 
   // Handle filtering
-  const handleFilter = () => {
-    alert("Custom filter logic can be implemented here.");
-  };
+  // const handleFilter = () => {
+  //   alert("Custom filter logic can be implemented here.");
+  // };
 
   // Filter and sort transactions based on state
-  const filteredTransactions = transactions
-    .filter((tx) => (filterByStatus ? tx.status.toLowerCase() === filterByStatus : true))
-    .sort((a, b) => {
-      if (sortBy === "dateTime") {
-        return new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime();
-      } else if (sortBy === "incidentType") {
-        return a.incidentType.localeCompare(b.incidentType);
-      }
-      return 0;
-    });
+  // const filteredTransactions = transactions
+  //   .filter((tx) => (filterByStatus ? tx.status.toLowerCase() === filterByStatus : true))
+  //   .sort((a, b) => {
+  //     if (sortBy === "dateTime") {
+  //       return new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime();
+  //     } else if (sortBy === "incidentType") {
+  //       return a.incidentType.localeCompare(b.incidentType);
+  //     }
+  //     return 0;
+  //   });
 
   return (
     <div>
@@ -216,8 +216,8 @@ const AcitivityCard = ({ status, type }: { type: string; status: string }) => {
           </Text>
         </div>
         <div className="p-1 bg-[#C4CBD4] rounded-full" />
-        {status === "pending" && <StatusIndicator status="Pending" />}
-        {status === "success" && <StatusIndicator status="Success" />}
+        {status === "pending" && <StatusIndicator status="PENDING" />}
+        {status === "success" && <StatusIndicator status="SUCCESS" />}
         {status === "progress" && <StatusIndicator status="Progress" />}
       </div>
       <Button

@@ -7,7 +7,7 @@ export type StatusType =
   | "superadmin"
   | "user"
   | "agent"
-  | "Allowed"
+  | "allowed"
   | "SUCCESS"
   | "Resolved"
   | "Progress"
@@ -32,7 +32,7 @@ interface StatusIndicatorProps {
   pale?: boolean;
 }
 
-const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status = "Admin", pale = false }) => {
+const StatusIndicator: React.FC<StatusIndicatorProps> = ({ status = "admin", pale = false }) => {
   let displayStatus: Exclude<StatusType, boolean>;
   if (typeof status === "boolean") {
     displayStatus = status ? "admin" : "user";
@@ -92,7 +92,7 @@ const StatusPill = styled.div<{
             color: #40C4AA;
             &::before { background: #40C4AA; }
           `;
-      case "Allowed":
+      case "allowed":
         return `background: #ECF9F6;
             color: #40C4AA;
             &::before { background: #40C4AA; }

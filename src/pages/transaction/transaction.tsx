@@ -32,7 +32,7 @@ function Transaction() {
           <>
             <div className="flex justify-between">
               <Text h3>All Done! New Waybill Successfully Generated 🧾</Text>
-              <StatusIndicator status="Success" />
+              <StatusIndicator status="SUCCESS" />
             </div>
             <Text>Your payment was successful and we have confirmed it.</Text>
           </>
@@ -40,7 +40,7 @@ function Transaction() {
           <>
             <div className="flex justify-between">
               <Text h3>Please Make Payment Before 14 Oct 2024, 23:54</Text>
-              <StatusIndicator status="Pending" />
+              <StatusIndicator status="PENDING" />
             </div>
             <Text>To get a waybill, please complete your payment</Text>
           </>
@@ -158,7 +158,7 @@ function Transaction() {
                 <Text style={{ display: "flex", gap: 3, alignItems: "center" }}>
                   <Ship size="16" /> Shipment Status
                 </Text>
-                <StatusIndicator status="Pending" />
+                <StatusIndicator status="PENDING" />
               </div>
 
               <Text

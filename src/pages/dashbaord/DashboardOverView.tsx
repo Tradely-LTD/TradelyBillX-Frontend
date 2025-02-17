@@ -22,22 +22,26 @@ const data = [
   { name: "07 Oct", payment: 350.0, commission: 65.0 },
 ];
 
+interface cardProps {
+  className?: string;
+  children: React.ReactNode;
+}
 // Card Components
-const Card = ({ className = "", children }) => (
+const Card = ({ className = "", children }: cardProps) => (
   <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}  `}>
     {children}
   </div>
 );
 
-const CardHeader = ({ className = "", children }) => (
+const CardHeader = ({ className = "", children }: cardProps) => (
   <div className={`p-6 border-b border-gray-200 ${className}`}>{children}</div>
 );
 
-const CardTitle = ({ className = "", children }) => (
+const CardTitle = ({ className = "", children }: cardProps) => (
   <h3 className={`text-lg font-semibold text-gray-900 ${className}`}>{children}</h3>
 );
 
-const CardContent = ({ className = "", children }) => (
+const CardContent = ({ className = "", children }: cardProps) => (
   <div className={`p-6 ${className}`}>{children}</div>
 );
 

@@ -189,7 +189,7 @@ const LocationManagement = () => {
                   ? [{ label: "No LGAs found for this state", value: "no data ", id: "" }]
                   : [{ label: "Select a state first", value: "no data ", id: "" }]
               }
-              onChange={(value, id) => {
+              onChange={(_, id) => {
                 setSelectedLGA(id ?? "");
               }}
               isLoading={isLGALoading || isFetchingLGA}

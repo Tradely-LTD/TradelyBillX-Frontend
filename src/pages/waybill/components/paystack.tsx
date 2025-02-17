@@ -77,7 +77,7 @@ const PaystackPayment = ({ amount, stateId, email, reference }: Props) => {
     } catch (err: any) {
       const errorMessage = err.message || "Failed to initialize payment";
       setError(errorMessage);
-      onError?.(errorMessage);
+      // onError?.(errorMessage);
     } finally {
       setIsLoading(false);
     }

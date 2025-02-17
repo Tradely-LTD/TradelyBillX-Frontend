@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useEffect, useState } from "react";
 
 const AnimatedPieChart = ({ data, size = 200 }) => {
@@ -74,16 +75,16 @@ const AnimatedPieChart = ({ data, size = 200 }) => {
 
           const pathData = `
               M ${centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)} ${
-                centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)
-              }
+            centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)
+          }
               L ${startX} ${startY}
               A ${radius - strokeWidth} ${radius - strokeWidth} 0 ${largeArcFlag} 1 ${endX} ${endY}
               L ${
                 centerX + innerRadius * Math.cos(((currentStartAngle + angle) * Math.PI) / 180)
               } ${centerY + innerRadius * Math.sin(((currentStartAngle + angle) * Math.PI) / 180)}
               A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${
-                centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)
-              } ${centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)}
+            centerX + innerRadius * Math.cos((currentStartAngle * Math.PI) / 180)
+          } ${centerY + innerRadius * Math.sin((currentStartAngle * Math.PI) / 180)}
             `;
 
           return (

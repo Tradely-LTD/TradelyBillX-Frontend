@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Lock, Bell, Bold, Italic, Table, Underline, Code, Image } from "lucide-react";
+import { Bold, Italic, Table, Underline, Code, Image } from "lucide-react";
 import BellIcon from "@/assets/bell.svg";
 import PaswordIcon from "@/assets/password.svg";
 import { Select } from "@radix-ui/themes";
