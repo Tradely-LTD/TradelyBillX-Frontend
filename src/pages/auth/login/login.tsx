@@ -1,84 +1,98 @@
-import Logo from "@/common/logo/logo";
-import React, { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import Input from "../../../common/input/input";
+import Button from "../../../common/button/button";
+import Logo from "../../../common/logo/logo";
 import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../auth.api";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+const schema = yup.object().shape({
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Password is required"),
+  email: yup.string().email("Invalid email address").required("Email is required"),
+});
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simulate login - replace with actual login logic
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/");
-    }, 1000);
+  const [handleLogin, { isLoading, isSuccess }] = useLoginMutation();
+
+  const onSubmit = async (data: any) => {
+    await handleLogin({ email: data.email, password: data.password }).unwrap();
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/");
+    }
+  }, [isSuccess]);
+
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-      {/* Left Section with Background */}
-      <div
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('bg.jpeg')`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-        className="hidden lg:block lg:w-1/2 relative"
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-50" />
-        <div className="absolute z-10 max-w-xl p-8 text-white top-[20px] left-8">
+    <Container>
+      {/* Left Section with Background Image */}
+      <Info>
+        <div className="absolute z-20 max-w-xl p-8 text-white top-[20px] left-8">
           <Logo />
           <h2 className="text-4xl font-bold leading-relaxed">
             Streamline your AUFCDN online waybill requests effortlessly.
           </h2>
         </div>
-      </div>
+      </Info>
 
       {/* Right Section - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8">
-        <div className="w-full max-w-md space-y-8">
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex text-center justify-center items-center">
-            <Logo />
-          </div>
-
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-2">Welcome Back!</h1>
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-bold mb-2">Welcome Back!</h1>
             <p className="text-gray-500">Please log in to your account</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-            <div className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                <Input
+                  label="Email"
+                  type="text"
                   placeholder="Email Address"
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  {...register("email")}
+                  error={errors.email?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const emailValue = e.target.value.toLowerCase();
+                    setValue("email", emailValue);
+                    clearErrors("email");
+                  }}
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                <input
+              <div className="my-3">
+                <Input
+                  label="Password"
                   type="password"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="Password"
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  {...register("password", { required: "Password is required" })}
+                  error={errors.password?.message}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    setValue("password", e.target.value);
+                    clearErrors("password");
+                  }}
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
                 <input
                   type="checkbox"
@@ -96,16 +110,12 @@ const LoginPage = () => {
               </a>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
-            >
+            <Button loading={isLoading} fullWidth type="submit" disabled={isLoading}>
               {isLoading ? "Logging in..." : "Login"}
-            </button>
+            </Button>
           </form>
 
-          <p className="text-center text-gray-500">
+          <p className="text-center mt-8 text-gray-500">
             Don't have an account yet?{" "}
             <Link to="/register" className="text-green-700 hover:text-green-800">
               Create an Account
@@ -113,19 +123,25 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
 export default LoginPage;
-// const Info = styled.div`
-//   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("bg.jpeg");
-//   background-position: center;
-//   background-repeat: no-repeat;
-//   width: 70%;
-// `;
 
-// const Container = styled.div`
-//   min-height: 100vh;
-//   display: flex;
-// `;
+const Info = styled.div`
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://s3-alpha-sig.figma.com/img/f36e/eda3/82a9acebc97b1c621256eb13648950a6?Expires=1738540800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=aONR4dLiJlocr0d43KrMabRw7LSR2wxBv8YSWw1Q3LwatxDsATB7BJXDPXoO~aiqLv0vbSVTq5ApxT6O1aa8THkueMBJJkOoCWJNL3u31MNTWNCymxSkXXBvB~8HcnkGdQ1DncaYI6JlIe6ybmUNX~CHxImaaF9OclW0EF-BQCal10CD5BhkcoSkV0AMzP1n2sp98ckUf8TgyMN8nyAHiEg8f2bhZ1EGnyWPr2z9XmXhFicWE8Zp1GMucQbJFs~svZOyWGZXkD9jOfZyJ49feDmnJnU7pKbazAWTXNynELcynZ-9ACVtqq5tjFwB~ihiqiwmDYY0heWzRll64T3llg__");
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 70%;
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
+`;
+
+const Container = styled.div`
+  min-height: 100vh;
+  display: flex;
+  /* flex-wrap: wrap; */
+`;
