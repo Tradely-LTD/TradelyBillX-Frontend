@@ -6,15 +6,18 @@ import { useUserSlice } from "@/pages/auth/authSlice";
 import { useFormContext } from "./formContext";
 import { useNavigate } from "react-router-dom";
 import urls from "@/utils/config";
+import { toast } from "react-toastify";
 
 interface Props {
   amount: number;
   stateId: string;
   email: string;
   reference: string;
+  waybillFee: string;
+  agentFee: number;
 }
 
-const PaystackPayment = ({ amount, stateId, email, reference }: Props) => {
+const PaystackPayment = ({ agentFee, waybillFee, amount, stateId, email, reference }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { getValues } = useFormContext();
@@ -95,11 +98,15 @@ const PaystackPayment = ({ amount, stateId, email, reference }: Props) => {
             shipmentStatus: "IN_TRANSIT",
             incidentStatus: "SAFE",
             createdBy: loginResponse?.user.id,
+            waybillFee: waybillFee,
+            totalAmount: amount,
+            agentFee: agentFee,
           });
           setPaymentConfig(null);
         },
         onClose: () => {
           setPaymentConfig(null);
+          toast.error("Payment Decline");
         },
       });
     }
