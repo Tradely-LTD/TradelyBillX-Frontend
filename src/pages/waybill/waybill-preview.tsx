@@ -130,28 +130,26 @@ const WaybillPreview = () => {
               </Text>
               <StatusIndicator status={waybill.shipmentStatus} />
             </div>
-
             <Text
               style={{
                 display: "flex",
-                fontWeight: "500",
-                margin: "10px 0px",
                 gap: 3,
                 alignItems: "center",
               }}
+              h2
             >
-              <Ship size="16" /> Loading Location
+              <Ship size="18" /> Loading Location
             </Text>
-            <div className="flex gap-2">
+            <div className="flex gap-5 mb-4  ">
               <LabelData title="State" value={waybill.loadingState} />
               <LabelData title="LGA" value={waybill.loadingLGA} />
               <LabelData title="Town/City" value={waybill.loadingTown} />
               <LabelData title="Market/Location" value={waybill.loadingMarket} />
             </div>
 
-            <div className="bg-[#F7F8FB] py-2 rounded-md">
-              <Text h3>Delivery Location</Text>
-              <div className="flex gap-2">
+            <div className="bg-[#F7F8FB] mt-3 rounded-md">
+              <Text h2>Delivery Location</Text>
+              <div className="flex gap-5 mb-5">
                 <LabelData title="State" value={waybill.deliveryState} />
                 <LabelData title="LGA" value={waybill.deliveryLGA} />
                 <LabelData title="Town/City" value={waybill.deliveryTown} />

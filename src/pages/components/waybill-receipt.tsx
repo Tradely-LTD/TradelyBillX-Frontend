@@ -74,7 +74,7 @@ const WaybillReceipt = () => {
         </div>
 
         <div className="flex flex-wrap w-full  flex-col md:flex-row-reverse justify-between items-center">
-          <div className="p-3 my-2  w-[100%] md:w-[40%]   flex flex-row-reverse justify-between gap-1 items-center border rounded-md bg-white">
+          <div className="p-2 my-1  w-[100%] md:w-[40%]   flex flex-row-reverse justify-between gap-1 items-center border rounded-md bg-white">
             <QRCodeSVG value={qrcode} size={90} level="H" />
             <div>
               <Text secondaryColor className=" rounded-md my-2">
@@ -85,8 +85,8 @@ const WaybillReceipt = () => {
               </Text>
             </div>
           </div>
-          <div className="border p-3 rounded-md   w-[100%] md:w-[40%]   flex flex-col justify-between mb-4">
-            <Text className="bg-[#F7F8FB] p-3 rounded-md my-2" h3>
+          <div className="border p-2 rounded-md   w-[100%] md:w-[40%]   flex flex-col justify-between ">
+            <Text className="bg-[#F7F8FB] p-0 rounded-md my-1" h3>
               Waybill Information
             </Text>
 
@@ -115,12 +115,12 @@ const WaybillReceipt = () => {
           </div>
         </div>
 
-        <div className="border p-3 rounded-md min-w-full  flex flex-col justify-between mb-4">
-          <Text className="bg-[#F7F8FB] p-3 rounded-md my-2" h3>
+        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
+          <Text className="bg-[#F7F8FB] p-2 rounded-md my-2" h3>
             Drive and Vehicle Information
           </Text>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             <div>
               <LabelData title="Driver's Name" value={data?.driverName ?? ""} />
             </div>
@@ -133,8 +133,8 @@ const WaybillReceipt = () => {
           </div>
         </div>
 
-        <div className="border p-3 rounded-md min-w-full  flex flex-col justify-between mb-4">
-          <Text className="bg-[#F7F8FB] p-3 rounded-md my-2" h3>
+        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
+          <Text className="bg-[#F7F8FB] p-2 rounded-md my-1" h3>
             Shipment Information
           </Text>
 
@@ -200,8 +200,8 @@ const WaybillReceipt = () => {
           </div>
         </div>
 
-        <div className="border p-3 rounded-md min-w-full  flex flex-col justify-between mb-4">
-          <Text className="bg-[#F7F8FB] p-3 rounded-md my-2" h3>
+        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
+          <Text className="bg-[#F7F8FB] p-2 rounded-md my-1" h3>
             Product Information
           </Text>
           <div>
@@ -220,15 +220,12 @@ const WaybillReceipt = () => {
             </div>
           </div>
         </div>
-        <div className="border p-3 rounded-md min-w-full  flex flex-col justify-between mb-4">
-          <Text className="bg-[#F7F8FB] p-3 rounded-md my-2" h3>
+
+        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
+          <Text className="bg-[#F7F8FB] p-3 rounded-md my-1" h3>
             Payment Information
           </Text>
           <div>
-            {/* <FlexLabel
-              title="Item Total"
-              value={data?.products?.length.toString() ?? ("" as string)}
-            /> */}
             <FlexLabel title="Waybill Fee" value={thousandFormatter(data?.waybillFee ?? 0)} />
             <FlexLabel title="Agent Service Fee" value={thousandFormatter(data?.agentFee ?? 0)} />
             <hr className="border-dotted border-[1px]" />
@@ -236,7 +233,6 @@ const WaybillReceipt = () => {
           </div>
         </div>
 
-        {/* People Details */}
         {/* <div className="space-y-4 mb-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
