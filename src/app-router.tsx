@@ -9,7 +9,6 @@ import UserManagement from "./pages/users/user-management";
 import UserForm from "./pages/users/components/user-form";
 import LocationManagement from "./pages/location/location-management";
 import LocationForm from "./pages/location/components/location-form";
-
 import Waybill from "./pages/waybill/components/Waybill";
 import Register from "./pages/auth/register/register";
 import TransactionHistory from "./pages/transaction/transaction-history";
@@ -24,8 +23,18 @@ import WaybillReceipt from "./pages/components/waybill-receipt";
 import WaybillPreview from "./pages/waybill/waybill-preview";
 import withRoleAccess from "./common/router-helper/withRole";
 import { Unauthorized } from "./pages/components/unauthorized-component";
+import UnionManagement from "./pages/union/union-management";
+import UnionForm from "./pages/union/components/union-form";
 
+// Apply role-based access control
 const WaybillComponent = withRoleAccess("agent")(Waybill);
+const UserManagementComponent = withRoleAccess("superadmin")(UserManagement);
+const UserFormComponent = withRoleAccess("superadmin")(UserForm);
+const LocationManagementComponent = withRoleAccess("superadmin")(LocationManagement);
+const LocationFormComponent = withRoleAccess("superadmin")(LocationForm);
+const UnionManagementComponent = withRoleAccess("superadmin")(UnionManagement);
+const UnionFormComponent = withRoleAccess("superadmin")(UnionForm);
+const CommisionTrackerComponent = withRoleAccess("superadmin")(CommisionTracker);
 
 function AppRouter() {
   return (
@@ -33,12 +42,6 @@ function AppRouter() {
       <Routes>
         <Route path={appPaths.login} element={<Login />} />
         <Route path={appPaths.register} element={<Register />} />
-        {/* 
-        <Route path={appPaths.register} element={<Registration />} />
-        <Route path={appPaths.forgotPassword} element={<ResetPassword />} />
-        <Route path={appPaths.verification} element={<Verification />} />
-        <Route path={appPaths.verifyCode} element={<VerifyResetCode />} />
-        <Route path={appPaths.newPassword} element={<NewPassword />} /> */}
 
         <Route
           path={appPaths.dashboard}
@@ -58,15 +61,17 @@ function AppRouter() {
             }
           />
           <Route path={appPaths.configuration} element={<Configuration />} />
-          <Route path={appPaths.location} element={<LocationManagement />} />
-          <Route path={`${appPaths.location}/add`} element={<LocationForm />} />
-          <Route path={appPaths.users} element={<UserManagement />} />
-          <Route path={`${appPaths.users}/add`} element={<UserForm mode="create" />} />
-          <Route path={`${appPaths.users}/:id`} element={<UserForm mode="update" />} />
+          <Route path={appPaths.location} element={<LocationManagementComponent />} />
+          <Route path={appPaths.union} element={<UnionManagementComponent />} />
+          <Route path={`${appPaths.union}/add`} element={<UnionFormComponent />} />
+          <Route path={`${appPaths.location}/add`} element={<LocationFormComponent />} />
+          <Route path={appPaths.users} element={<UserManagementComponent />} />
+          <Route path={`${appPaths.users}/add`} element={<UserFormComponent mode="create" />} />
+          <Route path={`${appPaths.users}/:id`} element={<UserFormComponent mode="update" />} />
           <Route path={appPaths.waybil} element={<WaybillComponent />} />
           <Route path={`${appPaths.waybil}/list`} element={<WaybillsList />} />
           <Route path={`${appPaths.waybil}/:id`} element={<WaybillPreview />} />
-          <Route path={`${appPaths.user}/:id`} element={<UserForm mode="update" />} />
+          <Route path={`${appPaths.user}/:id`} element={<UserFormComponent mode="update" />} />
           <Route path={appPaths.transaction} element={<TransactionHistory />} />
           <Route path={`${appPaths.transaction}/:id`} element={<Transaction />} />
           <Route path={appPaths.incident} element={<Incidents />} />
@@ -74,10 +79,9 @@ function AppRouter() {
           <Route path={`${appPaths.incident}/preview`} element={<IncidentPreview />} />
           <Route path={`${appPaths.receipt}/:id`} element={<WaybillReceipt />} />
           <Route path={`${appPaths.activity}`} element={<ActivityLogs />} />
-          <Route path={`${appPaths.commission}`} element={<CommisionTracker />} />
+          <Route path={`${appPaths.commission}`} element={<CommisionTrackerComponent />} />
           <Route path={`${appPaths.unauthorized}`} element={<Unauthorized />} />
         </Route>
-        {/* <Route path={"/*"} element={<NotFound />} /> */}
       </Routes>
     </BrowserRouter>
   );

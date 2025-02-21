@@ -68,11 +68,35 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
-    getUsers: builder.query<{ data: AuthUser[]; success: boolean }, void>({
-      query: () => ({
-        url: "auth/users",
-        method: Methods.Get,
+    getUsers: builder.query<{ data: AuthUser[]; success: boolean }, GetUsersParams | void>({
+      query: (params) => {
+        const queryParams = params?.role ? `?role=${params.role}` : "";
+        return {
+          url: `auth/users${queryParams}`,
+          method: Methods.Get,
+        };
+      },
+    }),
+    updateUser: builder.mutation<any, any>({
+      query: ({ data }) => ({
+        url: `/auth/${data.id}`,
+        method: Methods.Put,
+        body: data,
       }),
+      invalidatesTags: ["UNION"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          toast.success("Updated Successfully", {
+            position: "top-right",
+          });
+        } catch (err: any) {
+          const errorMessage = err?.error?.data?.error || err?.error || "Failed to update ";
+          toast.error(errorMessage, {
+            position: "top-right",
+          });
+        }
+      },
     }),
     getUser: builder.query<{ data: AuthUser; success: boolean }, { id: string }>({
       query: ({ id }) => ({
@@ -98,11 +122,18 @@ export interface LoginResponse {
   message: String;
 }
 
+export type UserRole = "superadmin" | "admin" | "agent" | null;
+
+interface GetUsersParams {
+  role?: UserRole;
+}
+
 export interface AuthUser {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
+  union: string;
   phoneNumber: string;
   profileImage?: string;
   isKYCCompleted: boolean;
@@ -161,4 +192,5 @@ export const {
   useRegisterMutation,
   useGetUserQuery,
   useGetUsersQuery,
+  useUpdateUserMutation,
 } = authApi;

@@ -6,6 +6,8 @@ export type StatusType =
   | "admin"
   | "superadmin"
   | "user"
+  | "active"
+  | "inactive"
   | "agent"
   | "allowed"
   | "SUCCESS"
@@ -87,6 +89,7 @@ const StatusPill = styled.div<{
           `;
       case "SUCCESS":
       case "Resolved":
+      case "active":
       case "IN_TRANSIT":
         return `background: #ECF9F6;
             color: #40C4AA;
@@ -99,6 +102,7 @@ const StatusPill = styled.div<{
           `;
       case "Restricated":
       case "Open":
+      case "inactive":
       case "PENDING":
         return `background: #FEE7EB;
             color: #F43F5D;

@@ -7,6 +7,9 @@ import Button from "@/common/button/button";
 import Logo from "@/common/logo/logo";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../auth.api";
+import { useGetUnionQuery } from "@/pages/union/union";
+import SelectComponent from "@/common/input/select";
+import { useGetLGAsQuery, useGetStatesQuery } from "@/pages/location/location.api";
 
 const schema = yup.object().shape({
   firstName: yup.string().min(2, "First name is required").required("First name is required"),
@@ -16,13 +19,14 @@ const schema = yup.object().shape({
     .string()
     .min(10, "Phone number is required")
     .required("Phone number is required"),
-  timeZone: yup.string().min(3, "Time zone is required").required("Time zone is required"),
+  timeZone: yup.string().min(3, "Time zone is required"),
   password: yup
     .string()
     .min(6, "Password must be at least 6 characters long")
     .required("Password is required"),
   state: yup.string().required("State is required"),
   lga: yup.string().required("LGA is required"),
+  union: yup.string().required("Union is required"),
   city: yup.string().required("City is required"),
 
   termsAccepted: yup
@@ -34,6 +38,8 @@ const schema = yup.object().shape({
 const Register = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+  const [selectedState, setSelectedState] = useState<any | null>(null);
+  const [selectedLGA, setSelectedLGA] = useState<string | null>(null);
 
   const {
     register,
@@ -45,6 +51,14 @@ const Register = () => {
     resolver: yupResolver(schema),
   });
   const [handleRegister, { isLoading, isSuccess }] = useRegisterMutation();
+  const { data: unions, isLoading: isFetchingUnion } = useGetUnionQuery();
+  const { data: statesData, isLoading: isStatesLoading } = useGetStatesQuery();
+  const {
+    data: lgasData,
+    isLoading: isLGALoading,
+    isFetching: isFetchingLGA,
+  } = useGetLGAsQuery({ stateId: selectedState }, { skip: selectedState === null });
+
   const onSubmit = (data: any) => {
     const { termsAccepted, ...rest } = data;
     handleRegister(rest);
@@ -143,16 +157,20 @@ const Register = () => {
 
             <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
               <div>
-                <Input
-                  label="Time zone"
-                  type="text"
-                  placeholder="Time zone"
-                  {...register("timeZone")}
-                  error={errors.timeZone?.message}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setValue("timeZone", e.target.value);
-                    clearErrors("timeZone");
+                <SelectComponent
+                  label="Union"
+                  options={
+                    unions?.data?.map((item) => ({
+                      label: item.name,
+                      value: item.code,
+                    })) ?? []
+                  }
+                  onChange={(val, id) => {
+                    console.log(val, id);
+                    setValue("union", val);
+                    clearErrors("union");
                   }}
+                  isLoading={isFetchingUnion}
                 />
               </div>
               <div className="my-3">
@@ -170,32 +188,46 @@ const Register = () => {
               </div>
             </div>
             <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
-              <div>
-                <Input
-                  label="State"
-                  type="text"
-                  placeholder="State"
-                  {...register("state")}
-                  error={errors.state?.message}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setValue("state", e.target.value);
-                    clearErrors("state");
-                  }}
-                />
-              </div>
-              <div className="my-3">
-                <Input
-                  label="LGA"
-                  type="text"
-                  placeholder="LGA"
-                  {...register("lga")}
-                  error={errors.lga?.message}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setValue("lga", e.target.value);
-                    clearErrors("lga");
-                  }}
-                />
-              </div>
+              <SelectComponent
+                label="State"
+                className="my-2 min-w-[50%] mr-2"
+                options={
+                  statesData?.data?.length
+                    ? statesData.data.map((state) => ({
+                        label: state.label,
+                        value: state.value,
+                        id: state.id,
+                      }))
+                    : [{ label: "No States available", value: "no data ", id: "" }]
+                }
+                onChange={(value, id) => {
+                  setValue("state", value);
+                  setSelectedState(id);
+                }}
+                isLoading={isStatesLoading}
+              />
+
+              <SelectComponent
+                label="LGA"
+                className="my-2 min-w-[50%] mr-2"
+                options={
+                  lgasData?.data?.length
+                    ? lgasData.data.map((lga) => ({
+                        label: lga.label,
+                        value: lga.value,
+                        id: lga.id,
+                      }))
+                    : selectedState
+                    ? [{ label: "No LGAs found for this state", value: "no data ", id: "" }]
+                    : [{ label: "Select a state first", value: "no data ", id: "" }]
+                }
+                onChange={(value, id) => {
+                  setValue("lga", value);
+                  setSelectedLGA(id ?? "");
+                }}
+                isLoading={isLGALoading || isFetchingLGA}
+                disabled={!selectedState}
+              />
             </div>
 
             <div className="my-3">

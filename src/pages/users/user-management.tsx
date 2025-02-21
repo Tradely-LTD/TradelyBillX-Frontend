@@ -1,41 +1,29 @@
 import { useState } from "react";
 import Button from "@/common/button/button";
 import { TabButton, TabContainer } from "@/common/tab";
-import { Sort } from "iconsax-react";
-import { ArrowLeft, ArrowRight, Filter, Pencil, Trash2 } from "lucide-react";
-import Input from "@/common/input/input";
+import { Pencil, Trash2 } from "lucide-react";
 import StatusIndicator from "@/common/status";
 import { useNavigate } from "react-router-dom";
-import { useGetUsersQuery } from "../auth/auth.api";
+import { AuthUser, useGetUsersQuery, UserRole } from "../auth/auth.api";
 import { Loader } from "@/common/loader/loader";
+import EditUserModal from "./components/editUserModal";
+import EmptyState from "../components/empty-state";
+import { capitalizeFirstLetter } from "@/utils/helper";
 
 const UserManagement = () => {
   const navigate = useNavigate();
-  const { data: users, isLoading, isFetching } = useGetUsersQuery();
-  const [activeTab, setActiveTab] = useState("all");
-  // const [selectedItems, setSelectedItems] = useState<string[]>([]);
-
-  const handleSwitchTab = (value: string) => {
+  const [activeTab, setActiveTab] = useState<UserRole | null>("agent");
+  const { data: users, isLoading, isFetching } = useGetUsersQuery({ role: activeTab });
+  const handleSwitchTab = (value: UserRole) => {
     setActiveTab(value);
   };
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<AuthUser | null>(null);
 
-  // const handleBulkSelection = (checked: boolean) => {
-  //   if (checked) {
-  //     setSelectedItems(users.map((user) => user.email));
-  //   } else {
-  //     setSelectedItems([]);
-  //   }
-  // };
-
-  // const handleIndividualSelection = (email: string) => {
-  //   setSelectedItems((prev) => {
-  //     if (prev.includes(email)) {
-  //       return prev.filter((item) => item !== email);
-  //     } else {
-  //       return [...prev, email];
-  //     }
-  //   });
-  // };
+  const handleEditClick = (user: AuthUser) => {
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
+  };
 
   return (
     <div className="p-4">
@@ -55,52 +43,45 @@ const UserManagement = () => {
         </div>
       </div>
 
-      <div className=" flex justify-end mb-4">
-        <Input
-          classNameWrapper="!border-none "
-          className="h-[34px] !bg-[#eff0f2cf] !rounded-[5px]"
-          type="date"
-          label="Date Range"
-        />
-      </div>
       <div className="flex justify-between mb-4">
-        <div className="w-[60%]">
-          <TabContainer className=" !w-full">
-            <TabButton onClick={() => handleSwitchTab("all")} active={activeTab === "all"}>
+        <div className="w-[60%] my-3">
+          <TabContainer className="!w-[450px] ">
+            <TabButton onClick={() => handleSwitchTab(null)} active={activeTab === null}>
               All
             </TabButton>
-            <TabButton onClick={() => handleSwitchTab("user")} active={activeTab === "user"}>
+            <TabButton
+              className=""
+              onClick={() => handleSwitchTab("agent")}
+              active={activeTab === "agent"}
+            >
               User/Agent
             </TabButton>
             <TabButton onClick={() => handleSwitchTab("admin")} active={activeTab === "admin"}>
               Admin
             </TabButton>
             <TabButton
-              onClick={() => handleSwitchTab("super_admin")}
-              active={activeTab === "super_admin"}
+              onClick={() => handleSwitchTab("superadmin")}
+              active={activeTab === "superadmin"}
             >
               Super Admin
             </TabButton>
           </TabContainer>
         </div>
-
-        <div className="flex gap-3">
-          <Button className="!w-[120px] h-[40px]" variant="outlined" leftIcon={<Filter />}>
-            Filter
-          </Button>
-          <Button className="!w-[120px] h-[40px]" variant="outlined" leftIcon={<Sort />}>
-            Sort by
-          </Button>
-        </div>
       </div>
 
       {isLoading || isFetching ? (
         <Loader />
+      ) : users?.data?.length === 0 ? (
+        <EmptyState
+          showButton={false}
+          description="No users found. Add a new user to get started."
+        />
       ) : (
         <>
           <table className="min-w-full bg-white border rounded-lg">
             <thead className=" bg-[#F7F8FB] rounded-tl-2xl rounded-tr-2xl p-3">
               <tr className="text-left">
+                <th className="py-2 px-4 border-b">S/N</th>
                 <th className="py-2 px-4 border-b ">
                   <div className="flex items-center gap-2">
                     <label htmlFor="select-all">Name</label>
@@ -109,7 +90,7 @@ const UserManagement = () => {
                 <th className="py-2 px-4 border-b">Role</th>
                 <th className="py-2 px-4 border-b">Email</th>
                 <th className="py-2 px-4 border-b">Union</th>
-                <th className="py-2 px-4 border-b">Location</th>
+                {/* <th className="py-2 px-4 border-b">Location</th> */}
 
                 <th className="py-2 px-4 border-b">Action</th>
               </tr>
@@ -117,20 +98,26 @@ const UserManagement = () => {
             <tbody>
               {users?.data?.map((user, index) => (
                 <tr key={index} className="hover:bg-gray-50">
+                  <td className="py-2 px-4 border-b">{++index}</td>
                   <td className="py-2 px-4 border-b">
                     <div className="flex items-center gap-2">
-                      <label htmlFor={`user-${index}`}>{user.firstName}</label>
+                      <label htmlFor={`user-${index}`}>
+                        {capitalizeFirstLetter(user.firstName ?? "")}
+                      </label>
                     </div>
                   </td>
                   <td className="py-2 px-4 border-b  w-[140px]">
                     <StatusIndicator status={user?.role} />
                   </td>
                   <td className="py-2 px-4 border-b">{user.email}</td>
-                  <td className="py-2 px-4 border-b">{user.firstName}</td>
-                  <td className="py-2 px-4 border-b">{user.state}</td>
+                  <td className="py-2 px-4 border-b">{user.union}</td>
+                  {/* <td className="py-2 px-4 border-b">{user.state}</td> */}
                   <td className="py-2 px-4 border-b">
                     <div className="flex gap-2">
-                      <button className="p-1 text-gray-500 hover:text-gray-700">
+                      <button
+                        onClick={() => handleEditClick(user)}
+                        className="p-1 text-gray-500 hover:text-gray-700"
+                      >
                         <Pencil size={18} />
                       </button>
                       <button className="p-1 text-gray-500 hover:text-gray-700">
@@ -143,7 +130,15 @@ const UserManagement = () => {
             </tbody>
           </table>
 
-          <div className="flex gap-3 justify-between py-3">
+          <EditUserModal
+            isOpen={isEditModalOpen}
+            onClose={() => {
+              setIsEditModalOpen(false);
+              setSelectedUser(null);
+            }}
+            user={selectedUser}
+          />
+          {/* <div className="flex gap-3 justify-between py-3">
             <Button
               // disabled
               leftIcon={<ArrowLeft color="green" />}
@@ -159,7 +154,7 @@ const UserManagement = () => {
             >
               Next
             </Button>
-          </div>
+          </div> */}
         </>
       )}
     </div>
