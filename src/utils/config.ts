@@ -5,12 +5,15 @@ interface Config {
 const config: { [key: string]: Config } = {
   development: {
     API_BASE_URL: "http://172.105.61.224:5000",
+    // API_BASE_URL: "http://localhost:5000",
   },
   staging: {
     API_BASE_URL: "http://172.105.61.224:5000",
+    // API_BASE_URL: "http://localhost:5000",
   },
   production: {
     API_BASE_URL: "http://172.105.61.224:5000",
+    // API_BASE_URL: "http://localhost:5000",
   },
 };
 

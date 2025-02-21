@@ -1,16 +1,17 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Menu, Bell } from "lucide-react";
-import Input from "../input/input";
+import { Menu } from "lucide-react";
 
 import { getMenuItems, UserRoles } from "./menuItems";
-import { useUserSlice } from "@/pages/auth/authSlice";
+import { logout, useUserSlice } from "@/pages/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 function Layout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
   const { loginResponse } = useUserSlice();
   const roleMapping = {
@@ -28,6 +29,9 @@ function Layout() {
     } else {
       navigate(item.path);
       if (isMobile) setIsSidebarCollapsed(true); // Collapse sidebar on mobile after navigation
+      if (item.path === "/login") {
+        dispatch(logout());
+      }
     }
   };
 
@@ -36,11 +40,25 @@ function Layout() {
     if (isMobile) setIsSidebarCollapsed(true); // Collapse sidebar on mobile after navigation
   };
 
-  const isPathActive = (itemPath) => {
+  // const isPathActive = (itemPath) => {
+  //   if (itemPath === "/") {
+  //     return location.pathname === "/";
+  //   }
+  //   return location.pathname.startsWith(itemPath);
+  // };
+  const isPathActive = (itemPath: string) => {
     if (itemPath === "/") {
       return location.pathname === "/";
     }
-    return location.pathname.startsWith(itemPath);
+
+    // Ensure exact match by splitting and comparing path segments
+    const currentPath = location.pathname.split("/").filter(Boolean);
+    const itemPathSegments = itemPath.split("/").filter(Boolean);
+
+    return (
+      currentPath.length === itemPathSegments.length &&
+      currentPath.every((segment, index) => segment === itemPathSegments[index])
+    );
   };
 
   // Handle window resize
@@ -113,7 +131,7 @@ function Layout() {
               {/* Submenu */}
               {item.hasSubmenu && expandedSubmenu === item.label && (
                 <div className={`${isMobile ? "ml-[5px]" : "ml-1"} mt-1`}>
-                  {item.submenuItems.map((subItem, subIndex) => (
+                  {item?.submenuItems?.map((subItem, subIndex) => (
                     <div
                       key={subIndex}
                       onClick={() => handleSubmenuClick(subItem)}

@@ -12,6 +12,9 @@ import {
   LogOut,
   FilePlus,
   FileSearch,
+  Users2,
+  UsersRound,
+  UserSquare,
 } from "lucide-react";
 
 export const UserRoles = {
@@ -62,6 +65,13 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
       privilege: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
     },
     {
+      icon: UserSquare,
+      label: "Union Management",
+      path: "/union",
+      description: "Manage system unions",
+      privilege: [UserRoles.SUPER_ADMIN],
+    },
+    {
       icon: MapIcon,
       label: "Location Management",
       path: "/location",
@@ -86,7 +96,7 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
         },
       ],
       description: "Manage shipping documents and tracking",
-      privilege: [UserRoles.AGENT, UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
+      privilege: [UserRoles.AGENT],
     },
     {
       icon: DollarSign,
@@ -100,7 +110,7 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
       label: "Incident Reporting",
       path: "/incidents",
       description: "Report and track delivery incidents",
-      privilege: [UserRoles.SUPER_ADMIN, UserRoles.ADMIN, UserRoles.AGENT],
+      privilege: [UserRoles.AGENT],
     },
     {
       icon: Activity,
