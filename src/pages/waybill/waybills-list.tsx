@@ -1,9 +1,7 @@
-import Button from "@/common/button/button";
 import StatsCard from "@/common/cards/StatsCard";
 import { TabButton, TabContainer } from "@/common/tab";
 import Text from "@/common/text/text";
-import { Sort } from "iconsax-react";
-import { Eye, Filter, Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useGetWaybillsQuery } from "./waybill.api";
 import StatusIndicator from "@/common/status";
@@ -21,7 +19,7 @@ const chartData = Array.from({ length: 20 }, (_, i) => ({
 
 function WaybillsList() {
   const [activeTab, setActiveTab] = useState("all");
-  const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
+  // const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
   //   const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useGetWaybillsQuery();
@@ -32,15 +30,15 @@ function WaybillsList() {
   };
 
   // Handle sorting
-  const handleSort = (key: "dateTime" | "amount") => {
-    setSortBy(key);
-  };
+  // const handleSort = (key: "dateTime" | "amount") => {
+  //   setSortBy(key);
+  // };
 
-  // Handle filtering
-  const handleFilter = () => {
-    // Implement custom filtering logic if needed
-    alert("Custom filter logic can be implemented here.");
-  };
+  // // Handle filtering
+  // const handleFilter = () => {
+  //   // Implement custom filtering logic if needed
+  //   alert("Custom filter logic can be implemented here.");
+  // };
 
   const statsCards = [
     {
@@ -74,12 +72,12 @@ function WaybillsList() {
             This is a list of all waybill generation activities across the platform.{" "}
           </Text>
         </div>
-        <div>
+        {/* <div>
           <div className="flex gap-1 flex-col ">
             <span className="text-gray-500 block ">Date Range</span>
             <input type="date" className="px-4 py-2 bg-white border rounded-lg flex items-center" />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {isLoading ? (
@@ -102,7 +100,7 @@ function WaybillsList() {
         </div>
       )}
 
-      <div className="my-4 flex items-center justify-between">
+      <div className="my-5 flex items-center justify-between">
         <div className="w-[100%]">
           <TabContainer style={{ width: "350px" }}>
             <TabButton onClick={() => handleSwitchTab("all")} active={activeTab === "all"}>
@@ -120,7 +118,7 @@ function WaybillsList() {
           </TabContainer>
         </div>
 
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <Button
             className="!w-[120px] !h-[40px] !text-[#64748B]"
             variant="outlined"
@@ -137,7 +135,7 @@ function WaybillsList() {
           >
             Filter
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {isLoading || isFetching ? (
