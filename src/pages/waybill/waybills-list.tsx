@@ -74,12 +74,12 @@ function WaybillsList() {
             This is a list of all waybill generation activities across the platform.{" "}
           </Text>
         </div>
-        <div>
+        {/* <div>
           <div className="flex gap-1 flex-col ">
             <span className="text-gray-500 block ">Date Range</span>
             <input type="date" className="px-4 py-2 bg-white border rounded-lg flex items-center" />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {isLoading ? (
@@ -102,7 +102,7 @@ function WaybillsList() {
         </div>
       )}
 
-      <div className="my-4 flex items-center justify-between">
+      <div className="my-5 flex items-center justify-between">
         <div className="w-[100%]">
           <TabContainer style={{ width: "350px" }}>
             <TabButton onClick={() => handleSwitchTab("all")} active={activeTab === "all"}>
@@ -120,7 +120,7 @@ function WaybillsList() {
           </TabContainer>
         </div>
 
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <Button
             className="!w-[120px] !h-[40px] !text-[#64748B]"
             variant="outlined"
@@ -137,7 +137,7 @@ function WaybillsList() {
           >
             Filter
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {isLoading || isFetching ? (
