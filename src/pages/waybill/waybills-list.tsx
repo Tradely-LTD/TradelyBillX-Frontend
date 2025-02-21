@@ -1,9 +1,7 @@
-import Button from "@/common/button/button";
 import StatsCard from "@/common/cards/StatsCard";
 import { TabButton, TabContainer } from "@/common/tab";
 import Text from "@/common/text/text";
-import { Sort } from "iconsax-react";
-import { Eye, Filter, Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useGetWaybillsQuery } from "./waybill.api";
 import StatusIndicator from "@/common/status";
@@ -21,7 +19,7 @@ const chartData = Array.from({ length: 20 }, (_, i) => ({
 
 function WaybillsList() {
   const [activeTab, setActiveTab] = useState("all");
-  const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
+  // const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
   //   const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useGetWaybillsQuery();
@@ -32,15 +30,15 @@ function WaybillsList() {
   };
 
   // Handle sorting
-  const handleSort = (key: "dateTime" | "amount") => {
-    setSortBy(key);
-  };
+  // const handleSort = (key: "dateTime" | "amount") => {
+  //   setSortBy(key);
+  // };
 
-  // Handle filtering
-  const handleFilter = () => {
-    // Implement custom filtering logic if needed
-    alert("Custom filter logic can be implemented here.");
-  };
+  // // Handle filtering
+  // const handleFilter = () => {
+  //   // Implement custom filtering logic if needed
+  //   alert("Custom filter logic can be implemented here.");
+  // };
 
   const statsCards = [
     {

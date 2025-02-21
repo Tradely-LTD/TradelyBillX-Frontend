@@ -39,7 +39,7 @@ const Register = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState<any | null>(null);
-  const [selectedLGA, setSelectedLGA] = useState<string | null>(null);
+  const [_, setSelectedLGA] = useState<string | null>(null);
 
   const {
     register,
@@ -225,6 +225,7 @@ const Register = () => {
                   setValue("lga", value);
                   setSelectedLGA(id ?? "");
                 }}
+                // value={selectedLGA}
                 isLoading={isLGALoading || isFetchingLGA}
                 disabled={!selectedState}
               />

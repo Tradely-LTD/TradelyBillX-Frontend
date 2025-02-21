@@ -2,9 +2,16 @@ import Button from "@/common/button/button";
 import Text from "@/common/text/text";
 import Input from "@/common/input/input";
 import { Modal } from "@/common/modal/modal";
-import { useUpdateUnionMutation } from "../union";
+import { Union, useUpdateUnionMutation } from "../union";
 
-function EditModal({ setEditingUnion, setIsModalOpen, isModalOpen, editingUnion }) {
+interface EditModalProps {
+  setEditingUnion: React.Dispatch<React.SetStateAction<Union>>;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isModalOpen: boolean;
+  editingUnion: Union;
+}
+
+function EditModal({ setEditingUnion, setIsModalOpen, isModalOpen, editingUnion }: EditModalProps) {
   const [triggerUpdate, { isLoading: isUpdating }] = useUpdateUnionMutation();
   const handleUpdateUnion = async () => {
     // Implement update logic here
