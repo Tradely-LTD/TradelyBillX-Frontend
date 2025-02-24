@@ -7,7 +7,6 @@ import { useReactToPrint } from "react-to-print";
 import Text from "@/common/text/text";
 import { formatID, thousandFormatter } from "@/utils/helper";
 import { QRCodeSVG } from "qrcode.react";
-// import html2canvas from "html2canvas";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import urls from "@/utils/config";
@@ -19,251 +18,269 @@ const WaybillReceipt = () => {
   const data = waybillData?.data;
   const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
   const componentRef = useRef<HTMLDivElement | null>(null);
+
+  // Updated for 80mm thermal printer (typically 302px width)
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     documentTitle: "waybill",
+    pageStyle: `
+      @page { 
+        size: 80mm auto !important;
+        margin: 0 !important;
+      }
+      @media print {
+        body { 
+          width: 80mm !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .receipt-container {
+          max-width: 80mm !important;
+          width: 80mm !important;
+          padding: 2mm !important;
+          margin: 0 !important;
+        }
+        .text-sm {
+          font-size: 8px !important;
+          line-height: 1.2 !important;
+        }
+        .text-lg {
+          font-size: 10px !important;
+          line-height: 1.2 !important;
+        }
+        h2, h3 {
+          font-size: 10px !important;
+          margin: 2px 0 !important;
+        }
+        p {
+          margin: 1px 0 !important;
+        }
+        .section {
+          padding: 1mm !important;
+          margin-bottom: 1mm !important;
+        }
+        .qr-code {
+          width: 60px !important;
+          height: 60px !important;
+        }
+        .flex-wrap {
+          gap: 1mm !important;
+        }
+        img {
+          height: 24px !important;
+        }
+      }
+    `,
   });
+
+  const handleDownload = async () => {
+    const input = componentRef.current;
+    if (!input) return;
+
+    try {
+      // Create PDF with appropriate dimensions for 80mm receipt (302px width)
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: [80, 297], // 80mm width, dynamic height
+      });
+
+      // Get the height of the content
+      const canvas = await html2canvas(input, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        windowWidth: input.scrollWidth,
+        windowHeight: input.scrollHeight,
+      });
+
+      const imgWidth = 80; // 80mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Add image to PDF
+      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, imgHeight);
+
+      // Save the PDF
+      pdf.save(`waybill-${dateOnly}.pdf`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    }
+  };
 
   if (isFetching || isLoading) {
     return <Loader />;
   }
   const dateOnly = data?.createdAt?.split("T")[0];
-
-  const handleDownload = async () => {
-    const input = componentRef.current;
-    if (input) {
-      const pdf = new jsPDF("portrait", "px", "a4");
-      const canvas = await html2canvas(input, { scale: 3 });
-      const imgData = canvas.toDataURL("image/png");
-      const imageProperties = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imageProperties.height * pdfWidth) / imageProperties.width;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`waybill-${dateOnly}.pdf`);
-    }
-  };
   return (
     <>
-      <div className="max-w-3xl mx-auto  flex gap-2">
-        <div
-          className="cursor-pointer p-1 font-semibold rounded-md   text-green-600"
+      <div className="flex gap-2 justify-center">
+        <button
+          className="cursor-pointer p-1 font-semibold rounded-md text-green-600"
           onClick={() => handlePrint()}
         >
           Print
-        </div>
-        <div
-          className="cursor-pointer p-1 font-semibold rounded-md  text-green-600"
+        </button>
+        <button
+          className="cursor-pointer p-1 font-semibold rounded-md text-green-600"
           onClick={handleDownload}
         >
           Download
-        </div>
+        </button>
       </div>
 
-      <div ref={componentRef} className="max-w-3xl mx-auto bg-white p-4 shadow-lg rounded-lg ">
-        <div className="text-center my-3 flex justify-center items-center flex-col">
+      <div
+        ref={componentRef}
+        className="receipt-container mx-auto bg-white p-2 shadow-lg rounded-lg"
+        style={{ maxWidth: "302px" }}
+      >
+        {/* Logo and Header - Reduced spacing */}
+        <div className="text-center my-1 flex justify-center items-center flex-col">
           <div>
-            <img style={{ height: "40px" }} src="../vite.svg" />
+            <img style={{ height: "24px" }} src="../vite.svg" />
           </div>
           <div>
-            <Text h2>AMALGAMATE UNION OF FOODSTUFF AND CATTLE DEALERS OF NIGERIA</Text>
-            <Text secondaryColor block>
+            <Text h2 className="text-xs">
+              AMALGAMATE UNION OF FOODSTUFF AND CATTLE DEALERS OF NIGERIA
+            </Text>
+            <Text secondaryColor block className="text-xs">
               Plot D36, Flat 6, Lagos Crescent Garki II, Abuja.
             </Text>
           </div>
         </div>
 
-        <div className="flex flex-wrap w-full  flex-col md:flex-row-reverse justify-between items-center">
-          <div className="p-2 my-1  w-[100%] md:w-[40%]   flex flex-row-reverse justify-between gap-1 items-center border rounded-md bg-white">
-            <QRCodeSVG value={qrcode} size={90} level="H" />
+        {/* QR and Waybill Info - Stack on small width */}
+        <div className="flex flex-col w-full gap-1">
+          <div className="section p-1 border rounded-md bg-white flex justify-between items-center">
             <div>
-              <Text secondaryColor className=" rounded-md my-2">
+              <Text secondaryColor className="text-xs">
                 Date Issued
               </Text>
-              <Text block h3>
+              <Text block h3 className="text-xs">
                 06/10/2024
               </Text>
             </div>
+            <QRCodeSVG value={qrcode} size={60} level="H" className="qr-code" />
           </div>
-          <div className="border p-2 rounded-md   w-[100%] md:w-[40%]   flex flex-col justify-between ">
-            <Text className="bg-[#F7F8FB] p-0 rounded-md my-1" h3>
+
+          <div className="section border p-1 rounded-md">
+            <Text className="bg-[#F7F8FB] p-1 rounded-md text-xs" h3>
               Waybill Information
             </Text>
 
-            <div className="w-full flex flex-col gap-3">
-              <div className="flex gap-2 items-start justify-between">
-                <div>
-                  <Text>Waybill ID</Text>
-                </div>
-                <div className="flex gap-4">
-                  <Text className="!flex items-center gap-2" color="green">
-                    {formatID(data?.id ?? "")}
-                  </Text>
-                </div>
+            <div className="w-full flex flex-col gap-1">
+              <div className="flex gap-1 items-start justify-between">
+                <Text className="text-xs">Waybill ID</Text>
+                <Text className="!flex items-center text-xs" color="green">
+                  {formatID(data?.id ?? "")}
+                </Text>
               </div>
-              <div className="flex gap-2 items-start justify-between">
-                <div>
-                  <Text>Waybill Number</Text>
-                </div>
-                <div className="flex gap-4">
-                  <Text className="!flex items-center gap-2" color="green">
-                    {formatID(data?.id ?? "")}
-                  </Text>
-                </div>
+              <div className="flex gap-1 items-start justify-between">
+                <Text className="text-xs">Waybill Number</Text>
+                <Text className="!flex items-center text-xs" color="green">
+                  {formatID(data?.id ?? "")}
+                </Text>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
-          <Text className="bg-[#F7F8FB] p-2 rounded-md my-2" h3>
+        {/* Driver Info - Reduced padding and margins */}
+        <div className="section border p-1 rounded-md flex flex-col mb-1 mt-1">
+          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
             Drive and Vehicle Information
           </Text>
 
-          <div className="flex flex-wrap gap-2">
-            <div>
-              <LabelData title="Driver's Name" value={data?.driverName ?? ""} />
-            </div>
-            <div>
-              <LabelData title="Driver's Phone Number" value={data?.driverPhone ?? ""} />
-            </div>
-            <div>
-              <LabelData title="Vehicle Number" value={data?.vehicleNumber ?? ""} />
-            </div>
+          <div className="flex flex-col gap-1">
+            <LabelData title="Driver's Name" value={data?.driverName ?? ""} />
+            <LabelData title="Driver's Phone" value={data?.driverPhone ?? ""} />
+            <LabelData title="Vehicle Number" value={data?.vehicleNumber ?? ""} />
           </div>
         </div>
 
-        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
-          <Text className="bg-[#F7F8FB] p-2 rounded-md my-1" h3>
+        {/* Shipment Info - Reduced padding */}
+        <div className="section border p-1 rounded-md flex flex-col mb-1">
+          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
             Shipment Information
           </Text>
 
-          <div className="">
-            <div>
-              <Text className=" rounded-md my-2 !flex items-center gap-2">
-                <MapPin size={16} /> Loading Location
-              </Text>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <div>
-                <LabelData title="State" value={data?.loadingState ?? ""} />
-              </div>
-              <div>
-                <LabelData title="LGA" value={data?.loadingLGA ?? ""} />
-              </div>
-              <div>
-                <LabelData title="Town/City" value={data?.loadingMarket ?? ""} />
-              </div>
+          <div className="mb-1">
+            <Text className="mb-1 !flex items-center gap-1 text-xs">
+              <MapPin size={12} /> Loading Location
+            </Text>
+            <div className="flex flex-col gap-1">
+              <LabelData title="State" value={data?.loadingState ?? ""} />
+              <LabelData title="LGA" value={data?.loadingLGA ?? ""} />
+              <LabelData title="Town/City" value={data?.loadingMarket ?? ""} />
             </div>
           </div>
 
-          <div className="border-t">
-            <div>
-              <Text className=" rounded-md my-2 !flex items-center gap-2">
-                <MapPin size={16} /> Delivery Location
-              </Text>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <div>
-                <LabelData title="State" value={data?.deliveryState ?? ""} />
-              </div>
-              <div>
-                <LabelData title="LGA" value={data?.deliveryLGA ?? ""} />
-              </div>
-              <div>
-                <LabelData title="Town/City" value={data?.deliveryTown ?? ""} />
-              </div>
+          <div className="border-t pt-1">
+            <Text className="mb-1 !flex items-center gap-1 text-xs">
+              <MapPin size={12} /> Delivery Location
+            </Text>
+            <div className="flex flex-col gap-1">
+              <LabelData title="State" value={data?.deliveryState ?? ""} />
+              <LabelData title="LGA" value={data?.deliveryLGA ?? ""} />
+              <LabelData title="Town/City" value={data?.deliveryTown ?? ""} />
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-1 border-t  py-2">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Calendar2 size={16} />
-                <span className="font-semibold">Departure</span>
+
+          <div className="grid grid-cols-2 gap-1 border-t pt-1">
+            <div>
+              <div className="flex items-center gap-1">
+                <Calendar2 size={12} />
+                <span className="font-semibold text-xs">Departure</span>
               </div>
 
-              <div className="pl-6">
-                <p className="text-sm">Date: {data?.departureDate}</p>
-                <p className="text-sm">Time: {data?.departureTime}</p>
+              <div className="pl-4">
+                <p className="text-xs">Date: {data?.departureDate}</p>
+                <p className="text-xs">Time: {data?.departureTime}</p>
               </div>
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Calendar2 size={16} />
-                <span className="font-semibold">Arrival</span>
+            <div className="mt-1">
+              <div className="flex items-center gap-1">
+                <Calendar2 size={12} />
+                <span className="font-semibold text-xs">Arrival</span>
               </div>
-              <div className="pl-6">
-                <p className="text-sm ">Date: {data?.arrivalDate}</p>
-                <p className="text-sm">Time: {data?.arrivalTime}</p>
+              <div className="pl-4">
+                <p className="text-xs">Date: {data?.arrivalDate}</p>
+                <p className="text-xs">Time: {data?.arrivalTime}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
-          <Text className="bg-[#F7F8FB] p-2 rounded-md my-1" h3>
+        {/* Product Info - Reduced padding */}
+        <div className="section border p-1 rounded-md flex flex-col mb-1">
+          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
             Product Information
           </Text>
-          <div>
-            <div>
-              {data?.products.map((item, index) => {
-                return (
-                  <ProductCard
-                    number={(index + 1).toString()}
-                    quantity={item?.quantity}
-                    title={item?.productName}
-                    value=""
-                    unit={item.unit}
-                  />
-                );
-              })}
-            </div>
+          <div className="grid grid-cols-2 gap-1 border-t pt-1">
+            {data?.products.map((item, index) => (
+              <ProductCard
+                key={index}
+                number={(index + 1).toString()}
+                quantity={item?.quantity}
+                title={item?.productName}
+                value=""
+                unit={item.unit}
+              />
+            ))}
           </div>
         </div>
 
-        <div className="border p-2 rounded-md min-w-full  flex flex-col justify-between mb-1">
-          <Text className="bg-[#F7F8FB] p-3 rounded-md my-1" h3>
+        {/* Payment Info - Reduced padding */}
+        <div className="section border p-1 rounded-md flex flex-col mb-1">
+          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
             Payment Information
           </Text>
           <div>
             <FlexLabel title="Waybill Fee" value={thousandFormatter(data?.waybillFee ?? 0)} />
             <FlexLabel title="Agent Service Fee" value={thousandFormatter(data?.agentFee ?? 0)} />
-            <hr className="border-dotted border-[1px]" />
+            <hr className="border-dotted border-[1px] my-1" />
             <FlexLabel title="Total Price" value={thousandFormatter(data?.totalAmount ?? 0)} />
           </div>
         </div>
-
-        {/* <div className="space-y-4 mb-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <User size={16} className="text-gray-500" />
-              <span className="font-semibold">Goods Owner</span>
-            </div>
-            <p className="text-sm pl-6">{data?.goodsOwnerName}</p>
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <User size={16} className="text-gray-500" />
-              <span className="font-semibold">Goods Receiver</span>
-            </div>
-            <p className="text-sm pl-6">{data?.goodsReceiverName}</p>
-          </div>
-        </div>
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <User size={16} className="text-gray-500" />
-            <span className="font-semibold">Driver Details</span>
-          </div>
-          <div className="pl-6 flex gap-4">
-            <p className="text-sm">{data?.driverName}</p>
-            <div className="flex items-center gap-1">
-              <Phone size={14} className="text-gray-500" />
-              <p className="text-sm">{data?.driverPhone}</p>
-            </div>
-          </div>
-        </div>
-      </div> */}
       </div>
     </>
   );
@@ -271,21 +288,23 @@ const WaybillReceipt = () => {
 
 export default WaybillReceipt;
 
+// Simplified components with smaller text and tighter spacing
 const LabelData = ({ title, value }: { title: string; value: string }) => {
   return (
-    <div className="my-2">
-      <p className="text-gray-600">{title}</p>
-      <Text block h3>
+    <div className="mb-1">
+      <p className="text-gray-600 text-xs">{title}</p>
+      <Text block h3 className="text-xs">
         {value}
       </Text>
     </div>
   );
 };
+
 const FlexLabel = ({ title, value }: { title: string; value: string }) => {
   return (
-    <div className="my-2 flex justify-between">
-      <p className="text-gray-600">{title}</p>
-      <Text block h3>
+    <div className="mb-1 flex justify-between">
+      <p className="text-gray-600 text-xs">{title}</p>
+      <Text block h3 className="text-xs">
         {value}
       </Text>
     </div>
@@ -306,19 +325,23 @@ const ProductCard = ({
   unit: string;
 }) => {
   return (
-    <div className="flex items-center my-2 justify-between p-2 rounded-md bg-white">
-      <div className="flex items-center gap-2">
-        <div className="bg-[#F7F8FB] w-4 h-4 flex items-center justify-center p-3 text-gray-700 rounded-full">
+    <div className="flex items-center mb-1 justify-between p-1 rounded-md bg-white">
+      <div className="flex  items-center gap-1">
+        <div className="bg-[#F7F8FB] w-3 h-3 flex items-center justify-center p-2 text-gray-700 rounded-full text-xs">
           {number}
         </div>
         <div>
-          <Text color="#64748B">{title}</Text>
-          <Text block h3>
+          <Text color="#64748B" className="text-xs">
+            {title}
+          </Text>
+          <Text block className="text-xs">
             {quantity}- {unit}
           </Text>
         </div>
       </div>
-      <Text block>{value}</Text>
+      <Text block className="text-xs">
+        {value}
+      </Text>
     </div>
   );
 };
