@@ -117,27 +117,16 @@ export const ShipmentDetails: React.FC = () => {
               disabled={!selectedState}
             />
 
-            <SelectComponent
-              label="Select town/city"
-              options={
-                towns?.data?.length
-                  ? towns.data.map((lga) => ({
-                      label: lga.label,
-                      value: lga.value,
-                      id: lga.id,
-                    }))
-                  : selectedTown
-                  ? [{ label: "No Town/City found for this lga", value: "no data ", id: "" }]
-                  : [{ label: "Select a LGA first", value: "no data ", id: "" }]
-              }
-              onChange={(value) => {
-                setValue("loadingTown", value);
-                setSelectedTown(value ?? "");
-              }}
-              // value={selectedTown}
+            <Input
+              label="Town/City"
               value={watch("loadingTown")}
-              isLoading={isLoadingTown}
-              disabled={!selectedLGA}
+              {...register("loadingTown")}
+              error={errors.loadingTown?.message}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setValue("loadingTown", e.target.value);
+                clearErrors("loadingTown");
+              }}
+              placeholder="Type full Loading Town/City"
             />
 
             <Input
@@ -200,27 +189,16 @@ export const ShipmentDetails: React.FC = () => {
               disabled={!selectedDeliveryState}
             />
 
-            <SelectComponent
-              label="Select town/city"
-              options={
-                townsDelivery?.data?.length
-                  ? townsDelivery.data.map((lga) => ({
-                      label: lga.label,
-                      value: lga.value,
-                      id: lga.id,
-                    }))
-                  : selectedDeliveryTown
-                  ? [{ label: "No Town/City found for this lga", value: "no data ", id: "" }]
-                  : [{ label: "Select a LGA first", value: "no data ", id: "" }]
-              }
-              onChange={(value) => {
-                setValue("deliveryTown", value);
-                setSelectedDeliveryTown(value ?? "");
-              }}
-              // value={selectedDeliveryTown}
+            <Input
+              label="Town/City"
               value={watch("deliveryTown")}
-              isLoading={isLoadingTownDelivery}
-              disabled={!selectedDeliveryLGA}
+              {...register("deliveryTown")}
+              error={errors.deliveryTown?.message}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setValue("deliveryTown", e.target.value);
+                clearErrors("deliveryTown");
+              }}
+              placeholder="Type full Delivery Town/City"
             />
 
             <Input

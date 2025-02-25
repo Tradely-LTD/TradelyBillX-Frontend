@@ -52,16 +52,16 @@ const PaymentStatsCard = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-8 rounded-lg my-6">
     <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
       <p className="text-gray-600 text-base sm:text-lg">Payments Made</p>
-      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">100.538.149 NGN</p>
+      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">0 NGN</p>
       <div className="flex items-center text-green-500">
-        <span className="text-xs sm:text-sm">+5% last month</span>
+        <span className="text-xs sm:text-sm">0% last month</span>
       </div>
     </div>
     <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
       <p className="text-gray-600 text-base sm:text-lg">Commission Earned</p>
-      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">20.000.000 NGN</p>
+      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">0 NGN</p>
       <div className="flex items-center text-green-500">
-        <span className="text-xs sm:text-sm">+5% last month</span>
+        <span className="text-xs sm:text-sm">0% last month</span>
       </div>
     </div>
   </div>
@@ -78,35 +78,35 @@ const DashboardOverview = () => {
   const statsCards = [
     {
       title: "Waybills Submitted",
-      value: "100",
-      change: "5% last month",
+      value: "0",
+      change: "0% last month",
       data: chartData,
     },
     {
       title: "Payments Made",
-      value: "100",
-      change: "+5% last month",
+      value: "0",
+      change: "+0% last month",
       data: chartData,
     },
     {
       title: "Incidents Reported",
-      value: "50",
-      change: "+5% last month",
+      value: "0",
+      change: "+0% last month",
       data: chartData,
     },
   ];
 
   // Status data for donut charts
   const waybillStatus = [
-    { status: "Pending", percentage: 40, color: "rgb(239, 68, 68)" },
-    { status: "In Transit", percentage: 35, color: "rgb(59, 130, 246)" },
-    { status: "Delivered", percentage: 25, color: "rgb(45, 212, 191)" },
+    { status: "Pending", percentage: 0, color: "rgb(239, 68, 68)" },
+    { status: "In Transit", percentage: 0, color: "rgb(59, 130, 246)" },
+    { status: "Delivered", percentage: 0, color: "rgb(45, 212, 191)" },
   ];
 
   const incidentStatus = [
-    { status: "Open", percentage: 40, color: "rgb(239, 68, 68)" },
-    { status: "In Progress", percentage: 35, color: "rgb(59, 130, 246)" },
-    { status: "Resolved", percentage: 25, color: "rgb(45, 212, 191)" },
+    { status: "Open", percentage: 0, color: "rgb(239, 68, 68)" },
+    { status: "In Progress", percentage: 0, color: "rgb(59, 130, 246)" },
+    { status: "Resolved", percentage: 0, color: "rgb(45, 212, 191)" },
   ];
   const [chartDimensions, setChartDimensions] = useState({ width: 350, height: 300 });
   const containerRef = useRef(null);
