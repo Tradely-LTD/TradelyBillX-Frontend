@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import { useFormContext } from "../formContext";
 
@@ -9,11 +9,12 @@ interface Product {
   quantity: number;
 }
 
-const productOptions = ["Rice", "Corn", "Wheat"];
-const unitOptions = ["Kilogram", "TON"];
+const productOptions = ["Rice", "Corn", "Wheat", "Maize", "Millet", "Sorghum", "Barley", "Oats", "Tomatoes", "Onions", ""];
+const unitOptions = ["Piece(s)", "Grams", "Kilogram", "Tone", "Bag(s)", "Crate", "Box(s)", ""];
 
 export const ProductDetails: React.FC = () => {
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [localProducts, setLocalProducts] = useState<Product[]>([]);
   const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
     productName: "",
     unit: "",
@@ -26,38 +27,46 @@ export const ProductDetails: React.FC = () => {
   });
 
   const { setValue, watch } = useFormContext();
-  const products = watch("products") || []; // Use watch to reactively get form values
+  const formProducts = watch("products") || [];
+
+  // Synchronize local state with form state
+  useEffect(() => {
+    setLocalProducts(formProducts);
+  }, [formProducts]);
 
   const handleAdd = () => {
     if (newProduct.productName && newProduct.unit && newProduct.quantity > 0) {
       const newItem = { id: Date.now(), ...newProduct };
-      const updatedItems = [...products, newItem];
+      const updatedItems = [...localProducts, newItem];
       setValue("products", updatedItems);
+      setLocalProducts(updatedItems);
       setNewProduct({ productName: "", unit: "", quantity: 0 });
     }
   };
 
-  const startEdit = (id: string | number) => {
-    const item = products.find((item) => item.id === id);
+  const startEdit = (id: number) => {
+    const item = localProducts.find((item) => item.id === id);
     if (item) {
-      setEditingId(id as string);
+      setEditingId(id);
       setEditProduct(item);
     }
   };
 
   const saveEdit = () => {
     if (editingId !== null) {
-      const updatedItems = products.map((item) =>
+      const updatedItems = localProducts.map((item) =>
         item.id === editingId ? { ...item, ...editProduct } : item
       );
       setValue("products", updatedItems);
+      setLocalProducts(updatedItems);
       setEditingId(null);
     }
   };
 
-  const deleteItem = (id: number | string) => {
-    const updatedItems = products.filter((item) => item.id !== id);
+  const deleteItem = (id: number) => {
+    const updatedItems = localProducts.filter((item) => item.id !== id);
     setValue("products", updatedItems);
+    setLocalProducts(updatedItems); // Force immediate UI update
   };
 
   return (
@@ -74,12 +83,12 @@ export const ProductDetails: React.FC = () => {
       </div>
 
       <div className="space-y-4 ">
-        {products.map((item) => (
+        {localProducts.map((item) => (
           <div
             key={item.id}
-            className="flex gap-4  border-b p-2 items-center flex-wrap md:flex-nowrap"
+            className="flex gap-4 border-b p-2 items-center flex-wrap md:flex-nowrap"
           >
-            {editingId === item?.id ? (
+            {editingId === item.id ? (
               <>
                 <select
                   value={editProduct.productName}
@@ -116,7 +125,7 @@ export const ProductDetails: React.FC = () => {
                     }
                     className="w-full p-2 rounded border border-green-500"
                   />
-                  <span>{editProduct.unit === "TON" ? "TON" : "Kg"}</span>
+                  <span>{editProduct.unit}</span>
                 </div>
 
                 <button
@@ -136,16 +145,16 @@ export const ProductDetails: React.FC = () => {
               <>
                 <div className="flex-1">{item.productName}</div>
                 <div className="flex-1">
-                  {item.quantity} {item.unit === "TON" ? "TON" : "Kg"}
+                  {item.quantity} {item.unit}
                 </div>
                 <button
-                  onClick={() => startEdit(item.id ?? "")}
+                  onClick={() => startEdit(item.id)}
                   className="text-blue-600 hover:text-blue-700"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => deleteItem(item.id ?? "")}
+                  onClick={() => deleteItem(item.id)}
                   className="text-red-500 hover:text-red-600"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -155,7 +164,6 @@ export const ProductDetails: React.FC = () => {
           </div>
         ))}
 
-        {/* Always visible add form */}
         <div className="flex gap-4 items-center flex-wrap w-full">
           <select
             value={newProduct.productName}
@@ -183,14 +191,14 @@ export const ProductDetails: React.FC = () => {
             ))}
           </select>
 
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <input
               type="number"
               value={newProduct.quantity}
               onChange={(e) => setNewProduct({ ...newProduct, quantity: Number(e.target.value) })}
               className="w-full p-2 rounded border border-green-500"
             />
-            <span>{newProduct.unit === "TON" ? "TON" : "Kg"}</span>
+            <span>{newProduct.unit}</span>
           </div>
 
           <button
@@ -203,4 +211,4 @@ export const ProductDetails: React.FC = () => {
       </div>
     </div>
   );
-};
+}; 

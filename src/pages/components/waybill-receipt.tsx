@@ -387,7 +387,7 @@ const WaybillReceipt = () => {
         {/* Payment Info - Reduced padding */}
         <div className="section border p-1 rounded-md flex flex-col mb-1">
           <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
-            Payment Information
+            Payment Summary
           </Text>
           <div>
             <FlexLabel title="Waybill Fee" value={thousandFormatter(data?.waybillFee ?? 0)} />
