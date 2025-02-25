@@ -2,7 +2,7 @@ import { MapPin } from "lucide-react";
 import { useGetWaybillQuery } from "../waybill/waybill.api";
 import { useParams } from "react-router-dom";
 import { Loader } from "@/common/loader/loader";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import Text from "@/common/text/text";
 import { formatID, thousandFormatter } from "@/utils/helper";
@@ -11,19 +11,23 @@ import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import urls from "@/utils/config";
 import { Calendar2 } from "iconsax-react";
+import { TabButton, TabContainer } from "@/common/tab";
 
 const WaybillReceipt = () => {
   const { id } = useParams();
+  const [activeTab, setActiveTab] = useState("80");
+
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const data = waybillData?.data;
   const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
   const componentRef = useRef<HTMLDivElement | null>(null);
 
-  // Updated for 80mm thermal printer (typically 302px width)
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     documentTitle: "waybill",
-    pageStyle: `
+    pageStyle:
+      activeTab === "80"
+        ? `
       @page { 
         size: 80mm auto !important;
         margin: 0 !important;
@@ -70,6 +74,54 @@ const WaybillReceipt = () => {
           height: 24px !important;
         }
       }
+    `
+        : `
+      @page { 
+        size: A4 !important;
+        margin: 0 !important;
+      }
+      @media print {
+        body { 
+          width: 210mm !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .receipt-container {
+          max-width: 210mm !important;
+          width: 210mm !important;
+          padding: 10mm !important;
+          margin: 0 !important;
+        }
+        .text-sm {
+          font-size: 12px !important;
+          line-height: 1.5 !important;
+        }
+        .text-lg {
+          font-size: 14px !important;
+          line-height: 1.5 !important;
+        }
+        h2, h3 {
+          font-size: 16px !important;
+          margin: 5px 0 !important;
+        }
+        p {
+          margin: 3px 0 !important;
+        }
+        .section {
+          padding: 5mm !important;
+          margin-bottom: 5mm !important;
+        }
+        .qr-code {
+          width: 100px !important;
+          height: 100px !important;
+        }
+        .flex-wrap {
+          gap: 5mm !important;
+        }
+        img {
+          height: 48px !important;
+        }
+      }
     `,
   });
 
@@ -77,12 +129,14 @@ const WaybillReceipt = () => {
     const input = componentRef.current;
     if (!input) return;
 
+    const dateOnly = data?.createdAt?.split("T")[0] || new Date().toISOString().split("T")[0];
+
     try {
-      // Create PDF with appropriate dimensions for 80mm receipt (302px width)
+      // Create PDF with appropriate dimensions
       const pdf = new jsPDF({
         orientation: "portrait",
-        unit: "mm",
-        format: [80, 297], // 80mm width, dynamic height
+        unit: "px",
+        format: "a4",
       });
 
       // Get the height of the content
@@ -94,11 +148,55 @@ const WaybillReceipt = () => {
         windowHeight: input.scrollHeight,
       });
 
-      const imgWidth = 80; // 80mm
+      const imgWidth = pdf.internal.pageSize.getWidth();
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const totalPages = Math.ceil(imgHeight / pdf.internal.pageSize.getHeight());
 
-      // Add image to PDF
-      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, imgHeight);
+      // Generate PDF page by page
+      for (let page = 0; page < totalPages; page++) {
+        // Add new page if not first page
+        if (page > 0) {
+          pdf.addPage();
+        }
+
+        // Calculate the portion of the image to use for this page
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const sourceY = page * (canvas.height / totalPages);
+        const destY = page === 0 ? 0 : 0;
+
+        // Create a temporary canvas for this page section
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height / totalPages;
+        const tempCtx = tempCanvas.getContext("2d");
+
+        if (tempCtx) {
+          tempCtx.drawImage(
+            canvas,
+            0, // source x
+            sourceY, // source y
+            canvas.width, // source width
+            canvas.height / totalPages, // source height
+            0, // dest x
+            0, // dest y
+            tempCanvas.width, // dest width
+            tempCanvas.height // dest height
+          );
+        }
+
+        // Add this section to the PDF
+        const imgData = tempCanvas.toDataURL("image/png");
+        pdf.addImage(
+          imgData,
+          "PNG",
+          0,
+          destY,
+          imgWidth,
+          pdf.internal.pageSize.getHeight(),
+          "",
+          "FAST"
+        );
+      }
 
       // Save the PDF
       pdf.save(`waybill-${dateOnly}.pdf`);
@@ -111,8 +209,19 @@ const WaybillReceipt = () => {
     return <Loader />;
   }
   const dateOnly = data?.createdAt?.split("T")[0];
+  const handleTabSwitch = (value: string) => {
+    setActiveTab(value);
+  };
   return (
     <>
+      <TabContainer className="!w-fit">
+        <TabButton onClick={() => handleTabSwitch("80")} active={activeTab === "80"}>
+          80 mm
+        </TabButton>
+        <TabButton onClick={() => handleTabSwitch("A4")} active={activeTab === "A4"}>
+          A4
+        </TabButton>
+      </TabContainer>
       <div className="flex gap-2 justify-center">
         <button
           className="cursor-pointer p-1 font-semibold rounded-md text-green-600"
@@ -130,19 +239,20 @@ const WaybillReceipt = () => {
 
       <div
         ref={componentRef}
+        id="receipt-container"
         className="receipt-container mx-auto bg-white p-2 shadow-lg rounded-lg"
-        style={{ maxWidth: "302px" }}
+        style={{ maxWidth: activeTab === "80" ? "302px" : "210mm" }}
       >
         {/* Logo and Header - Reduced spacing */}
         <div className="text-center my-1 flex justify-center items-center flex-col">
           <div>
-            <img style={{ height: "24px" }} src="../vite.svg" />
+            <img style={{ height: activeTab === "80" ? "24px" : "48px" }} src="../vite.svg" />
           </div>
           <div>
-            <Text h2 className="text-xs">
+            <Text h2 className={activeTab === "80" ? "text-xs" : "text-lg"}>
               AMALGAMATE UNION OF FOODSTUFF AND CATTLE DEALERS OF NIGERIA
             </Text>
-            <Text secondaryColor block className="text-xs">
+            <Text secondaryColor block className={activeTab === "80" ? "text-xs" : "text-sm"}>
               Plot D36, Flat 6, Lagos Crescent Garki II, Abuja.
             </Text>
           </div>
@@ -152,14 +262,19 @@ const WaybillReceipt = () => {
         <div className="flex flex-col w-full gap-1">
           <div className="section p-1 border rounded-md bg-white flex justify-between items-center">
             <div>
-              <Text secondaryColor className="text-xs">
+              <Text secondaryColor className={activeTab === "80" ? "text-xs" : "text-sm"}>
                 Date Issued
               </Text>
-              <Text block h3 className="text-xs">
+              <Text block h3 className={activeTab === "80" ? "text-xs" : "text-sm"}>
                 06/10/2024
               </Text>
             </div>
-            <QRCodeSVG value={qrcode} size={60} level="H" className="qr-code" />
+            <QRCodeSVG
+              value={qrcode}
+              size={activeTab === "80" ? 60 : 100}
+              level="H"
+              className="qr-code"
+            />
           </div>
 
           <div className="section border p-1 rounded-md">
@@ -169,13 +284,13 @@ const WaybillReceipt = () => {
 
             <div className="w-full flex flex-col gap-1">
               <div className="flex gap-1 items-start justify-between">
-                <Text className="text-xs">Waybill ID</Text>
+                <Text className={activeTab === "80" ? "text-xs" : "text-sm"}>Waybill ID</Text>
                 <Text className="!flex items-center text-xs" color="green">
                   {formatID(data?.id ?? "")}
                 </Text>
               </div>
               <div className="flex gap-1 items-start justify-between">
-                <Text className="text-xs">Waybill Number</Text>
+                <Text className={activeTab === "80" ? "text-xs" : "text-sm"}>Waybill Number</Text>
                 <Text className="!flex items-center text-xs" color="green">
                   {formatID(data?.id ?? "")}
                 </Text>
