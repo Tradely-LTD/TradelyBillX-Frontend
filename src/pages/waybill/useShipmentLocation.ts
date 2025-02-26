@@ -2,7 +2,7 @@ import { useGetLGAsQuery, useGetStatesQuery, useGetTownsQuery } from "../locatio
 
 interface props {
   selectedStateId: string;
-  selectedLGAId: string;
+  selectedLGAId?: string;
 }
 export const useShipmentLocation = ({ selectedStateId, selectedLGAId }: props) => {
   const { data: statesData, isLoading: isStatesLoading } = useGetStatesQuery();
@@ -15,7 +15,7 @@ export const useShipmentLocation = ({ selectedStateId, selectedLGAId }: props) =
     {
       lgaId: selectedLGAId ?? "",
     },
-    { skip: selectedLGAId === null }
+    { skip: selectedLGAId === null || selectedLGAId === "" }
   );
 
   return {

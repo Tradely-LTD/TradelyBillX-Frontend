@@ -13,6 +13,8 @@ import {
 import AnimatedPieChart from "../../common/ui/AnimatedPieChart";
 import { StatusCard } from "../components/StatusCard";
 import { useEffect, useRef, useState } from "react";
+import { useGetStatsRecordQuery } from "./stats.api";
+import Skeleton from "react-loading-skeleton";
 
 const data = [
   { name: "01 Oct", payment: 100.5, commission: 38.1 },
@@ -48,20 +50,24 @@ const CardContent = ({ className = "", children }: cardProps) => (
 );
 
 // Payment Stats Card Component
-const PaymentStatsCard = () => (
+const PaymentStatsCard = ({ totalPayments = 0, paymentsAmount = 0 }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-8 rounded-lg my-6">
     <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
       <p className="text-gray-600 text-base sm:text-lg">Payments Made</p>
-      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">100.538.149 NGN</p>
+      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">
+        {totalPayments} NGN
+      </p>
       <div className="flex items-center text-green-500">
-        <span className="text-xs sm:text-sm">+5% last month</span>
+        <span className="text-xs sm:text-sm">0% last month</span>
       </div>
     </div>
     <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
       <p className="text-gray-600 text-base sm:text-lg">Commission Earned</p>
-      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">20.000.000 NGN</p>
+      <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">
+        {paymentsAmount.toFixed(2)} NGN
+      </p>
       <div className="flex items-center text-green-500">
-        <span className="text-xs sm:text-sm">+5% last month</span>
+        <span className="text-xs sm:text-sm">0% last month</span>
       </div>
     </div>
   </div>
@@ -74,24 +80,32 @@ const DashboardOverview = () => {
     value: Math.floor(Math.random() * 50) + 50,
   }));
 
-  // Stats cards data
+  const { data: statsData, isLoading, error } = useGetStatsRecordQuery();
+
+  // Get statistics from API response
+  const totalWaybills = statsData?.data?.totalWaybills || 0;
+  const totalPayments = statsData?.data?.totalPayments || 0;
+  const totalIncidents = statsData?.data?.totalIncidents || 0;
+  const paymentsAmount = statsData?.data?.paymentsAmount || 0;
+
+  // Stats cards data with updated values from API
   const statsCards = [
     {
       title: "Waybills Submitted",
-      value: "100",
-      change: "5% last month",
+      value: String(totalWaybills),
+      change: "0% last month",
       data: chartData,
     },
     {
       title: "Payments Made",
-      value: "100",
-      change: "+5% last month",
+      value: String(totalPayments),
+      change: "+0% last month",
       data: chartData,
     },
     {
       title: "Incidents Reported",
-      value: "50",
-      change: "+5% last month",
+      value: String(totalIncidents),
+      change: "+0% last month",
       data: chartData,
     },
   ];
@@ -104,10 +118,11 @@ const DashboardOverview = () => {
   ];
 
   const incidentStatus = [
-    { status: "Open", percentage: 40, color: "rgb(239, 68, 68)" },
-    { status: "In Progress", percentage: 35, color: "rgb(59, 130, 246)" },
+    { status: "Open", percentage: 30, color: "rgb(239, 68, 68)" },
+    { status: "In Progress", percentage: 45, color: "rgb(59, 130, 246)" },
     { status: "Resolved", percentage: 25, color: "rgb(45, 212, 191)" },
   ];
+
   const [chartDimensions, setChartDimensions] = useState({ width: 350, height: 300 });
   const containerRef = useRef(null);
 
@@ -132,6 +147,13 @@ const DashboardOverview = () => {
     // Cleanup
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
+
+  // Error state
+  if (error)
+    return (
+      <div className="p-6 text-red-500">Error loading dashboard data. Please try again later.</div>
+    );
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -150,87 +172,108 @@ const DashboardOverview = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {statsCards.map((stat, index) => (
-          <Card key={index} className="h-[130px]">
-            <CardContent>
-              <div className="flex flex-row justify-between">
-                <div className="w-[60%]  flex h-auto flex-col gap-[5px]">
-                  <h3 className="text-gray-500 font-medium">{stat.title}</h3>
-                  <span className="text-3xl font-semibold">{stat.value}</span>
-                  <span className="text-green-500 text-sm">{stat.change}</span>
+
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, index) => (
+            <Skeleton key={index} height={"130px"} width={"300px"} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {statsCards.map((stat, index) => (
+            <Card key={index} className="h-[130px]">
+              <CardContent>
+                <div className="flex flex-row justify-between">
+                  <div className="w-[60%]  flex h-auto flex-col gap-[5px]">
+                    <h3 className="text-gray-500 font-medium">{stat.title}</h3>
+                    <span className="text-3xl font-semibold">{stat.value}</span>
+                    <span className="text-green-500 text-sm">{stat.change}</span>
+                  </div>
+                  <div className="flex-1 flex justify-end items-center w-1/2">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={stat.data}>
+                        <Line
+                          type="monotone"
+                          dataKey="value"
+                          stroke="#0EA5E9"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
-                <div className="flex-1 flex justify-end items-center w-1/2">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={stat.data}>
-                      <Line
-                        type="monotone"
-                        dataKey="value"
-                        stroke="#0EA5E9"
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       {/* Status Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <StatusCard title="Waybills Status" statusData={waybillStatus} />
-        <StatusCard title="Incidents Status" statusData={incidentStatus} />
-      </div>
+
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          {[...Array(2)].map((_, index) => (
+            <Skeleton key={index} height={"330px"} width={"500px"} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <StatusCard title="Waybills Status" statusData={waybillStatus} />
+          <StatusCard title="Incidents Status" statusData={incidentStatus} />
+        </div>
+      )}
 
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-bold mb-4">Payment & Commission</h2>
 
-        {/* <BarChart
-          width={350}
-          height={300}
-          data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="payment" fill="#8884d8" />
-          <Bar dataKey="commission" fill="#82ca9d" />
-        </BarChart> */}
-        <div ref={containerRef} className="w-full overflow-x-auto">
-          <div className="min-w-[280px]">
-            {/* Ensures minimum width for legibility */}
-            <BarChart
-              width={chartDimensions.width}
-              height={400}
-              data={data}
-              margin={{
-                top: 20,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 768 ? 12 : 14 }} />
-              <YAxis tick={{ fontSize: window.innerWidth < 768 ? 12 : 14 }} />
-              <Tooltip />
-              <Legend
-                wrapperStyle={{
-                  fontSize: window.innerWidth < 768 ? "12px" : "14px",
-                }}
-              />
-              <Bar dataKey="payment" fill="#8884d8" />
-              <Bar dataKey="commission" fill="#82ca9d" />
-            </BarChart>
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+            {[...Array(1)].map((_, index) => (
+              <Skeleton key={index} height={"350px"} className="w-full" />
+            ))}
           </div>
-        </div>
-        <PaymentStatsCard />
+        ) : (
+          <div ref={containerRef} className="w-full overflow-x-auto">
+            <div className="min-w-[280px]">
+              {/* Ensures minimum width for legibility */}
+              <BarChart
+                width={chartDimensions.width}
+                height={400}
+                data={data}
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" tick={{ fontSize: window.innerWidth < 768 ? 12 : 14 }} />
+                <YAxis tick={{ fontSize: window.innerWidth < 768 ? 12 : 14 }} />
+                <Tooltip />
+                <Legend
+                  wrapperStyle={{
+                    fontSize: window.innerWidth < 768 ? "12px" : "14px",
+                  }}
+                />
+                <Bar dataKey="payment" fill="#8884d8" />
+                <Bar dataKey="commission" fill="#82ca9d" />
+              </BarChart>
+            </div>
+          </div>
+        )}
+
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            {[...Array(2)].map((_, index) => (
+              <Skeleton key={index} height={"130px"} className="w-full" />
+            ))}
+          </div>
+        ) : (
+          <PaymentStatsCard totalPayments={totalPayments} paymentsAmount={paymentsAmount} />
+        )}
       </div>
     </div>
   );
