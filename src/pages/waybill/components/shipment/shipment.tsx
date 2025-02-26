@@ -38,9 +38,9 @@ export const ShipmentDetails: React.FC = () => {
     isFetchingLGA: isFetchingLGADelivery,
     isStatesLoading: isLoadingState,
     isLGALoading: isLoadingLGADelivery,
-    isLoadingTown: isLoadingTownDelivery,
+    // isLoadingTown: isLoadingTownDelivery,
     lgasData: lgaDelivery,
-    towns: townsDelivery,
+    // towns: townsDelivery,
   } = useShipmentLocation({
     selectedLGAId: selectedDeliveryLGAId ?? "",
     selectedStateId: selectedDeliveryStateId,
