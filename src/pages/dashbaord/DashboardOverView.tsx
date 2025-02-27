@@ -10,7 +10,6 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import AnimatedPieChart from "../../common/ui/AnimatedPieChart";
 import { StatusCard } from "../components/StatusCard";
 import { useEffect, useRef, useState } from "react";
 import { useGetStatsRecordQuery } from "./stats.api";
@@ -149,7 +148,7 @@ const DashboardOverview = () => {
   }, []);
 
   // Error state
-  if (error)
+  if (error && !isLoading)
     return (
       <div className="p-6 text-red-500">Error loading dashboard data. Please try again later.</div>
     );
