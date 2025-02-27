@@ -19,7 +19,7 @@ const WaybillReceipt = () => {
 
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const data = waybillData?.data;
-  const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
+  const qrcode = `${urls.SERVER_BASE_URL}/receipt/${id}`;
   const componentRef = useRef<HTMLDivElement | null>(null);
 
   const handlePrint = useReactToPrint({
