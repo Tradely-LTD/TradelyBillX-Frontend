@@ -45,15 +45,15 @@ const WaybillReceipt = () => {
           margin: 0 !important;
         }
         .text-sm {
-          font-size: 8px !important;
+          font-size: 5px !important;
           line-height: 1.2 !important;
         }
         .text-lg {
-          font-size: 10px !important;
+          font-size: 5px !important;
           line-height: 1.2 !important;
         }
         h2, h3 {
-          font-size: 10px !important;
+          font-size: 5px !important;
           margin: 2px 0 !important;
         }
         p {
@@ -64,8 +64,8 @@ const WaybillReceipt = () => {
           margin-bottom: 1mm !important;
         }
         .qr-code {
-          width: 60px !important;
-          height: 60px !important;
+          width: 100px !important;
+          height: 100px !important;
         }
         .flex-wrap {
           gap: 1mm !important;
@@ -249,10 +249,19 @@ const WaybillReceipt = () => {
             <img style={{ height: activeTab === "80" ? "24px" : "48px" }} src="../vite.svg" />
           </div>
           <div>
-            <Text h2 className={activeTab === "80" ? "text-xs" : "text-lg"}>
+            <Text
+              h2
+              style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+              className={activeTab === "80" ? "text-[8px]" : "text-lg"}
+            >
               AMALGAMATE UNION OF FOODSTUFF AND CATTLE DEALERS OF NIGERIA
             </Text>
-            <Text secondaryColor block className={activeTab === "80" ? "text-xs" : "text-sm"}>
+            <Text
+              style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+              secondaryColor
+              block
+              className={activeTab === "80" ? "text-xs" : "text-sm"}
+            >
               Plot D36, Flat 6, Lagos Crescent Garki II, Abuja.
             </Text>
           </div>
@@ -262,36 +271,61 @@ const WaybillReceipt = () => {
         <div className="flex flex-col w-full gap-1">
           <div className="section p-1 border rounded-md bg-white flex justify-between items-center">
             <div>
-              <Text secondaryColor className={activeTab === "80" ? "text-xs" : "text-sm"}>
+              <Text
+                style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+                secondaryColor
+                className={activeTab === "80" ? "text-xs" : "text-sm"}
+              >
                 Date Issued
               </Text>
-              <Text block h3 className={activeTab === "80" ? "text-xs" : "text-sm"}>
+              <Text
+                style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+                block
+                h3
+                className={activeTab === "80" ? "text-xs" : "text-sm"}
+              >
                 06/10/2024
               </Text>
             </div>
-            <QRCodeSVG
-              value={qrcode}
-              size={activeTab === "80" ? 60 : 100}
-              level="H"
-              className="qr-code"
-            />
           </div>
 
           <div className="section border p-1 rounded-md">
-            <Text className="bg-[#F7F8FB] p-1 rounded-md text-xs" h3>
+            <Text
+              style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+              className="bg-[#F7F8FB] p-1 rounded-md text-xs"
+              h3
+            >
               Waybill Information
             </Text>
 
             <div className="w-full flex flex-col gap-1">
               <div className="flex gap-1 items-start justify-between">
-                <Text className={activeTab === "80" ? "text-xs" : "text-sm"}>Waybill ID</Text>
-                <Text className="!flex items-center text-xs" color="green">
+                <Text
+                  style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+                  className={activeTab === "80" ? "text-xs" : "text-sm"}
+                >
+                  Waybill ID
+                </Text>
+                <Text
+                  style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+                  className="!flex items-center text-xs"
+                  color="green"
+                >
                   {formatID(data?.id ?? "")}
                 </Text>
               </div>
               <div className="flex gap-1 items-start justify-between">
-                <Text className={activeTab === "80" ? "text-xs" : "text-sm"}>Waybill Number</Text>
-                <Text className="!flex items-center text-xs" color="green">
+                <Text
+                  style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+                  className={activeTab === "80" ? "text-xs" : "text-sm"}
+                >
+                  Waybill Number
+                </Text>
+                <Text
+                  style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+                  className="!flex items-center text-xs"
+                  color="green"
+                >
                   {formatID(data?.id ?? "")}
                 </Text>
               </div>
@@ -301,20 +335,36 @@ const WaybillReceipt = () => {
 
         {/* Driver Info - Reduced padding and margins */}
         <div className="section border p-1 rounded-md flex flex-col mb-1 mt-1">
-          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
+          <Text
+            style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+            className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs"
+            h3
+          >
             Drive and Vehicle Information
           </Text>
 
           <div className="flex flex-col gap-1">
-            <LabelData title="Driver's Name" value={data?.driverName ?? ""} />
-            <LabelData title="Driver's Phone" value={data?.driverPhone ?? ""} />
-            <LabelData title="Vehicle Number" value={data?.vehicleNumber ?? ""} />
+            <LabelData activeTab={activeTab} title="Driver's Name" value={data?.driverName ?? ""} />
+            <LabelData
+              activeTab={activeTab}
+              title="Driver's Phone"
+              value={data?.driverPhone ?? ""}
+            />
+            <LabelData
+              activeTab={activeTab}
+              title="Vehicle Number"
+              value={data?.vehicleNumber ?? ""}
+            />
           </div>
         </div>
 
         {/* Shipment Info - Reduced padding */}
         <div className="section border p-1 rounded-md flex flex-col mb-1">
-          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
+          <Text
+            style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+            className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs"
+            h3
+          >
             Shipment Information
           </Text>
 
@@ -323,9 +373,13 @@ const WaybillReceipt = () => {
               <MapPin size={12} /> Loading Location
             </Text>
             <div className="flex flex-col gap-1">
-              <LabelData title="State" value={data?.loadingState ?? ""} />
-              <LabelData title="LGA" value={data?.loadingLGA ?? ""} />
-              <LabelData title="Town/City" value={data?.loadingMarket ?? ""} />
+              <LabelData activeTab={activeTab} title="State" value={data?.loadingState ?? ""} />
+              <LabelData activeTab={activeTab} title="LGA" value={data?.loadingLGA ?? ""} />
+              <LabelData
+                activeTab={activeTab}
+                title="Town/City"
+                value={data?.loadingMarket ?? ""}
+              />
             </div>
           </div>
 
@@ -334,9 +388,9 @@ const WaybillReceipt = () => {
               <MapPin size={12} /> Delivery Location
             </Text>
             <div className="flex flex-col gap-1">
-              <LabelData title="State" value={data?.deliveryState ?? ""} />
-              <LabelData title="LGA" value={data?.deliveryLGA ?? ""} />
-              <LabelData title="Town/City" value={data?.deliveryTown ?? ""} />
+              <LabelData activeTab={activeTab} title="State" value={data?.deliveryState ?? ""} />
+              <LabelData activeTab={activeTab} title="LGA" value={data?.deliveryLGA ?? ""} />
+              <LabelData activeTab={activeTab} title="Town/City" value={data?.deliveryTown ?? ""} />
             </div>
           </div>
 
@@ -367,7 +421,11 @@ const WaybillReceipt = () => {
 
         {/* Product Info - Reduced padding */}
         <div className="section border p-1 rounded-md flex flex-col mb-1">
-          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
+          <Text
+            style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+            className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs"
+            h3
+          >
             Product Information
           </Text>
           <div className="grid grid-cols-2 gap-1 border-t pt-1">
@@ -386,15 +444,39 @@ const WaybillReceipt = () => {
 
         {/* Payment Info - Reduced padding */}
         <div className="section border p-1 rounded-md flex flex-col mb-1">
-          <Text className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs" h3>
+          <Text
+            style={{ fontSize: activeTab === "80" ? 12 : 24 }}
+            className="bg-[#F7F8FB] p-1 rounded-md mb-1 text-xs"
+            h3
+          >
             Payment Summary
           </Text>
           <div>
-            <FlexLabel title="Waybill Fee" value={thousandFormatter(data?.waybillFee ?? 0)} />
-            <FlexLabel title="Agent Service Fee" value={thousandFormatter(data?.agentFee ?? 0)} />
+            <FlexLabel
+              activeTab={activeTab}
+              title="Waybill Fee"
+              value={thousandFormatter(data?.waybillFee ?? 0)}
+            />
+            <FlexLabel
+              activeTab={activeTab}
+              title="Agent Service Fee"
+              value={thousandFormatter(data?.agentFee ?? 0)}
+            />
             <hr className="border-dotted border-[1px] my-1" />
-            <FlexLabel title="Total Price" value={thousandFormatter(data?.totalAmount ?? 0)} />
+            <FlexLabel
+              activeTab={activeTab}
+              title="Total Price"
+              value={thousandFormatter(data?.totalAmount ?? 0)}
+            />
           </div>
+        </div>
+        <div className="flex justify-center items-center w-full">
+          <QRCodeSVG
+            value={qrcode}
+            size={activeTab === "80" ? 120 : 100}
+            level="H"
+            className="qr-code"
+          />
         </div>
       </div>
     </>
@@ -404,22 +486,38 @@ const WaybillReceipt = () => {
 export default WaybillReceipt;
 
 // Simplified components with smaller text and tighter spacing
-const LabelData = ({ title, value }: { title: string; value: string }) => {
+const LabelData = ({
+  title,
+  value,
+  activeTab,
+}: {
+  title: string;
+  value: string;
+  activeTab?: string;
+}) => {
   return (
     <div className="mb-1">
       <p className="text-gray-600 text-xs">{title}</p>
-      <Text block h3 className="text-xs">
+      <Text style={{ fontSize: activeTab === "80" ? 12 : 24 }} block h3 className="text-xs">
         {value}
       </Text>
     </div>
   );
 };
 
-const FlexLabel = ({ title, value }: { title: string; value: string }) => {
+const FlexLabel = ({
+  title,
+  value,
+  activeTab,
+}: {
+  title: string;
+  value: string;
+  activeTab?: string;
+}) => {
   return (
     <div className="mb-1 flex justify-between">
       <p className="text-gray-600 text-xs">{title}</p>
-      <Text block h3 className="text-xs">
+      <Text style={{ fontSize: activeTab === "80" ? 12 : 24 }} block h3 className="text-xs">
         {value}
       </Text>
     </div>
