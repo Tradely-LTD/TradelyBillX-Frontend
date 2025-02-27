@@ -77,7 +77,7 @@ function AppRouter() {
           <Route path={`${appPaths.transaction}/:id`} element={<Transaction />} />
           <Route path={appPaths.incident} element={<Incidents />} />
           <Route path={`${appPaths.incident}/new`} element={<IncidentForm />} />
-          <Route path={`${appPaths.incident}/preview`} element={<IncidentPreview />} />
+          <Route path={`${appPaths.incident}/:id`} element={<IncidentPreview />} />
           <Route path={`${appPaths.receipt}/:id`} element={<WaybillReceipt />} />
           <Route path={`${appPaths.activity}`} element={<ActivityLogs />} />
           <Route path={`${appPaths.commission}`} element={<CommisionTrackerComponent />} />

@@ -11,14 +11,14 @@ import { useDispatch } from "react-redux";
 export const ShipmentDetails: React.FC = () => {
   const [selectedState, setSelectedState] = useState<any | null>(null);
   const [selectedStateId, setSelectedStateId] = useState<any | null>(null);
-  const [selectedTown, setSelectedTown] = useState<string>("");
+  // const [selectedTown, setSelectedTown] = useState<string>("");
   const [selectedLGA, setSelectedLGA] = useState<any | null>(null);
   const [selectedLGAId, setSelectedLGAId] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   const [selectedDeliveryState, setSelectedDeliveryState] = useState<any | null>(null);
   const [selectedDeliveryStateId, setSelectedDeliveryStateId] = useState<any | null>(null);
-  const [selectedDeliveryTown, setSelectedDeliveryTown] = useState<string>("");
+  // const [selectedDeliveryTown, setSelectedDeliveryTown] = useState<string>("");
   const [selectedDeliveryLGA, setSelectedDeliveryLGA] = useState<any | null>(null);
   const [selectedDeliveryLGAId, setSelectedDeliveryLGAId] = useState<string | null>(null);
   const {
@@ -26,9 +26,9 @@ export const ShipmentDetails: React.FC = () => {
     isFetchingLGA,
     isStatesLoading,
     isLGALoading,
-    isLoadingTown,
+    // isLoadingTown,
     lgasData,
-    towns,
+    // towns,
   } = useShipmentLocation({
     selectedLGAId: selectedLGAId ?? "",
     selectedStateId: selectedStateId,

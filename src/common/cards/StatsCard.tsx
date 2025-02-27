@@ -9,9 +9,9 @@ function StatsCard({ title, value, change, data }: cardProps) {
   return (
     <div>
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm max-w-[300px] h-[130px]">
-        <div className="p-6">
-          <div className="flex flex-row justify-between">
-            <div className="w-[60%]  flex h-auto flex-col gap-[5px]">
+        <div className="p-4">
+          <div className="flex flex-row   justify-between">
+            <div className="w-[70%]  flex h-auto flex-col gap-[2px]">
               <h3 className="text-gray-500 font-medium">{title}</h3>
               <span className="text-3xl font-semibold">{value}</span>
               <span className="text-green-500 text-sm">{change}</span>
