@@ -111,15 +111,15 @@ const DashboardOverview = () => {
 
   // Status data for donut charts
   const waybillStatus = [
-    { status: "Pending", percentage: 40, color: "rgb(239, 68, 68)" },
-    { status: "In Transit", percentage: 35, color: "rgb(59, 130, 246)" },
-    { status: "Delivered", percentage: 25, color: "rgb(45, 212, 191)" },
+    { status: "Pending", percentage: 0, color: "rgb(239, 68, 68)" },
+    { status: "In Transit", percentage: 0, color: "rgb(59, 130, 246)" },
+    { status: "Delivered", percentage: 0, color: "rgb(45, 212, 191)" },
   ];
 
   const incidentStatus = [
-    { status: "Open", percentage: 30, color: "rgb(239, 68, 68)" },
-    { status: "In Progress", percentage: 45, color: "rgb(59, 130, 246)" },
-    { status: "Resolved", percentage: 25, color: "rgb(45, 212, 191)" },
+    { status: "Open", percentage: 0, color: "rgb(239, 68, 68)" },
+    { status: "In Progress", percentage: 0, color: "rgb(59, 130, 246)" },
+    { status: "Resolved", percentage: 0, color: "rgb(45, 212, 191)" },
   ];
 
   const [chartDimensions, setChartDimensions] = useState({ width: 350, height: 300 });

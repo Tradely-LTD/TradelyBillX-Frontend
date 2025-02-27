@@ -14,7 +14,7 @@ const WaybillPreview = () => {
   const navigate = useNavigate();
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const waybill = waybillData?.data;
-  const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
+  const qrcode = `${urls.SERVER_BASE_URL}/receipt/${id}`;
 
   if (isFetching || isLoading) {
     return <Loader />;
