@@ -41,6 +41,7 @@ function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path={appPaths.login} element={<Login />} />
+        <Route path={`${appPaths.receipt}/:id`} element={<WaybillReceipt />} />
         <Route path={appPaths.register} element={<Register />} />
 
         <Route
