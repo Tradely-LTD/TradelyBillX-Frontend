@@ -40,7 +40,7 @@ const PaystackPayment = ({ agentFee, waybillFee, amount, stateId, email, referen
   const config = {
     email,
     amount: paymentConfig?.amount || 0,
-    publicKey: "pk_test_dec2039127e6a19857b73b6c0c44302d8593252a",
+    publicKey: "pk_live_7b0c98030bdb004575dee5a042a7a18b5ac4f200",
     split_code: paymentConfig?.split_code,
     reference,
   };
