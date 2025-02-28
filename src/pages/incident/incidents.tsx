@@ -64,10 +64,7 @@ function Incidents() {
     data: incidentsResponse,
     isLoading,
     isFetching: isFetching,
-  } = useGetIncidentsQuery(
-    // Pass status as a query parameter if not "all"
-    apiStatus ? { status: apiStatus } : undefined
-  );
+  } = useGetIncidentsQuery(apiStatus ? { status: apiStatus } : undefined);
 
   // Get incident statistics from backend
   const {

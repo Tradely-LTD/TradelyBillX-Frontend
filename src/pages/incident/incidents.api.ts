@@ -15,6 +15,7 @@ export const incidentApi = baseApi.injectEndpoints({
         }
         return "/incidents";
       },
+      providesTags: ["INCIDENT"],
     }),
     getIncidentStats: builder.query<IncidentStatsResponse, void>({
       query: () => "/incidents/stats",
