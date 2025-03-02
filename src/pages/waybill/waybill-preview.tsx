@@ -1,4 +1,4 @@
-import { Copy, Download, Ship } from "lucide-react";
+import { Copy, CopyCheck, Download, Ship } from "lucide-react";
 import Text from "@/common/text/text";
 import Button from "@/common/button/button";
 import StatusIndicator from "@/common/status";
@@ -8,10 +8,13 @@ import { Loader } from "@/common/loader/loader";
 import { formatID } from "@/utils/helper";
 import { QRCodeSVG } from "qrcode.react";
 import urls from "@/utils/config";
+import { useState } from "react";
 
 const WaybillPreview = () => {
+  const [copied, setCopied] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const waybill = waybillData?.data;
   const qrcode = `${urls.SERVER_BASE_URL}/receipt/${id}`;
@@ -22,6 +25,11 @@ const WaybillPreview = () => {
   if (!waybill) {
     return <p>Not found</p>;
   }
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
@@ -39,10 +47,13 @@ const WaybillPreview = () => {
                     <div>
                       <Text>Waybill ID</Text>
                     </div>
-                    <div className="flex gap-4">
+                    <div
+                      onClick={() => copyToClipboard(waybill.id)}
+                      className="flex gap-4 cursor-pointer"
+                    >
                       {formatID(waybill?.id)}
                       <Text className="!flex items-center gap-2" color="green">
-                        <Copy size={14} color="green" /> Copy
+                        {copied ? <CopyCheck /> : <Copy size={14} color="green" />}Copy
                       </Text>
                     </div>
                   </div>
@@ -50,10 +61,13 @@ const WaybillPreview = () => {
                     <div>
                       <Text>Waybill Number</Text>
                     </div>
-                    <div className="flex gap-4">
+                    <div
+                      className="flex gap-4 cursor-pointer"
+                      onClick={() => copyToClipboard(waybill.id)}
+                    >
                       {formatID(waybill?.id)}
-                      <Text className="!flex items-center gap-2" color="green">
-                        <Copy size={14} color="green" /> Copy
+                      <Text className="!flex items-center gap-2 " color="green">
+                        {copied ? <CopyCheck /> : <Copy size={14} color="green" />}Copy
                       </Text>
                     </div>
                   </div>

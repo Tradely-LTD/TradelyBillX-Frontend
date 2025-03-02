@@ -13,6 +13,7 @@ import { appPaths } from "@/utils/app-paths";
 import Input from "@/common/input/input";
 import { useCreateIncidentMutation } from "../incidents.api";
 import { useUserSlice } from "@/pages/auth/authSlice";
+import { useUploadsFileMutation } from "@/hooks/file-uploader";
 
 // Define the Incident interface
 export interface Incident {
@@ -24,7 +25,7 @@ export interface Incident {
 
   // Status Management
   status?: string;
-
+  evidenceUrl?: string[];
   // Resolution Details
   resolutionNotes?: string;
   resolvedDate?: string; // Nullable timestamp
@@ -43,6 +44,7 @@ const schema = yup.object().shape({
   location: yup.string().required("Location is required"),
   reportedDate: yup.string().required("Reported date is required"),
   status: yup.string().oneOf(["REPORTED", "REVIEWING", "RESOLVED"]),
+  evidenceUrl: yup.array().of(yup.string()),
   resolutionNotes: yup.string(),
   resolvedDate: yup.string(),
   assignTeam: yup.string(),
@@ -52,26 +54,84 @@ function IncidentForm() {
   const {
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<Incident>({
     resolver: yupResolver(schema),
     defaultValues: {
       status: "REPORTED", // Default status
+      evidenceUrl: [],
     },
   });
 
+  const evidenceUrls = watch("evidenceUrl") || [];
   const [files, setFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<{ file: File; url: string }[]>([]);
+  const [currentlyUploading, setCurrentlyUploading] = useState<string[]>([]);
   const navigate = useNavigate();
   const { loginResponse } = useUserSlice();
   const [handlePostIncident, { isLoading }] = useCreateIncidentMutation();
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      setFiles([...files, ...Array.from(event.target.files)]);
+  const [handleUploadsFile, { isLoading: isUploading }] = useUploadsFileMutation();
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const newFiles = Array.from(event.target.files);
+      setFiles([...files, ...newFiles]);
+
+      // Keep track of which files are currently being uploaded
+      const fileNames = newFiles.map((file) => file.name);
+      setCurrentlyUploading([...currentlyUploading, ...fileNames]);
+
+      // Upload each file and get URLs
+      const uploadPromises = newFiles.map(async (file) => {
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+
+          const result = await handleUploadsFile({ file: formData }).unwrap();
+
+          if (result.success && result.data) {
+            // Add new file+URL to the uploaded files state
+            setUploadedFiles((prev) => [...prev, { file, url: result.data }]);
+
+            // Update the form's evidenceUrl array
+            setValue("evidenceUrl", [...evidenceUrls, result.data]);
+
+            // Remove from currently uploading list
+            setCurrentlyUploading((prev) => prev.filter((name) => name !== file.name));
+
+            return result.data;
+          }
+          return null;
+        } catch (error) {
+          console.error("Error uploading file:", error);
+          setCurrentlyUploading((prev) => prev.filter((name) => name !== file.name));
+          return null;
+        }
+      });
+
+      await Promise.all(uploadPromises);
     }
   };
 
   const removeFile = (index: number) => {
-    setFiles(files.filter((_, i) => i !== index));
+    // Get the file to be removed
+    const fileToRemove = uploadedFiles[index];
+
+    // Remove the file from uploadedFiles array
+    const newUploadedFiles = uploadedFiles.filter((_, i) => i !== index);
+    setUploadedFiles(newUploadedFiles);
+
+    // Remove the file from files array
+    const newFiles = files.filter(
+      (file) => !newUploadedFiles.some((f) => f.file.name !== file.name)
+    );
+    setFiles(newFiles);
+
+    // Remove the URL from evidenceUrl array
+    const newUrls = evidenceUrls.filter((url) => url !== fileToRemove.url);
+    setValue("evidenceUrl", newUrls);
   };
 
   const onSubmit = (data: Incident) => {
@@ -118,21 +178,6 @@ function IncidentForm() {
             </div>
           </div>
           <div className="">
-            {/* <Controller
-              name="waybillId"
-              control={control}
-              render={({ field }) => (
-                <SelectComponent
-                  {...field}
-                  onChange={(value) => field.onChange(value)}
-                  label="Waybill ID"
-                  className="my-2"
-                  options={[{ label: "one", value: "1" }]}
-                  error={errors.waybillId?.message}
-                />
-              )}
-            /> */}
-            {/* bec28ccc-c610-45b8-b58b-d74431954887 */}
             <Controller
               name="waybillId"
               control={control}
@@ -228,28 +273,37 @@ function IncidentForm() {
               <p className="text-sm">Drag & drop files here or</p>
               <label className="text-blue-600 cursor-pointer mt-1">
                 Click to upload
-                <input type="file" multiple className="hidden" onChange={handleFileChange} />
+                <input type="file" className="hidden" onChange={handleFileChange} multiple />
               </label>
+              {currentlyUploading.length > 0 && (
+                <p className="text-sm mt-2">Uploading {currentlyUploading.length} file(s)...</p>
+              )}
             </div>
 
             {/* Preview thumbnails */}
-            {files.length > 0 && (
+            {uploadedFiles.length > 0 && (
               <div className="mt-4 space-y-3">
-                {files.map((file, index) => (
+                {uploadedFiles.map((uploadedFile, index) => (
                   <div
                     key={index}
                     className="flex items-center gap-3 p-2 border border-gray-200 rounded-lg shadow-sm"
                   >
                     <img
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
+                      src={URL.createObjectURL(uploadedFile.file)}
+                      alt={uploadedFile.file.name}
                       className="w-12 h-12 object-cover rounded-lg border"
                     />
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-800">{file.name}</p>
-                      <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(2)} KB</p>
+                      <p className="text-sm font-medium text-gray-800">{uploadedFile.file.name}</p>
+                      <p className="text-xs text-gray-500">
+                        {(uploadedFile.file.size / 1024).toFixed(2)} KB
+                      </p>
+                      <p className="text-xs text-blue-500 min-w-0 line-clamp-1 ">
+                        {uploadedFile.url}
+                      </p>
                     </div>
                     <button
+                      type="button"
                       className="text-red-500 hover:bg-red-100 p-1 rounded-full"
                       onClick={() => removeFile(index)}
                     >
@@ -264,19 +318,35 @@ function IncidentForm() {
 
         <div className="flex justify-between items-center gap-3 my-3">
           <div>
-            <Button className="!w-[140px] border !border-[red] !text-[red]" variant="outlined">
+            <Button
+              type="button"
+              className="!w-[140px] border !border-[red] !text-[red]"
+              variant="outlined"
+              onClick={() => {
+                setFiles([]);
+                setUploadedFiles([]);
+                setCurrentlyUploading([]);
+                setValue("evidenceUrl", []);
+              }}
+            >
               Clear
             </Button>
           </div>
           <div className="flex gap-2">
             <Button
+              type="button"
               onClick={() => navigate(`/${appPaths.incident}/preview`)}
               className="!w-[140px]"
               variant="outlined"
             >
               Save as Draft
             </Button>
-            <Button loading={isLoading} type="submit" className="!w-[100px]" leftIcon={<Save />}>
+            <Button
+              loading={isLoading || currentlyUploading.length > 0}
+              type="submit"
+              className="!w-[100px]"
+              leftIcon={<Save />}
+            >
               Save
             </Button>
           </div>

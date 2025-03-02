@@ -13,14 +13,23 @@ import Skeleton from "react-loading-skeleton";
 
 function IncidentPreview() {
   const { id } = useParams();
-  const { data, isLoading, error } = useGetIncidentQuery({ id });
+  const { data, isLoading, error } = useGetIncidentQuery({ id: id ?? "" });
   const [copied, setCopied] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const incident = data?.data;
-  // Copy ID to clipboard
-  const copyToClipboard = (text) => {
+
+  const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
   };
 
   if (isLoading) {
@@ -117,14 +126,15 @@ function IncidentPreview() {
         <div className="bg-[#F7F8FB] p-2 rounded-md">
           <Text h3>Incident Evidence</Text>
           <div className="flex gap-2 flex-wrap">
-            {incident?.evidence && incident.evidence.length > 0 ? (
-              incident.evidence.map((item, index) => (
+            {incident?.evidenceUrl && incident.evidenceUrl.length > 0 ? (
+              incident.evidenceUrl.map((item, index) => (
                 <div
                   key={index}
                   className="relative w-44 h-44 border border-gray-300 rounded-lg overflow-hidden flex items-center justify-center bg-gray-100"
+                  onClick={() => handleImageClick(item)}
                 >
                   <img
-                    src={item.url}
+                    src={item}
                     alt={`Evidence ${index + 1}`}
                     className="object-cover w-full h-full"
                   />
@@ -183,6 +193,15 @@ function IncidentPreview() {
           </Button>
         </div>
       </section>
+
+      {selectedImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+          onClick={closeModal}
+        >
+          <img src={selectedImage} alt="Selected Evidence" className="max-w-[90%] max-h-[90%]" />
+        </div>
+      )}
     </Container>
   );
 }
