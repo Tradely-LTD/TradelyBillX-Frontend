@@ -19,6 +19,7 @@ export const incidentApi = baseApi.injectEndpoints({
     }),
     getIncidentStats: builder.query<IncidentStatsResponse, void>({
       query: () => "/incidents/stats",
+      providesTags: ["INCIDENT"],
     }),
 
     getIncident: builder.query<{ success: boolean; data: Incident }, { id: string }>({
