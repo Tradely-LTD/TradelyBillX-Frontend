@@ -43,7 +43,7 @@ const PaystackPayment = ({ agentFee, waybillFee, amount, stateId, email, referen
     amount: paymentConfig?.amount || 0,
     publicKey: "pk_live_7b0c98030bdb004575dee5a042a7a18b5ac4f200",
     split_code: paymentConfig?.split_code,
-    reference,
+    reference: paymentConfig?.reference || reference,
   };
 
   // Initialize Paystack hook
