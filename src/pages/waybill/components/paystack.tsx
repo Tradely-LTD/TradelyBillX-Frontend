@@ -25,6 +25,7 @@ const PaystackPayment = ({ agentFee, waybillFee, amount, stateId, email, referen
   const [paymentConfig, setPaymentConfig] = useState<{
     amount: number;
     split_code: string;
+    reference: string;
   } | null>(null);
   const [createWayBill, { isLoading: isCreatingWaybill, isSuccess }] = useCreateWayBillsMutation();
   const { loginResponse } = useUserSlice();
@@ -76,6 +77,7 @@ const PaystackPayment = ({ agentFee, waybillFee, amount, stateId, email, referen
       setPaymentConfig({
         amount: data.amount,
         split_code: data.splitCode,
+        reference: data.reference,
       });
     } catch (err: any) {
       const errorMessage = err.message || "Failed to initialize payment";
