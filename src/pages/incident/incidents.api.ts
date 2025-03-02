@@ -130,7 +130,7 @@ export interface Incident {
   resolvedDate?: string; // Nullable timestamp
 
   assignTeam?: string;
-
+  evidenceUrl?: string[];
   // Metadata
   createdAt: string; // ISO string format
   updatedAt: string; // ISO string format

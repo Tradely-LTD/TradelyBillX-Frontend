@@ -147,12 +147,6 @@ const DashboardOverview = () => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Error state
-  if (error && !isLoading)
-    return (
-      <div className="p-6 text-red-500">Error loading dashboard data. Please try again later.</div>
-    );
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -235,7 +229,7 @@ const DashboardOverview = () => {
           </div>
         ) : (
           <div ref={containerRef} className="w-full overflow-x-auto">
-            <div className="min-w-[280px]">
+            <div className="">
               {/* Ensures minimum width for legibility */}
               <BarChart
                 width={chartDimensions.width}

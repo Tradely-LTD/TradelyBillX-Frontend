@@ -20,7 +20,8 @@ function Layout() {
     agent: UserRoles.AGENT,
   };
 
-  const userType = roleMapping[loginResponse?.user.role || "agent"] || UserRoles.AGENT;
+  const userType =
+    (loginResponse && roleMapping[loginResponse?.user?.role || "agent"]) || UserRoles.AGENT;
   const menuItems = getMenuItems(userType);
 
   const handleMenuClick = (item) => {
