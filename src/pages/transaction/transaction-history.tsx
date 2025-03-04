@@ -4,82 +4,78 @@ import { TabButton, TabContainer } from "@/common/tab";
 import Text from "@/common/text/text";
 import { Sort } from "iconsax-react";
 import { Filter, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "@radix-ui/themes";
 import { appPaths } from "@/utils/app-paths";
 import { useNavigate } from "react-router-dom";
+import { useGetTransactionsQuery } from "../waybill/waybill.api";
 
-const chartData = Array.from({ length: 20 }, (_, i) => ({
-  name: i,
-  value: Math.floor(Math.random() * 50) + 50,
-}));
+// Skeleton Loader Component
+const TransactionSkeleton = () => {
+  return (
+    <tr className="animate-pulse">
+      {[...Array(6)].map((_, index) => (
+        <td key={index} className="py-4 px-4 border-b">
+          <div className="h-4 bg-gray-200 rounded w-full"></div>
+        </td>
+      ))}
+    </tr>
+  );
+};
 
-// Stats cards data
-const statsCards = [
-  {
-    title: "Waybills Submitted",
-    value: "100",
-    change: "5% last month",
-    data: chartData,
-  },
-  {
-    title: "Payments Made",
-    value: "100",
-    change: "+5% last month",
-    data: chartData,
-  },
-  {
-    title: "Incidents Reported",
-    value: "50",
-    change: "+5% last month",
-    data: chartData,
-  },
-];
-
-// Sample transaction data
-const transactions = [
-  {
-    id: "TX12345",
-    waybillId: "WB67890",
-    amount: "₦50,000",
-    paymentMethod: "Card",
-    dateTime: "2023-10-15 14:30",
-    status: "Pending",
-  },
-  {
-    id: "TX12346",
-    waybillId: "WB67891",
-    amount: "₦30,000",
-    paymentMethod: "Bank Transfer",
-    dateTime: "2023-10-14 10:15",
-    status: "Finished",
-  },
-  {
-    id: "TX12347",
-    waybillId: "WB67892",
-    amount: "₦20,000",
-    paymentMethod: "Card",
-    dateTime: "2023-10-13 09:00",
-    status: "Pending",
-  },
-];
+// Stats cards data generation function
+const generateStatsCards = (transactions: any[]) => {
+  return [
+    {
+      title: "Waybills Submitted",
+      value: transactions.length.toString(),
+      change: "+5% last month",
+      data: transactions.map((_, i) => ({
+        name: i,
+        value: Math.floor(Math.random() * 50) + 50,
+      })),
+    },
+    {
+      title: "Total Payments",
+      value: transactions
+        .reduce((sum, tx) => sum + parseFloat(tx.amount), 0)
+        .toLocaleString("en-NG", { style: "currency", currency: "NGN" }),
+      change: "+5% last month",
+      data: transactions.map((_, i) => ({
+        name: i,
+        value: Math.floor(Math.random() * 50) + 50,
+      })),
+    },
+    {
+      title: "Successful Transactions",
+      value: transactions.filter((tx) => tx.paymentStatus === "SUCCESS").length.toString(),
+      change: "+5% last month",
+      data: transactions.map((_, i) => ({
+        name: i,
+        value: Math.floor(Math.random() * 50) + 50,
+      })),
+    },
+  ];
+};
 
 function TransactionHistory() {
   const [activeTab, setActiveTab] = useState("all");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
   const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
+  const { data, isLoading, isFetching } = useGetTransactionsQuery();
   const navigate = useNavigate();
+
   // Handle tab switching
   const handleSwitchTab = (value: string) => {
     setActiveTab(value);
-    setFilterByStatus(value === "all" ? null : value); // Update filter based on tab
+    setFilterByStatus(value === "all" ? null : value);
   };
 
   // Handle bulk selection
   const handleBulkSelection = (checked: boolean) => {
-    if (checked) {
-      setSelectedItems(transactions.map((tx) => tx.id));
+    if (checked && data?.data) {
+      setSelectedItems(data.data.map((tx: any) => tx.id));
     } else {
       setSelectedItems([]);
     }
@@ -103,24 +99,28 @@ function TransactionHistory() {
 
   // Handle filtering
   const handleFilter = () => {
-    // Implement custom filtering logic if needed
     alert("Custom filter logic can be implemented here.");
   };
 
   // Filter and sort transactions based on state
-  const filteredTransactions = transactions
-    .filter((tx) => (filterByStatus ? tx.status.toLowerCase() === filterByStatus : true))
-    .sort((a, b) => {
-      if (sortBy === "dateTime") {
-        return new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime();
-      } else if (sortBy === "amount") {
-        return (
-          parseFloat(a.amount.replace("₦", "").replace(",", "")) -
-          parseFloat(b.amount.replace("₦", "").replace(",", ""))
-        );
-      }
-      return 0;
-    });
+  const filteredTransactions = data?.data
+    ? data.data
+        .filter((tx: any) =>
+          filterByStatus
+            ? filterByStatus === "pending"
+              ? tx.paymentStatus !== "SUCCESS"
+              : tx.paymentStatus === "SUCCESS"
+            : true
+        )
+        .sort((a: any, b: any) => {
+          if (sortBy === "amount") {
+            return parseFloat(a.amount) - parseFloat(b.amount);
+          }
+          return 0;
+        })
+    : [];
+
+  const statsCards = data?.data ? generateStatsCards(data.data) : [];
 
   return (
     <div>
@@ -129,20 +129,22 @@ function TransactionHistory() {
           <Text block h1>
             Transaction History
           </Text>
-          <Text secondaryColor>List of payments on waybill request. </Text>
+          <Text secondaryColor>List of payments on waybill request.</Text>
         </div>
         <div>
-          <div className="flex gap-1 flex-col ">
-            <span className="text-gray-500 block ">Date Range</span>
+          <div className="flex gap-1 flex-col">
+            <span className="text-gray-500 block">Date Range</span>
             <input type="date" className="px-4 py-2 bg-white border rounded-lg flex items-center" />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {statsCards.map((stat, index) => (
-          <StatsCard key={index} {...stat} />
-        ))}
+        {isLoading
+          ? [...Array(3)].map((_, index) => (
+              <div key={index} className="animate-pulse bg-gray-200 h-36 rounded-lg"></div>
+            ))
+          : statsCards.map((stat, index) => <StatsCard key={index} {...stat} />)}
       </div>
 
       <div className="my-4 flex items-center justify-between">
@@ -190,7 +192,7 @@ function TransactionHistory() {
               <th className="py-2 px-4 border-b">
                 <div className="flex items-center gap-2">
                   <Checkbox
-                    checked={selectedItems.length === transactions.length}
+                    checked={data?.data && selectedItems.length === data.data.length}
                     onCheckedChange={handleBulkSelection}
                     id="select-all"
                   />
@@ -200,42 +202,58 @@ function TransactionHistory() {
               <th className="py-2 px-4 border-b">Waybill Id</th>
               <th className="py-2 px-4 border-b">Amount</th>
               <th className="py-2 px-4 border-b">Payment Method</th>
-              <th className="py-2 px-4 border-b">Date & Time</th>
-              <th className="py-2 px-4 border-b">Action</th>
+              <th className="py-2 px-4 border-b">Status</th>
             </tr>
           </thead>
           <tbody>
-            {filteredTransactions.map((tx, index) => (
-              <tr key={tx.id} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      checked={selectedItems.includes(tx.id)}
-                      onCheckedChange={() => handleIndividualSelection(tx.id)}
-                      id={`tx-${index}`}
-                    />
-                    <label htmlFor={`tx-${index}`}>{tx.id}</label>
-                  </div>
-                </td>
-                <td className="py-2 px-4 border-b">{tx.waybillId}</td>
-                <td className="py-2 px-4 border-b">{tx.amount}</td>
-                <td className="py-2 px-4 border-b">{tx.paymentMethod}</td>
-                <td className="py-2 px-4 border-b">{tx.dateTime}</td>
-                <td className="py-2 px-4 border-b">
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => navigate(`${appPaths.transaction}/123`)}
-                      className="p-1 text-gray-500 hover:text-gray-700"
-                    >
-                      <Pencil size={18} />
-                    </button>
-                    <button className="p-1 text-gray-500 hover:text-gray-700">
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {isLoading
+              ? [...Array(5)].map((_, index) => <TransactionSkeleton key={index} />)
+              : filteredTransactions.map((tx: any, index: number) => (
+                  <tr key={tx.id} className="hover:bg-gray-50">
+                    <td className="py-2 px-4 border-b">
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          checked={selectedItems.includes(tx.id)}
+                          onCheckedChange={() => handleIndividualSelection(tx.id)}
+                          id={`tx-${index}`}
+                        />
+                        <label htmlFor={`tx-${index}`}>{tx.transactionRef}</label>
+                      </div>
+                    </td>
+                    <td className="py-2 px-4 border-b">{tx.id}</td>
+                    <td className="py-2 px-4 border-b">
+                      {parseFloat(tx.amount).toLocaleString("en-NG", {
+                        style: "currency",
+                        currency: "NGN",
+                      })}
+                    </td>
+                    <td className="py-2 px-4 border-b">-</td>
+                    <td className="py-2 px-4 border-b">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${
+                          tx.paymentStatus === "SUCCESS"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {tx.paymentStatus}
+                      </span>
+                    </td>
+                    {/* <td className="py-2 px-4 border-b">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate(`${appPaths.transaction}/${tx.id}`)}
+                          className="p-1 text-gray-500 hover:text-gray-700"
+                        >
+                          <Pencil size={18} />
+                        </button>
+                        <button className="p-1 text-gray-500 hover:text-gray-700">
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </td> */}
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>

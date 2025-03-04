@@ -5,8 +5,15 @@ import { toast } from "react-toastify";
 export const wayBillApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getWaybills: builder.query<WaybillsResponse, void>({
-      query: () => ({
-        url: "/waybill/list",
+      query: (props) => ({
+        url: `/waybill/list?id=${props?.id}`,
+        method: Methods.Get,
+      }),
+      providesTags: ["WAYBILL"],
+    }),
+    getTransactions: builder.query<WaybillsResponse, void>({
+      query: (props) => ({
+        url: `/waybill/transactions`,
         method: Methods.Get,
       }),
       providesTags: ["WAYBILL"],
@@ -43,7 +50,12 @@ export const wayBillApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateWayBillsMutation, useGetWaybillQuery, useGetWaybillsQuery } = wayBillApi;
+export const {
+  useCreateWayBillsMutation,
+  useGetWaybillQuery,
+  useGetWaybillsQuery,
+  useGetTransactionsQuery,
+} = wayBillApi;
 
 interface WaybillsResponse {
   data: Waybill[];
