@@ -97,7 +97,7 @@ const DashboardOverview = () => {
     },
     {
       title: "Payments Made",
-      value: String(totalPayments),
+      value: String(totalWaybills),
       change: "+0% last month",
       data: chartData,
     },
