@@ -4,13 +4,6 @@ import { toast } from "react-toastify";
 
 export const locationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getLocations: builder.query<LocationsResponse, void>({
-      query: () => ({
-        url: "/location/all",
-        method: Methods.Get,
-      }),
-      providesTags: ["LOCATION"],
-    }),
     getStates: builder.query<StateResponse, void>({
       query: () => ({
         url: "/location/states",
@@ -25,16 +18,16 @@ export const locationApi = baseApi.injectEndpoints({
       }),
       providesTags: ["LOCATION"],
     }),
-    getTowns: builder.query<TownResponse, { lgaId: string }>({
+    getMarket: builder.query<TownResponse, { lgaId: string }>({
       query: ({ lgaId }) => ({
-        url: `/location/towns/lga/${lgaId}`,
+        url: `/location/market/lga/${lgaId}`,
         method: Methods.Get,
       }),
       providesTags: ["LOCATION"],
     }),
-    createTowns: builder.mutation<TownResponse, RequestPayload>({
+    createMarket: builder.mutation<TownResponse, RequestPayload>({
       query: (data) => ({
-        url: `/location/towns`,
+        url: `/location/market`,
         method: Methods.Post,
         body: data,
       }),
@@ -54,9 +47,9 @@ export const locationApi = baseApi.injectEndpoints({
         }
       },
     }),
-    updateTowns: builder.mutation<TownResponse, RequestPayloadTown>({
+    updateMarket: builder.mutation<TownResponse, RequestPayloadTown>({
       query: ({ id, ...rest }) => ({
-        url: `/location/towns/${id}`,
+        url: `/location/market/${id}`,
         method: Methods.Put,
         body: rest,
       }),
@@ -125,10 +118,9 @@ export const locationApi = baseApi.injectEndpoints({
 export const {
   useGetStatesQuery,
   useGetLGAsQuery,
-  useCreateTownsMutation,
-  useGetLocationsQuery,
-  useGetTownsQuery,
-  useUpdateTownsMutation,
+  useCreateMarketMutation,
+  useGetMarketQuery,
+  useUpdateMarketMutation,
   useDeleteTownsMutation,
   useUpdateStateMutation,
 } = locationApi;
@@ -144,29 +136,6 @@ interface RequestPayloadTown {
   label: string;
   value: string;
   id: string;
-}
-interface LocationsResponse {
-  data: {
-    id: string;
-    label: string;
-    value: string;
-    status_allowed: boolean;
-    lgas: {
-      id: string;
-      stateId: string;
-      label: string;
-      value: string;
-      status_allowed: boolean;
-      towns: {
-        id: string;
-        lgaId: string;
-        label: string;
-        value: string;
-        status_allowed: boolean;
-      }[];
-    }[];
-  }[];
-  message: string;
 }
 export interface State {
   allow_price_edit: boolean;

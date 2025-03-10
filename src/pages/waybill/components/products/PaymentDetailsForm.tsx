@@ -10,6 +10,7 @@ import Input from "@/common/input/input";
 import { useState } from "react";
 import { useUserSlice } from "@/pages/auth/authSlice";
 import { thousandFormatter } from "@/utils/helper";
+import { useCreateWayBillsMutation } from "../../waybill.api";
 
 const PaymentDetailsForm = () => {
   const { watch } = useFormContext();
@@ -18,6 +19,7 @@ const PaymentDetailsForm = () => {
   const [agentAmount, setAmount] = useState(0);
   const { loginResponse } = useUserSlice();
   const totalAmount = agentAmount + Number(state?.constant_price);
+  const [createWayBill, { isLoading: isCreatingWaybill, isSuccess }] = useCreateWayBillsMutation();
 
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
@@ -188,14 +190,31 @@ const PaymentDetailsForm = () => {
                   </a>
                 </span>
               </div>
-              <PaystackPayment
+              {/* <PaystackPayment
                 amount={totalAmount}
                 agentFee={agentAmount}
                 waybillFee={state?.constant_price ?? ""}
                 email={loginResponse?.user?.email ?? ""}
                 reference={""}
                 stateId={state?.id ?? ""}
-              />
+              /> */}
+              <Button
+                onClick={() => {
+                  createWayBill({
+                    ...formValues,
+                    paymentStatus: "pending",
+                    transactionReference: "testing-1",
+                    shipmentStatus: "IN_TRANSIT",
+                    incidentStatus: "SAFE",
+                    createdBy: loginResponse?.user.id,
+                    waybillFee: state?.constant_price,
+                    totalAmount: totalAmount,
+                    agentFee: agentAmount,
+                  });
+                }}
+              >
+                Generate Waybill
+              </Button>
             </div>
           </div>
 

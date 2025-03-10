@@ -14,6 +14,7 @@ import { StatusCard } from "../components/StatusCard";
 import { useEffect, useRef, useState } from "react";
 import { useGetStatsRecordQuery } from "./stats.api";
 import Skeleton from "react-loading-skeleton";
+import { thousandFormatter } from "@/utils/helper";
 
 const data = [
   { name: "01 Oct", payment: 100.5, commission: 38.1 },
@@ -63,7 +64,7 @@ const PaymentStatsCard = ({ totalPayments = 0, paymentsAmount = 0 }) => (
     <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
       <p className="text-gray-600 text-base sm:text-lg">Commission Earned</p>
       <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">
-        {paymentsAmount.toFixed(2)} NGN
+        {paymentsAmount} NGN
       </p>
       <div className="flex items-center text-green-500">
         <span className="text-xs sm:text-sm">0% last month</span>
@@ -79,7 +80,7 @@ const DashboardOverview = () => {
     value: Math.floor(Math.random() * 50) + 50,
   }));
 
-  const { data: statsData, isLoading, error } = useGetStatsRecordQuery();
+  const { data: statsData, isLoading } = useGetStatsRecordQuery();
 
   // Get statistics from API response
   const totalWaybills = statsData?.data?.totalWaybills || 0;
@@ -91,19 +92,25 @@ const DashboardOverview = () => {
   const statsCards = [
     {
       title: "Waybills Submitted",
-      value: String(totalWaybills),
+      value: totalWaybills,
       change: "0% last month",
       data: chartData,
     },
     {
-      title: "Payments Made",
-      value: String(totalWaybills),
+      title: "Incidents Reported",
+      value: totalIncidents,
       change: "+0% last month",
       data: chartData,
     },
     {
-      title: "Incidents Reported",
-      value: String(totalIncidents),
+      title: "Payments Made",
+      value: totalPayments,
+      change: "+0% last month",
+      data: chartData,
+    },
+    {
+      title: "Total Amount",
+      value: paymentsAmount,
       change: "+0% last month",
       data: chartData,
     },
@@ -180,7 +187,7 @@ const DashboardOverview = () => {
                 <div className="flex flex-row justify-between">
                   <div className="w-[60%]  flex h-auto flex-col gap-[5px]">
                     <h3 className="text-gray-500 font-medium">{stat.title}</h3>
-                    <span className="text-3xl font-semibold">{stat.value}</span>
+                    <span className="text-3xl font-semibold">{thousandFormatter(stat.value)}</span>
                     <span className="text-green-500 text-sm">{stat.change}</span>
                   </div>
                   <div className="flex-1 flex justify-end items-center w-1/2">

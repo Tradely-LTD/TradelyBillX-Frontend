@@ -1,7 +1,8 @@
+import { thousandFormatter } from "@/utils/helper";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 interface cardProps {
   title: string;
-  value: string | number;
+  value: number;
   change: string;
   data: any;
 }
@@ -13,7 +14,7 @@ function StatsCard({ title, value, change, data }: cardProps) {
           <div className="flex flex-row   justify-between">
             <div className="w-[70%]  flex h-auto flex-col gap-[2px]">
               <h3 className="text-gray-500 font-medium">{title}</h3>
-              <span className="text-3xl font-semibold">{value}</span>
+              <span className="text-3xl font-semibold">{thousandFormatter(value)}</span>
               <span className="text-green-500 text-sm">{change}</span>
             </div>
             <div className="flex-1 flex justify-end items-center w-1/2">

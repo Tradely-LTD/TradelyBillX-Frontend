@@ -1,4 +1,4 @@
-import { useGetLGAsQuery, useGetStatesQuery, useGetTownsQuery } from "../location/location.api";
+import { useGetLGAsQuery, useGetStatesQuery, useGetMarketQuery } from "../location/location.api";
 
 interface props {
   selectedStateId: string;
@@ -11,7 +11,7 @@ export const useShipmentLocation = ({ selectedStateId, selectedLGAId }: props) =
     isLoading: isLGALoading,
     isFetching: isFetchingLGA,
   } = useGetLGAsQuery({ stateId: selectedStateId ?? "" }, { skip: selectedStateId === null });
-  const { data: towns, isLoading: isLoadingTown } = useGetTownsQuery(
+  const { data: towns, isLoading: isLoadingTown } = useGetMarketQuery(
     {
       lgaId: selectedLGAId ?? "",
     },

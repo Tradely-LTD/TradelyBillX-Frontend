@@ -158,10 +158,10 @@ export interface RegisterRequest {
   email: string;
   phoneNumber: string;
   password: string;
-  state: string;
-  lga: string;
+  stateId: string;
+  lgaId: string;
   city: string;
-  market?: string;
+  marketId?: string;
   streetAddress?: string;
 }
 

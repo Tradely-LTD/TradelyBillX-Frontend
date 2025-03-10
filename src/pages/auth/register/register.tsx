@@ -24,9 +24,9 @@ const schema = yup.object().shape({
     .string()
     .min(6, "Password must be at least 6 characters long")
     .required("Password is required"),
-  state: yup.string().required("State is required"),
-  lga: yup.string().required("LGA is required"),
-  union: yup.string().required("Union is required"),
+  stateId: yup.string().required("State is required"),
+  lgaId: yup.string().required("LGA is required"),
+  union: yup.string(),
   city: yup.string().required("City is required"),
 
   termsAccepted: yup
@@ -39,7 +39,7 @@ const Register = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState<any | null>(null);
-  const [_, setSelectedLGA] = useState<string | null>(null);
+  const [selectedLGA, setSelectedLGA] = useState<string | null>(null);
 
   const {
     register,
@@ -50,6 +50,7 @@ const Register = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  console.log(errors);
   const [handleRegister, { isLoading, isSuccess }] = useRegisterMutation();
   const { data: unions, isLoading: isFetchingUnion } = useGetUnionQuery();
   const { data: statesData, isLoading: isStatesLoading } = useGetStatesQuery();
@@ -61,6 +62,7 @@ const Register = () => {
 
   const onSubmit = (data: any) => {
     const { termsAccepted, ...rest } = data;
+    console.log(rest);
     handleRegister(rest);
   };
   useEffect(() => {
@@ -201,7 +203,8 @@ const Register = () => {
                     : [{ label: "No States available", value: "no data ", id: "" }]
                 }
                 onChange={(value, id) => {
-                  setValue("state", value);
+                  setValue("stateId", id ?? "");
+                  setSelectedState(value);
                   setSelectedState(id);
                 }}
                 isLoading={isStatesLoading}
@@ -222,10 +225,10 @@ const Register = () => {
                     : [{ label: "Select a state first", value: "no data ", id: "" }]
                 }
                 onChange={(value, id) => {
-                  setValue("lga", value);
-                  setSelectedLGA(id ?? "");
+                  setValue("lgaId", id ?? "");
+                  setSelectedLGA(value);
                 }}
-                // value={selectedLGA}
+                value={selectedLGA ?? ""}
                 isLoading={isLGALoading || isFetchingLGA}
                 disabled={!selectedState}
               />
