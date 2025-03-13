@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 export const wayBillApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getWaybills: builder.query<WaybillsResponse, void>({
-      query: (props) => ({
-        url: `/waybill/list?id=${props?.id}`,
+      query: () => ({
+        url: `/waybill/list`,
         method: Methods.Get,
       }),
       providesTags: ["WAYBILL"],

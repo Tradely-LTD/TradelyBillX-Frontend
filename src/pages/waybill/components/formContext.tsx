@@ -3,17 +3,21 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { WayBillFormData, wayBillSchema } from "../types";
 
-// type FormContextType = UseFormReturn;
-
-const FormContext = createContext<FormContextType | null>(null);
+// Define the type for the form context
 type FormContextType = UseFormReturn<WayBillFormData>;
+
+// Create the context
+const FormContext = createContext<FormContextType | null>(null);
+
+// FormProvider component
 export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const methods = useForm({
+  const methods = useForm<WayBillFormData>({
     resolver: yupResolver(wayBillSchema),
   });
   return <FormContext.Provider value={methods}>{children}</FormContext.Provider>;
 };
 
+// useFormContext hook
 export const useFormContext = () => {
   const context = useContext(FormContext);
   if (!context) {

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Loader } from "@/common/loader/loader";
 import EmptyState from "../components/empty-state";
 import Skeleton from "react-loading-skeleton";
+import { useGetStatsRecordQuery } from "../dashbaord/stats.api";
 
 const chartData = Array.from({ length: 20 }, (_, i) => ({
   name: i,
@@ -40,23 +41,38 @@ function WaybillsList() {
   //   alert("Custom filter logic can be implemented here.");
   // };
 
+  const { data: statsData, isLoading: isLoadingStats, error } = useGetStatsRecordQuery();
+
+  // Get statistics from API response
+  const totalWaybills = statsData?.data?.totalWaybills || 0;
+  const totalPayments = statsData?.data?.totalPayments || 0;
+  const totalIncidents = statsData?.data?.totalIncidents || 0;
+  const paymentsAmount = statsData?.data?.paymentsAmount || 0;
+
+  // Stats cards data with updated values from API
   const statsCards = [
     {
       title: "Waybills Submitted",
-      value: data?.data.length,
-      change: "5% last month",
-      data: chartData,
-    },
-    {
-      title: "Payments Made",
-      value: 0,
-      change: "+5% last month",
+      value: totalWaybills,
+      change: "0% last month",
       data: chartData,
     },
     {
       title: "Incidents Reported",
-      value: 0,
-      change: "+5% last month",
+      value: totalIncidents,
+      change: "+0% last month",
+      data: chartData,
+    },
+    {
+      title: "Payments Made",
+      value: totalPayments,
+      change: "+0% last month",
+      data: chartData,
+    },
+    {
+      title: "Total Amount",
+      value: paymentsAmount,
+      change: "+0% last month",
       data: chartData,
     },
   ];
@@ -80,7 +96,7 @@ function WaybillsList() {
         </div> */}
       </div>
 
-      {isLoading ? (
+      {isLoadingStats ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(3)].map((_, index) => (
             <Skeleton key={index} height={"130px"} width={"300px"} />
@@ -93,7 +109,7 @@ function WaybillsList() {
               change={stat.change}
               data={stat.data}
               title={stat.title}
-              value={stat?.value ?? ""}
+              value={stat?.value ?? 0}
               key={index}
             />
           ))}

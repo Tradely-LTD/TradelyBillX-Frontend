@@ -4,7 +4,7 @@ import Text from "@/common/text/text";
 import { Save } from "lucide-react";
 import UserIcon from "@/assets/user.svg";
 import { useEffect, useState } from "react";
-import { useCreateTownsMutation, useGetLGAsQuery, useGetStatesQuery } from "../location.api";
+import { useCreateMarketMutation, useGetLGAsQuery, useGetStatesQuery } from "../location.api";
 import Input from "@/common/input/input";
 import { capitalizeFirstLetter } from "@/utils/helper";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ function LocationForm() {
   const [status, setStatus] = useState(false);
   const [selectedState, setSelectedState] = useState<any | null>(null);
   const [selectedLGA, setSelectedLGA] = useState<string | null>(null);
-  const [selectedTown, setSelectedTown] = useState<string>("");
+  const [selectedMarket, setSelectedMarket] = useState<string>("");
   const navigate = useNavigate();
   // const location = useLocation();
   // const stateData = location.state || {};
@@ -24,17 +24,17 @@ function LocationForm() {
     isLoading: isLGALoading,
     isFetching: isFetchingLGA,
   } = useGetLGAsQuery({ stateId: selectedState }, { skip: selectedState === null });
-  const [handleCreateTown, { isLoading: isCreating, isSuccess }] = useCreateTownsMutation();
+  const [handleCreateMarket, { isLoading: isCreating, isSuccess }] = useCreateMarketMutation();
 
   const handleSave = () => {
     const locationData = {
       lgaId: selectedLGA ?? "",
-      label: selectedTown,
-      value: selectedTown,
+      label: selectedMarket,
+      value: selectedMarket,
       status_allowed: status,
     };
     if (selectedLGA) {
-      handleCreateTown(locationData);
+      handleCreateMarket(locationData);
     }
   };
 
@@ -47,7 +47,7 @@ function LocationForm() {
     <div className="p-5 bg-white shadow-md rounded-md">
       <div className="flex justify-between items-center my-2">
         <div>
-          <Text h1>Create New Location</Text>
+          <Text h1>Create New Market</Text>
           <Text secondaryColor block>
             Add location details that will be displayed when the user creates a waybill.
           </Text>
@@ -124,13 +124,13 @@ function LocationForm() {
                   }))
                 : [{ label: "No Town available", value: "No data" }]
             }
-            onChange={(value) => setSelectedTown(value)}
+            onChange={(value) => setSelectedMarket(value)}
             disabled={!selectedLGA}
           /> */}
           <Input
-            label="Town/City"
-            onChange={(e) => setSelectedTown(capitalizeFirstLetter(e.target.value))}
-            value={selectedTown}
+            label="Market"
+            onChange={(e) => setSelectedMarket(capitalizeFirstLetter(e.target.value))}
+            value={selectedMarket}
             placeholder="Enter town or city"
           />
 
@@ -160,7 +160,7 @@ function LocationForm() {
           onClick={() => {
             setSelectedState(null);
             setSelectedLGA(null);
-            setSelectedTown("");
+            setSelectedMarket("");
             setStatus(false);
           }}
         >

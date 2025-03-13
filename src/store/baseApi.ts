@@ -60,5 +60,7 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
   refetchOnReconnect: false,
+  refetchOnMountOrArgChange: true,
+  // keepUnusedDataFor:4000,
   tagTypes: [...cacher.defaultTags],
 });

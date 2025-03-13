@@ -27,14 +27,14 @@ import UnionManagement from "./pages/union/union-management";
 import UnionForm from "./pages/union/components/union-form";
 
 // Apply role-based access control
-const WaybillComponent = withRoleAccess("agent")(Waybill);
-const UserManagementComponent = withRoleAccess("superadmin")(UserManagement);
-const UserFormComponent = withRoleAccess("superadmin")(UserForm);
-const LocationManagementComponent = withRoleAccess("superadmin")(LocationManagement);
-const LocationFormComponent = withRoleAccess("superadmin")(LocationForm);
-const UnionManagementComponent = withRoleAccess("superadmin")(UnionManagement);
-const UnionFormComponent = withRoleAccess("superadmin")(UnionForm);
-const CommisionTrackerComponent = withRoleAccess("superadmin")(CommisionTracker);
+const WaybillComponent = withRoleAccess(["agent"])(Waybill);
+const UserManagementComponent = withRoleAccess(["superadmin", "admin"])(UserManagement);
+const UserFormComponent = withRoleAccess(["superadmin", "admin"])(UserForm);
+const LocationManagementComponent = withRoleAccess(["superadmin"])(LocationManagement);
+const LocationFormComponent = withRoleAccess(["superadmin"])(LocationForm);
+const UnionManagementComponent = withRoleAccess(["superadmin"])(UnionManagement);
+const UnionFormComponent = withRoleAccess(["superadmin"])(UnionForm);
+const CommisionTrackerComponent = withRoleAccess(["superadmin"])(CommisionTracker);
 
 function AppRouter() {
   return (

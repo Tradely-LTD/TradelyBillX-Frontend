@@ -3,12 +3,11 @@ import StatsCard from "@/common/cards/StatsCard";
 import { TabButton, TabContainer } from "@/common/tab";
 import Text from "@/common/text/text";
 import { Sort } from "iconsax-react";
-import { Filter, Pencil, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Filter } from "lucide-react";
+import { useState } from "react";
 import { Checkbox } from "@radix-ui/themes";
-import { appPaths } from "@/utils/app-paths";
-import { useNavigate } from "react-router-dom";
 import { useGetTransactionsQuery } from "../waybill/waybill.api";
+import { useGetStatsRecordQuery } from "../dashbaord/stats.api";
 
 // Skeleton Loader Component
 const TransactionSkeleton = () => {
@@ -63,9 +62,51 @@ function TransactionHistory() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<"dateTime" | "amount" | null>(null);
   const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
-  const { data, isLoading, isFetching } = useGetTransactionsQuery();
-  const navigate = useNavigate();
+  const { data, isLoading } = useGetTransactionsQuery();
 
+  const { data: statsData, isLoading: isLoadingStats, error } = useGetStatsRecordQuery();
+
+  // Get statistics from API response
+  const totalWaybills = statsData?.data?.totalWaybills || 0;
+  const totalPayments = statsData?.data?.totalPayments || 0;
+  const totalIncidents = statsData?.data?.totalIncidents || 0;
+  const paymentsAmount = statsData?.data?.paymentsAmount || 0;
+  // Stats cards data with updated values from API
+  const statsCards = [
+    {
+      title: "Waybills Submitted",
+      value: totalWaybills,
+      change: "0% last month",
+      // data: totalWaybills.map((_, i) => ({
+      //   name: i,
+      //   value: Math.floor(Math.random() * 50) + 50,
+      // })),
+    },
+    {
+      title: "Incidents Reported",
+      value: totalIncidents,
+      change: "+0% last month",
+      // data: totalIncidents.map((_, i) => ({
+      //   name: i,
+      //   value: Math.floor(Math.random() * 50) + 50,
+      // })),
+    },
+    {
+      title: "Payments Made",
+      value: totalPayments,
+      change: "+0% last month",
+      data: totalPayments + 50,
+    },
+    {
+      title: "Total Amount",
+      value: paymentsAmount,
+      change: "+0% last month",
+      // data: paymentsAmount.map((_, i) => ({
+      //   name: i,
+      //   value: Math.floor(Math.random() * 50) + 50,
+      // })),
+    },
+  ];
   // Handle tab switching
   const handleSwitchTab = (value: string) => {
     setActiveTab(value);
@@ -120,7 +161,7 @@ function TransactionHistory() {
         })
     : [];
 
-  const statsCards = data?.data ? generateStatsCards(data.data) : [];
+  // const statsCards = data?.data ? generateStatsCards(data.data) : [];
 
   return (
     <div>

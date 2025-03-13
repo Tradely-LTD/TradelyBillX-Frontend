@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, File, Package, Pencil, Trash2 } from "lucide-react";
 
 import Button from "@/common/button/button";
 import { TabButton, TabContainer, TabPanel } from "@/common/tab";
@@ -13,9 +13,9 @@ import {
   useDeleteTownsMutation,
   useGetLGAsQuery,
   useGetStatesQuery,
-  useGetTownsQuery,
+  useGetMarketQuery,
   useUpdateStateMutation,
-  useUpdateTownsMutation,
+  useUpdateMarketMutation,
 } from "./location.api";
 import { Modal } from "@/common/modal/modal";
 import Input from "@/common/input/input";
@@ -24,11 +24,11 @@ const LocationManagement = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("states");
   const [selectedState, setSelectedState] = useState<any | null>(null);
-  const [selectedTown, setSelectedTown] = useState<string>("");
-  const [selectedTownStatus, setSelectedTownStatus] = useState<boolean>(false);
+  const [selectedMarket, setSelectedMarket] = useState<string>("");
+  const [selectedMarketStatus, setSelectedMarketStatus] = useState<boolean>(false);
   const [selectedLGA, setSelectedLGA] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [editingTownId, setEditingTownId] = useState<string | null>(null);
+  const [editingTownId, setEditingMarketId] = useState<string | null>(null);
   const [isStateModalOpen, setIsStateModalOpen] = useState(false);
   const [editingState, setEditingState] = useState({
     id: "",
@@ -50,19 +50,23 @@ const LocationManagement = () => {
     isLoading: isLGALoading,
     isFetching: isFetchingLGA,
   } = useGetLGAsQuery({ stateId: selectedState }, { skip: selectedState === null });
-  const [deleteTown, { isLoading: isDeleting }] = useDeleteTownsMutation();
+  const [deleteMarket, { isLoading: isDeleting }] = useDeleteTownsMutation();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [townToDelete, setTownToDelete] = useState<string | null>(null);
+  const [marketToDelete, setMarketToDelete] = useState<string | null>(null);
 
   const handleDeleteTown = () => {
-    if (!townToDelete) return;
-    deleteTown({ id: townToDelete });
+    if (!marketToDelete) return;
+    deleteMarket({ id: marketToDelete });
     setIsDeleteModalOpen(false);
-    setTownToDelete(null);
+    setMarketToDelete(null);
   };
 
-  const { data: towns, isLoading, isFetching } = useGetTownsQuery({ lgaId: selectedLGA ?? "" });
-  const [updateTown, { isLoading: isUpdating }] = useUpdateTownsMutation();
+  const {
+    data: markets,
+    isLoading,
+    isFetching,
+  } = useGetMarketQuery({ lgaId: selectedLGA ?? "" }, { skip: selectedLGA === null });
+  const [updateMarket, { isLoading: isUpdating }] = useUpdateMarketMutation();
   const handleSwitchTab = (value: string) => {
     setActiveTab(value);
   };
@@ -95,29 +99,29 @@ const LocationManagement = () => {
     });
     setIsStateModalOpen(true);
   };
-  const handleEditTown = (town: {
+  const handleEditMarket = (market: {
     id: any;
     label?: string;
     value: any;
     status_allowed?: boolean;
   }) => {
-    setSelectedTown(town.value);
-    setSelectedTownStatus(town.status_allowed ?? false);
-    setEditingTownId(town.id);
+    setSelectedMarket(market.value);
+    setSelectedMarketStatus(market.status_allowed ?? false);
+    setEditingMarketId(market.id);
     setIsModalOpen(true);
   };
-  const handleUpdateTown = async () => {
-    if (!editingTownId || !selectedTown.trim()) return;
+  const handleUpdateMarket = async () => {
+    if (!editingTownId || !selectedMarket.trim()) return;
     try {
-      await updateTown({
+      await updateMarket({
         id: editingTownId,
-        value: selectedTown,
-        status_allowed: selectedTownStatus,
-        label: selectedTown,
+        value: selectedMarket,
+        status_allowed: selectedMarketStatus,
+        label: selectedMarket,
       }).unwrap();
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Error updating town:", error);
+      console.error("Error updating market:", error);
     }
   };
   return (
@@ -130,7 +134,7 @@ const LocationManagement = () => {
           </Text>
           <Text secondaryColor>
             Allows the Super Admin to restrict or allow waybill generation for specific locations
-            (State, LGA, City/Town).
+            (State, LGA, Market).
           </Text>
         </div>
         <Button onClick={() => navigate("/location/add")}>Add Location</Button>
@@ -142,8 +146,8 @@ const LocationManagement = () => {
             <TabButton onClick={() => handleSwitchTab("states")} active={activeTab === "states"}>
               States
             </TabButton>
-            <TabButton onClick={() => handleSwitchTab("towns")} active={activeTab === "towns"}>
-              Towns
+            <TabButton onClick={() => handleSwitchTab("market")} active={activeTab === "market"}>
+              Market
             </TabButton>
             {/* <TabButton
               onClick={() => handleSwitchTab("restricted")}
@@ -155,7 +159,7 @@ const LocationManagement = () => {
         </div>
 
         {/* Filters */}
-        {activeTab === "towns" && (
+        {activeTab === "market" && (
           <div className="flex">
             <SelectComponent
               label="State"
@@ -208,7 +212,7 @@ const LocationManagement = () => {
               <thead className="bg-[#F7F8FB] rounded-tl-2xl rounded-tr-2xl p-3">
                 <tr className="text-left">
                   <th className="py-2 px-4 border-b">S/N</th>
-                  <th className="py-2 px-4 border-b">City/Town</th>
+                  <th className="py-2 px-4 border-b">State</th>
                   <th className="py-2 px-4 border-b">Gov't %</th>
                   <th className="py-2 px-4 border-b">AUFCDN %</th>
                   <th className="py-2 px-4 border-b">Allow agent</th>
@@ -252,23 +256,23 @@ const LocationManagement = () => {
         </>
       </TabPanel>
 
-      <TabPanel active={activeTab === "towns"}>
+      <TabPanel active={activeTab === "market"}>
         {isLoading || isFetching ? (
           <Loader />
-        ) : towns?.data.length ? (
+        ) : markets?.data.length ? (
           <>
             <table className="min-w-full bg-white border rounded-lg">
               <thead className="bg-[#F7F8FB] rounded-tl-2xl rounded-tr-2xl p-3">
                 <tr className="text-left">
                   <th className="py-2 px-4 border-b">S/N</th>
-                  <th className="py-2 px-4 border-b">City/Town</th>
+                  <th className="py-2 px-4 border-b">Market</th>
                   <th className="py-2 px-4 border-b">Status</th>
                   <th className="py-2 px-4 border-b">Action</th>
                 </tr>
               </thead>
 
               <tbody>
-                {towns.data.map((item, index) => (
+                {markets.data.map((item, index) => (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="py-2 px-4 border-b">{index + 1}</td>
                     <td className="py-2 px-4 border-b">{item.value}</td>
@@ -278,14 +282,14 @@ const LocationManagement = () => {
                     <td className="py-2 px-4 border-b">
                       <div className="flex gap-2">
                         <button
-                          onClick={() => handleEditTown(item)}
+                          onClick={() => handleEditMarket(item)}
                           className="p-1 text-gray-500 hover:text-gray-700"
                         >
                           <Pencil size={18} />
                         </button>
                         <button
                           onClick={() => {
-                            setTownToDelete(item.id);
+                            setMarketToDelete(item.id);
                             setIsDeleteModalOpen(true);
                           }}
                           className="p-1 text-gray-500 hover:text-gray-700"
@@ -321,7 +325,7 @@ const LocationManagement = () => {
         ) : (
           <div className="flex justify-center items-center min-h-[50vh] text-gray-500">
             {selectedState && selectedLGA ? (
-              <p>No towns found for the selected State & LGA.</p>
+              <p>No maket found for the selected State & LGA.</p>
             ) : (
               <p>Please select a State and LGA to view records.</p>
             )}
@@ -333,24 +337,24 @@ const LocationManagement = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         className="!h-[300px]"
-        header="Edit the town/city"
+        header="Edit the Market"
         children={
           <div className="p-5">
             <Input
-              placeholder="Enter the town or city"
-              onChange={(e) => setSelectedTown(e.target.value)}
-              value={selectedTown}
+              placeholder="Enter the market name"
+              onChange={(e) => setSelectedMarket(e.target.value)}
+              value={selectedMarket}
             />
             <div>
               <div className="flex items-center justify-between my-7">
-                <Text>Allow or restrict this location</Text>
+                <Text>Allow or restrict this market</Text>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={selectedTownStatus}
+                    checked={selectedMarketStatus}
                     className="sr-only peer"
                     readOnly
-                    onClick={() => setSelectedTownStatus(!selectedTownStatus)}
+                    onClick={() => setSelectedMarketStatus(!selectedMarketStatus)}
                   />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                   <span className="ml-2">{status ? "Allowed" : "Restricted"}</span>
@@ -368,7 +372,7 @@ const LocationManagement = () => {
             >
               Cancel
             </Button>
-            <Button onClick={handleUpdateTown} disabled={isUpdating}>
+            <Button onClick={handleUpdateMarket} disabled={isUpdating}>
               {isUpdating ? "Updating..." : "Update"}
             </Button>
           </div>
@@ -395,7 +399,10 @@ const LocationManagement = () => {
           </div>
         }
       >
-        <p>Are you sure you want to delete this town? {}</p>
+        <div className="flex items-center flex-col gap-3">
+          <Package size={"5rem"} color="green" />
+          <p>Are you sure you want to delete this Market? </p>
+        </div>
       </Modal>
       <Modal
         isOpen={isStateModalOpen}

@@ -48,7 +48,7 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
       label: "Dashboard",
       path: "/",
       description: "Overview of key metrics and performance",
-      privilege: [UserRoles.AGENT, UserRoles.SUPER_ADMIN],
+      privilege: [UserRoles.AGENT, UserRoles.ADMIN],
     },
     {
       icon: Settings2,
@@ -76,7 +76,7 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
       label: "Location Management",
       path: "/location",
       description: " ",
-      privilege: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
+      privilege: [UserRoles.SUPER_ADMIN],
     },
     {
       icon: FileText,
@@ -96,7 +96,7 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
         },
       ],
       description: "Manage shipping documents and tracking",
-      privilege: [UserRoles.AGENT],
+      privilege: [UserRoles.AGENT, UserRoles.ADMIN],
     },
     {
       icon: DollarSign,
