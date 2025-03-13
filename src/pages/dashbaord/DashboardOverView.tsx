@@ -80,7 +80,7 @@ const DashboardOverview = () => {
     value: Math.floor(Math.random() * 50) + 50,
   }));
 
-  const { data: statsData, isLoading } = useGetStatsRecordQuery();
+  const { data: statsData, isLoading, isFetching } = useGetStatsRecordQuery();
 
   // Get statistics from API response
   const totalWaybills = statsData?.data?.totalWaybills || 0;
@@ -162,18 +162,18 @@ const DashboardOverview = () => {
           <h2 className="text-2xl font-semibold">Overview</h2>
           <p className="text-gray-500">Access a detailed overview of essentials data</p>
         </div>
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <span className="text-gray-500">Date Range</span>
           <input
             type="date"
             className="px-4 py-2 bg-white border rounded-lg flex items-center space-x-2"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Stats Grid */}
 
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(3)].map((_, index) => (
             <Skeleton key={index} height={"130px"} width={"300px"} />
@@ -212,7 +212,7 @@ const DashboardOverview = () => {
 
       {/* Status Charts Grid */}
 
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           {[...Array(2)].map((_, index) => (
             <Skeleton key={index} height={"330px"} width={"500px"} />
@@ -228,7 +228,7 @@ const DashboardOverview = () => {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-bold mb-4">Payment & Commission</h2>
 
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
             {[...Array(1)].map((_, index) => (
               <Skeleton key={index} height={"350px"} className="w-full" />

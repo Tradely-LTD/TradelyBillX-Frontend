@@ -9,6 +9,7 @@ import { Loader } from "@/common/loader/loader";
 import EditUserModal from "./components/editUserModal";
 import EmptyState from "../components/empty-state";
 import { capitalizeFirstLetter } from "@/utils/helper";
+import { useUserSlice } from "../auth/authSlice";
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const UserManagement = () => {
   };
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<AuthUser | null>(null);
-
+  const { loginResponse } = useUserSlice();
   const handleEditClick = (user: AuthUser) => {
     setSelectedUser(user);
     setIsEditModalOpen(true);
@@ -42,32 +43,33 @@ const UserManagement = () => {
           </Button>
         </div>
       </div>
-
-      <div className="flex justify-between mb-4">
-        <div className="w-[60%] my-3">
-          <TabContainer className="!w-[450px] ">
-            <TabButton onClick={() => handleSwitchTab(null)} active={activeTab === null}>
-              All
-            </TabButton>
-            <TabButton
-              className=""
-              onClick={() => handleSwitchTab("agent")}
-              active={activeTab === "agent"}
-            >
-              User/Agent
-            </TabButton>
-            <TabButton onClick={() => handleSwitchTab("admin")} active={activeTab === "admin"}>
-              Admin
-            </TabButton>
-            <TabButton
-              onClick={() => handleSwitchTab("superadmin")}
-              active={activeTab === "superadmin"}
-            >
-              Super Admin
-            </TabButton>
-          </TabContainer>
+      {loginResponse?.user.role === "superadmin" && (
+        <div className="flex justify-between mb-4">
+          <div className="w-[60%] my-3">
+            <TabContainer className="!w-[450px] ">
+              <TabButton onClick={() => handleSwitchTab(null)} active={activeTab === null}>
+                All
+              </TabButton>
+              <TabButton
+                className=""
+                onClick={() => handleSwitchTab("agent")}
+                active={activeTab === "agent"}
+              >
+                User/Agent
+              </TabButton>
+              <TabButton onClick={() => handleSwitchTab("admin")} active={activeTab === "admin"}>
+                Admin
+              </TabButton>
+              <TabButton
+                onClick={() => handleSwitchTab("superadmin")}
+                active={activeTab === "superadmin"}
+              >
+                Super Admin
+              </TabButton>
+            </TabContainer>
+          </div>
         </div>
-      </div>
+      )}
 
       {isLoading || isFetching ? (
         <Loader />

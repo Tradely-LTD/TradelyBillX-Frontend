@@ -18,6 +18,16 @@ export const locationApi = baseApi.injectEndpoints({
       }),
       providesTags: ["LOCATION"],
     }),
+    getLGA: builder.query<
+      { data: { id: string; label: string; value: string; status_allowed: boolean } },
+      { id: string }
+    >({
+      query: ({ id }) => ({
+        url: `/location/lgas/${id}`,
+        method: Methods.Get,
+      }),
+      providesTags: ["LOCATION"],
+    }),
     getMarket: builder.query<TownResponse, { lgaId: string }>({
       query: ({ lgaId }) => ({
         url: `/location/market/lga/${lgaId}`,
@@ -118,6 +128,7 @@ export const locationApi = baseApi.injectEndpoints({
 export const {
   useGetStatesQuery,
   useGetLGAsQuery,
+  useGetLGAQuery,
   useCreateMarketMutation,
   useGetMarketQuery,
   useUpdateMarketMutation,
@@ -125,7 +136,7 @@ export const {
   useUpdateStateMutation,
 } = locationApi;
 
-interface RequestPayload {
+export interface RequestPayload {
   status_allowed: boolean;
   label: string;
   value: string;

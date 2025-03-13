@@ -76,7 +76,7 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
       label: "Location Management",
       path: "/location",
       description: " ",
-      privilege: [UserRoles.ADMIN, UserRoles.SUPER_ADMIN],
+      privilege: [UserRoles.SUPER_ADMIN],
     },
     {
       icon: FileText,

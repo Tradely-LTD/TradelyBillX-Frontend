@@ -56,11 +56,11 @@ export const wayBillSchema = yup.object().shape({
   arrivalTime: yup.string().required("Arrival time is required"),
   loadingState: yup.string().required("Loading state is required"),
   loadingLGA: yup.string().required("Loading LGA is required"),
-  loadingTown: yup.string().required("Loading town is required"),
+  loadingTown: yup.string(),
 
   deliveryState: yup.string().required("Delivery state is required"),
   deliveryLGA: yup.string().required("Delivery LGA is required"),
-  deliveryTown: yup.string().required("Delivery town is required"),
+  deliveryTown: yup.string(),
   // products: yup.array().of(yup.object()).min(1, "At least one product is required"),
   products: yup
     .array()

@@ -2,37 +2,36 @@ import { Calendar, Clock } from "iconsax-react";
 
 import Input from "@/common/input/input";
 import SelectComponent from "@/common/input/select";
-import React, { ChangeEvent, useState } from "react";
-import { useFormContext } from "../formContext";
+import React, { ChangeEvent, useEffect, useState } from "react";
+// import { useFormContext } from "../formContext";
 import { useShipmentLocation } from "../../useShipmentLocation";
 import { setCurrentState } from "../../waybill.slice";
 import { useDispatch } from "react-redux";
+import { useUserSlice } from "@/pages/auth/authSlice";
+import Text from "@/common/text/text";
+import { useGetLGAQuery } from "@/pages/location/location.api";
 
-export const ShipmentDetails: React.FC = () => {
-  const [selectedState, setSelectedState] = useState<any | null>(null);
+export const ShipmentDetails: React.FC = ({ methods }) => {
+  // const [selectedState, setSelectedState] = useState<any | null>(null);
   const [selectedStateId, setSelectedStateId] = useState<any | null>(null);
   // const [selectedTown, setSelectedTown] = useState<string>("");
   const [selectedLGA, setSelectedLGA] = useState<any | null>(null);
   const [selectedLGAId, setSelectedLGAId] = useState<string | null>(null);
   const dispatch = useDispatch();
-
+  const { loginResponse } = useUserSlice();
+  const userState = loginResponse?.user?.state;
+  console.log(loginResponse?.user);
   const [selectedDeliveryState, setSelectedDeliveryState] = useState<any | null>(null);
   const [selectedDeliveryStateId, setSelectedDeliveryStateId] = useState<any | null>(null);
   // const [selectedDeliveryTown, setSelectedDeliveryTown] = useState<string>("");
   const [selectedDeliveryLGA, setSelectedDeliveryLGA] = useState<any | null>(null);
   const [selectedDeliveryLGAId, setSelectedDeliveryLGAId] = useState<string | null>(null);
-  const {
-    statesData,
-    isFetchingLGA,
-    isStatesLoading,
-    isLGALoading,
-    // isLoadingTown,
-    lgasData,
-    // towns,
-  } = useShipmentLocation({
-    selectedLGAId: selectedLGAId ?? "",
-    selectedStateId: selectedStateId,
-  });
+
+  const { data: LGAData, isLoading: isLoadingLGA } = useGetLGAQuery(
+    { id: loginResponse?.user.market?.lgaId ?? "" },
+    { skip: loginResponse?.user.market?.lgaId === null }
+  );
+  console.log(LGAData);
   const {
     statesData: DeliveryStates,
     isFetchingLGA: isFetchingLGADelivery,
@@ -48,10 +47,24 @@ export const ShipmentDetails: React.FC = () => {
   const {
     register,
     setValue,
-    clearErrors,
     watch,
+    clearErrors,
     formState: { errors },
-  } = useFormContext();
+  } = methods;
+
+  useEffect(() => {
+    if (userState) {
+      setValue("loadingState", userState.value);
+      setValue("loadingMarket", loginResponse?.user.market?.label);
+      setSelectedStateId(userState.id);
+      setSelectedLGAId(loginResponse?.user?.market?.lgaId ?? "");
+      dispatch(setCurrentState({ state: userState }));
+    }
+  }, [userState, setValue, dispatch]);
+
+  useEffect(() => {
+    setValue("loadingLGA", LGAData?.data?.label);
+  }, [LGAData, setValue]);
 
   return (
     <div className="flex flex-col rounded-[15px] border border-[#F0F2F4] flex-wrap p-[20px] ">
@@ -64,13 +77,23 @@ export const ShipmentDetails: React.FC = () => {
               We need to verify where the loading location and delivery location of the shipment
               will be.
             </div>
+            <h3 className="font-medium mt-3">Loading Location</h3>
+            <Text block secondaryColor>
+              State: {userState?.label}
+            </Text>
+
+            <Text block secondaryColor>
+              LGA: {isLoadingLGA ? "Loading..." : LGAData?.data?.label}
+            </Text>
+            <Text block secondaryColor>
+              Market: {loginResponse?.user.market?.label}
+            </Text>
           </div>
         </div>
 
         <div className="flex flex-col gap-[20px] md:w-1/2 w-full">
           <div className="space-y-4">
-            <h3 className="font-medium">Loading Location</h3>
-            <SelectComponent
+            {/* <SelectComponent
               options={
                 statesData?.data?.length
                   ? statesData.data.map((state) => ({
@@ -83,17 +106,15 @@ export const ShipmentDetails: React.FC = () => {
               }
               onChange={(value, id, rest) => {
                 setValue("loadingState", value);
-                setSelectedState(value);
-                setSelectedStateId(id);
                 dispatch(setCurrentState({ state: rest.state }));
               }}
-              // value={selectedState}
               value={watch("loadingState")}
               isLoading={isStatesLoading}
               label="Select state"
-            />
+              disabled
+            /> */}
 
-            <SelectComponent
+            {/* <SelectComponent
               label="Select LGA"
               options={
                 lgasData?.data?.length
@@ -111,14 +132,13 @@ export const ShipmentDetails: React.FC = () => {
                 setSelectedLGA(value);
                 setSelectedLGAId(id ?? "");
               }}
-              // value={selectedLGA}
               value={watch("loadingLGA")}
               isLoading={isLGALoading || isFetchingLGA}
-              disabled={!selectedState}
-            />
+              disabled={!userState}
+            /> */}
 
             <Input
-              label="Town/City"
+              label="Town/City (Optional)"
               value={watch("loadingTown")}
               {...register("loadingTown")}
               error={errors.loadingTown?.message}
@@ -129,7 +149,7 @@ export const ShipmentDetails: React.FC = () => {
               placeholder="Type full Loading Town/City"
             />
 
-            <Input
+            {/* <Input
               {...register("loadingMarket")}
               error={errors.loadingMarket?.message}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -139,12 +159,13 @@ export const ShipmentDetails: React.FC = () => {
               label="Market/Location"
               placeholder="Type full address"
               value={watch("loadingMarket")}
-            />
+            /> */}
           </div>
 
           <div className="space-y-4 mt-6">
             <h3 className="font-medium">Delivery Location</h3>
             <SelectComponent
+              required
               options={
                 DeliveryStates?.data?.length
                   ? DeliveryStates.data.map((state) => ({
@@ -159,7 +180,7 @@ export const ShipmentDetails: React.FC = () => {
                 setSelectedDeliveryState(value);
                 setSelectedDeliveryStateId(id);
               }}
-              // value={selectedDeliveryState}
+              error={errors?.deliveryState?.message}
               value={watch("deliveryState")}
               isLoading={isLoadingState}
               label="Select state"
@@ -167,6 +188,7 @@ export const ShipmentDetails: React.FC = () => {
 
             <SelectComponent
               label="Select LGA"
+              required
               options={
                 lgaDelivery?.data?.length
                   ? lgaDelivery.data.map((lga) => ({
@@ -183,7 +205,7 @@ export const ShipmentDetails: React.FC = () => {
                 setSelectedDeliveryLGA(value);
                 setSelectedDeliveryLGAId(id ?? "");
               }}
-              // value={selectedDeliveryLGA}
+              error={errors?.deliveryLGA?.message}
               value={watch("deliveryLGA")}
               isLoading={isLoadingLGADelivery || isFetchingLGADelivery}
               disabled={!selectedDeliveryState}
@@ -203,6 +225,7 @@ export const ShipmentDetails: React.FC = () => {
 
             <Input
               label="Market/Location"
+              required
               {...register("deliveryMarket")}
               error={errors.deliveryMarket?.message}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -221,6 +244,7 @@ export const ShipmentDetails: React.FC = () => {
                       <Input
                         label="Date"
                         type="date"
+                        required
                         placeholder="dd/mm/yyyy"
                         rightIcon={<Calendar size="20" color="#64748b" variant="Bold" />}
                         {...register("departureDate")}
@@ -235,6 +259,7 @@ export const ShipmentDetails: React.FC = () => {
                     <div>
                       <Input
                         label="Time"
+                        required
                         type="time"
                         placeholder="00:00"
                         value={watch("departureTime")}
@@ -257,6 +282,7 @@ export const ShipmentDetails: React.FC = () => {
                       <Input
                         label="Date"
                         type="date"
+                        required
                         placeholder="dd/mm/yyyy"
                         rightIcon={<Calendar size="20" color="#64748b" variant="Bold" />}
                         {...register("arrivalDate")}
@@ -272,6 +298,7 @@ export const ShipmentDetails: React.FC = () => {
                       <Input
                         label="Time"
                         type="time"
+                        required
                         {...register("arrivalTime")}
                         value={watch("arrivalTime")}
                         error={errors.arrivalTime?.message}
@@ -305,6 +332,7 @@ export const ShipmentDetails: React.FC = () => {
         <div className="flex flex-col gap-[20px]  md:w-1/2 w-full ">
           <div className="space-y-4">
             <Input
+              required
               {...register("goodsOwnerName")}
               error={errors.arrivalDate?.message}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -318,6 +346,7 @@ export const ShipmentDetails: React.FC = () => {
             />
 
             <Input
+              required
               label="Goods Receiver's Name"
               placeholder="Type full name"
               {...register("goodsReceiverName")}

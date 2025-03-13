@@ -2,6 +2,7 @@ import { baseApi } from "@/store/baseApi";
 import { Methods } from "@/utils/enums";
 import { toast } from "react-toastify";
 import { setAuth } from "./authSlice";
+import { RequestPayload, State } from "../location/location.api";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -140,10 +141,10 @@ export interface AuthUser {
   isVerified: boolean;
   role: "superadmin" | "admin" | "agent";
   status: boolean;
-  state: string;
+  state: State;
   lga: string;
   city: string;
-  market?: string;
+  market?: RequestPayload;
   streetAddress?: string;
 }
 

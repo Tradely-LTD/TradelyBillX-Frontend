@@ -9,10 +9,22 @@ interface Product {
   quantity: number;
 }
 
-const productOptions = ["Rice", "Corn", "Wheat", "Maize", "Millet", "Sorghum", "Barley", "Oats", "Tomatoes", "Onions", ""];
+const productOptions = [
+  "Rice",
+  "Corn",
+  "Wheat",
+  "Maize",
+  "Millet",
+  "Sorghum",
+  "Barley",
+  "Oats",
+  "Tomatoes",
+  "Onions",
+  "",
+];
 const unitOptions = ["Piece(s)", "Grams", "Kilogram", "Tone", "Bag(s)", "Crate", "Box(s)", ""];
 
-export const ProductDetails: React.FC = () => {
+export const ProductDetails: React.FC = ({ methods }) => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [localProducts, setLocalProducts] = useState<Product[]>([]);
   const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
@@ -25,14 +37,19 @@ export const ProductDetails: React.FC = () => {
     unit: "",
     quantity: 0,
   });
-
-  const { setValue, watch } = useFormContext();
+  const {
+    register,
+    setValue,
+    watch,
+    clearErrors,
+    formState: { errors },
+  } = methods;
   const formProducts = watch("products") || [];
 
   // Synchronize local state with form state
   useEffect(() => {
     setLocalProducts(formProducts);
-  }, [formProducts]);
+  }, []);
 
   const handleAdd = () => {
     if (newProduct.productName && newProduct.unit && newProduct.quantity > 0) {
@@ -211,4 +228,4 @@ export const ProductDetails: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

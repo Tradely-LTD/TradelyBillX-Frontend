@@ -9,7 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../auth.api";
 import { useGetUnionQuery } from "@/pages/union/union";
 import SelectComponent from "@/common/input/select";
-import { useGetLGAsQuery, useGetStatesQuery } from "@/pages/location/location.api";
+import {
+  useGetLGAsQuery,
+  useGetMarketQuery,
+  useGetStatesQuery,
+} from "@/pages/location/location.api";
 
 const schema = yup.object().shape({
   firstName: yup.string().min(2, "First name is required").required("First name is required"),
@@ -26,6 +30,7 @@ const schema = yup.object().shape({
     .required("Password is required"),
   stateId: yup.string().required("State is required"),
   lgaId: yup.string().required("LGA is required"),
+  marketId: yup.string().required("Market is required"),
   union: yup.string(),
   city: yup.string().required("City is required"),
 
@@ -59,6 +64,13 @@ const Register = () => {
     isLoading: isLGALoading,
     isFetching: isFetchingLGA,
   } = useGetLGAsQuery({ stateId: selectedState }, { skip: selectedState === null });
+
+  const { data: markets, isLoading: isLoadingMarket } = useGetMarketQuery(
+    {
+      lgaId: selectedLGA ?? "",
+    },
+    { skip: selectedLGA === null || selectedLGA === "" }
+  );
 
   const onSubmit = (data: any) => {
     const { termsAccepted, ...rest } = data;
@@ -102,6 +114,7 @@ const Register = () => {
               <div>
                 <Input
                   label="First Name"
+                  required
                   type="text"
                   placeholder="First name"
                   {...register("firstName")}
@@ -114,6 +127,7 @@ const Register = () => {
               </div>
               <div className="my-3">
                 <Input
+                  required
                   label="Last Name"
                   type="text"
                   placeholder="Last name"
@@ -132,6 +146,7 @@ const Register = () => {
                 <Input
                   label="Email"
                   type="text"
+                  required
                   placeholder="Email Address"
                   {...register("email")}
                   error={errors.email?.message}
@@ -144,6 +159,7 @@ const Register = () => {
               </div>
               <div className="my-3">
                 <Input
+                  required
                   label="Phone Number"
                   type="text"
                   placeholder="Phone number"
@@ -160,6 +176,7 @@ const Register = () => {
             <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
               <div>
                 <SelectComponent
+                  required
                   label="Union"
                   options={
                     unions?.data?.map((item) => ({
@@ -177,6 +194,7 @@ const Register = () => {
               </div>
               <div className="my-3">
                 <Input
+                  required
                   label="Password"
                   type="password"
                   placeholder="Create Password"
@@ -191,6 +209,8 @@ const Register = () => {
             </div>
             <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
               <SelectComponent
+                required
+                error={errors.stateId?.message}
                 label="State"
                 className="my-2 min-w-[50%] mr-2"
                 options={
@@ -202,9 +222,8 @@ const Register = () => {
                       }))
                     : [{ label: "No States available", value: "no data ", id: "" }]
                 }
-                onChange={(value, id) => {
+                onChange={(_, id) => {
                   setValue("stateId", id ?? "");
-                  setSelectedState(value);
                   setSelectedState(id);
                 }}
                 isLoading={isStatesLoading}
@@ -212,6 +231,8 @@ const Register = () => {
 
               <SelectComponent
                 label="LGA"
+                required
+                error={errors.lgaId?.message}
                 className="my-2 min-w-[50%] mr-2"
                 options={
                   lgasData?.data?.length
@@ -224,19 +245,41 @@ const Register = () => {
                     ? [{ label: "No LGAs found for this state", value: "no data ", id: "" }]
                     : [{ label: "Select a state first", value: "no data ", id: "" }]
                 }
-                onChange={(value, id) => {
+                onChange={(_, id) => {
                   setValue("lgaId", id ?? "");
-                  setSelectedLGA(value);
+                  setSelectedLGA(id ?? "");
                 }}
-                value={selectedLGA ?? ""}
                 isLoading={isLGALoading || isFetchingLGA}
                 disabled={!selectedState}
               />
             </div>
 
-            <div className="my-3">
+            <div className="mb-1 grid grid-cols-1 items-center gap-2 md:grid-cols-2">
+              <SelectComponent
+                label="Market"
+                required
+                error={errors.marketId?.message}
+                className="my-2 min-w-[50%] mr-2"
+                options={
+                  markets?.data?.length
+                    ? markets.data.map((lga) => ({
+                        label: lga.label,
+                        value: lga.value,
+                        id: lga.id,
+                      }))
+                    : selectedState
+                    ? [{ label: "No Market found for this state", value: "no data ", id: "" }]
+                    : [{ label: "Select a LGA first", value: "no data ", id: "" }]
+                }
+                onChange={(_, id) => {
+                  setValue("marketId", id ?? "");
+                }}
+                isLoading={isLoadingMarket}
+                disabled={!selectedLGA}
+              />
               <Input
                 label="City"
+                required
                 type="text"
                 placeholder="City"
                 {...register("city")}

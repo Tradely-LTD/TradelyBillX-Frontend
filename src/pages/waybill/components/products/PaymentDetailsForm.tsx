@@ -4,22 +4,28 @@ import Text from "@/common/text/text";
 import Button from "@/common/button/button";
 
 import StatusIndicator from "@/common/status";
-import PaystackPayment from "../paystack";
+// import PaystackPayment from "../paystack";
 import { useStateSlice } from "../../waybill.slice";
 import Input from "@/common/input/input";
 import { useState } from "react";
 import { useUserSlice } from "@/pages/auth/authSlice";
 import { thousandFormatter } from "@/utils/helper";
 import { useCreateWayBillsMutation } from "../../waybill.api";
+import { useNavigate } from "react-router-dom";
 
-const PaymentDetailsForm = () => {
-  const { watch } = useFormContext();
+const PaymentDetailsForm = ({ methods }) => {
+  const {
+    watch,
+    formState: { errors },
+  } = methods;
+
   const formValues = watch();
   const { state } = useStateSlice();
   const [agentAmount, setAmount] = useState(0);
   const { loginResponse } = useUserSlice();
   const totalAmount = agentAmount + Number(state?.constant_price);
-  const [createWayBill, { isLoading: isCreatingWaybill, isSuccess }] = useCreateWayBillsMutation();
+  const [createWayBill, { isLoading: isCreatingWaybill }] = useCreateWayBillsMutation();
+  const navigate = useNavigate();
 
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
@@ -210,10 +216,14 @@ const PaymentDetailsForm = () => {
                     waybillFee: state?.constant_price,
                     totalAmount: totalAmount,
                     agentFee: agentAmount,
-                  });
+                  })
+                    .unwrap()
+                    .then(() => {
+                      navigate("/waybill/list");
+                    });
                 }}
               >
-                Generate Waybill
+                {isCreatingWaybill ? "Generating..." : "Generate Waybill"}
               </Button>
             </div>
           </div>

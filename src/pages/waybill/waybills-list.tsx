@@ -53,25 +53,25 @@ function WaybillsList() {
   const statsCards = [
     {
       title: "Waybills Submitted",
-      value: String(totalWaybills),
+      value: totalWaybills,
       change: "0% last month",
       data: chartData,
     },
     {
       title: "Incidents Reported",
-      value: String(totalIncidents),
+      value: totalIncidents,
       change: "+0% last month",
       data: chartData,
     },
     {
       title: "Payments Made",
-      value: String(totalPayments),
+      value: totalPayments,
       change: "+0% last month",
       data: chartData,
     },
     {
       title: "Total Amount",
-      value: String(paymentsAmount),
+      value: paymentsAmount,
       change: "+0% last month",
       data: chartData,
     },
@@ -109,7 +109,7 @@ function WaybillsList() {
               change={stat.change}
               data={stat.data}
               title={stat.title}
-              value={stat?.value ?? ""}
+              value={stat?.value ?? 0}
               key={index}
             />
           ))}
