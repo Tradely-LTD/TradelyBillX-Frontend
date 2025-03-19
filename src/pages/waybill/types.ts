@@ -49,11 +49,12 @@ export const wayBillSchema = yup.object().shape({
   driverPhone: yup.string().required("Driver's phone number is required"),
   vehicleNumber: yup.string().required("Vehicle number is required"),
   loadingMarket: yup.string().required("Loading market is required"),
-  deliveryMarket: yup.string().required("Delivery market is required"),
+  deliveryMarket: yup.string(),
   departureDate: yup.string().required("Departure date is required"),
-  departureTime: yup.string().required("Departure time is required"),
-  arrivalDate: yup.string().required("Arrival date is required"),
-  arrivalTime: yup.string().required("Arrival time is required"),
+  departureTime: yup.string(),
+  arrivalDate: yup.string(),
+  arrivalTime: yup.string(),
+
   loadingState: yup.string().required("Loading state is required"),
   loadingLGA: yup.string().required("Loading LGA is required"),
   loadingTown: yup.string(),
@@ -76,8 +77,8 @@ export const wayBillSchema = yup.object().shape({
     )
     .min(1, "At least one product is required"),
 
-  goodsOwnerName: yup.string().required("Good Owners Name is required"),
-  goodsReceiverName: yup.string().required("Good Receiver Name is required"),
+  goodsOwnerName: yup.string(),
+  goodsReceiverName: yup.string(),
   shipmentStatus: yup.string().required("Shipment Status is required"),
   transactionReference: yup.string().required("Shipment Status is required"),
 });

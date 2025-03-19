@@ -78,6 +78,35 @@ export const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getProfile: builder.query<{ data: Profile; success: boolean }, { id: string }>({
+      query: ({ id }) => {
+        return {
+          url: `auth/profile/${id}`,
+          method: Methods.Get,
+        };
+      },
+    }),
+    updateProfile: builder.mutation<any, any>({
+      query: ({ data }) => ({
+        url: `/auth/profile/${data?.id}`,
+        method: Methods.Put,
+        body: data,
+      }),
+      invalidatesTags: ["AUTH"],
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          toast.success("Updated Successfully", {
+            position: "top-right",
+          });
+        } catch (err: any) {
+          const errorMessage = err?.error?.data?.error || err?.error || "Failed to update ";
+          toast.error(errorMessage, {
+            position: "top-right",
+          });
+        }
+      },
+    }),
     updateUser: builder.mutation<any, any>({
       query: ({ data }) => ({
         url: `/auth/${data.id}`,
@@ -139,13 +168,15 @@ export interface AuthUser {
   profileImage?: string;
   isKYCCompleted: boolean;
   isVerified: boolean;
-  role: "superadmin" | "admin" | "agent";
+  role: UserRole;
   status: boolean;
   state: State;
   lga: string;
   city: string;
   market?: RequestPayload;
   streetAddress?: string;
+  organisation: Organisation;
+  profile: Profile;
 }
 
 export interface LoginRequest {
@@ -173,6 +204,46 @@ export interface RegisterResponse {
   success: boolean;
 }
 
+export interface Organisation {
+  createdAt: string;
+  id: string;
+  logo: string;
+  orgName: string;
+  shortName: string;
+  updatedAt: string;
+}
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  profileImage: string | null;
+  isKYCCompleted: boolean;
+  isVerified: boolean;
+  stateId: string;
+  lgaId: string;
+  marketId: string;
+  role: UserRole;
+  status: boolean;
+  union: string | null;
+  city: string;
+  streetAddress: string | null;
+  organisationId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Profile {
+  id: string;
+  agentId: string;
+  agentFee: number;
+  accountNumber: number;
+  bankCode: string;
+  accountName: string;
+  payStackAccountNumber: string;
+}
+
 export interface PasswordResetArgs {
   token: string;
   newPassword: string;
@@ -194,4 +265,6 @@ export const {
   useGetUserQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
+  useGetProfileQuery,
+  useUpdateProfileMutation,
 } = authApi;

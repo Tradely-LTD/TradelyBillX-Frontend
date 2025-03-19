@@ -70,7 +70,7 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
     <div className="flex flex-col rounded-[15px] border border-[#F0F2F4] flex-wrap p-[20px] ">
       <div className="flex justify-between gap-[20px] flex-wrap md:flex-nowrap flex-1">
         <div className="flex gap-[10px]">
-          <img src="logistics.png" className="h-[48px] w-[48px]" />
+          <img src="logistics.png" className="hidden md:block h-[48px] w-[48px]" />
           <div>
             <div className="text-[18px] font-semibold">Shipment Information</div>
             <div className="text-[#64748B]">
@@ -225,7 +225,6 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
 
             <Input
               label="Market/Location"
-              required
               {...register("deliveryMarket")}
               error={errors.deliveryMarket?.message}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -259,7 +258,6 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
                     <div>
                       <Input
                         label="Time"
-                        required
                         type="time"
                         placeholder="00:00"
                         value={watch("departureTime")}
@@ -282,7 +280,6 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
                       <Input
                         label="Date"
                         type="date"
-                        required
                         placeholder="dd/mm/yyyy"
                         rightIcon={<Calendar size="20" color="#64748b" variant="Bold" />}
                         {...register("arrivalDate")}
@@ -298,7 +295,6 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
                       <Input
                         label="Time"
                         type="time"
-                        required
                         {...register("arrivalTime")}
                         value={watch("arrivalTime")}
                         error={errors.arrivalTime?.message}
@@ -320,7 +316,7 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
 
       <div className="flex justify-between gap-[20px] flex-wrap md:flex-nowrap  flex-1 mt-[30px]">
         <div className="flex gap-[10px]">
-          <img src="child.png" className="h-[48px] w-[48px]" />
+          <img src="child.png" className="hidden md:block h-[48px] w-[48px]" />
           <div>
             <div className="text-[18px] font-semibold">Owner & Receiver Information</div>
             <div className="text-[#64748B]">
@@ -332,7 +328,6 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
         <div className="flex flex-col gap-[20px]  md:w-1/2 w-full ">
           <div className="space-y-4">
             <Input
-              required
               {...register("goodsOwnerName")}
               error={errors.arrivalDate?.message}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -346,7 +341,6 @@ export const ShipmentDetails: React.FC = ({ methods }) => {
             />
 
             <Input
-              required
               label="Goods Receiver's Name"
               placeholder="Type full name"
               {...register("goodsReceiverName")}

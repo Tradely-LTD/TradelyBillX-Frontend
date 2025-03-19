@@ -29,6 +29,7 @@ export const DriverVehicleInfo = ({ methods }) => {
               setValue("driverName", e.target.value);
               clearErrors("driverName");
             }}
+            required
             label="Driver's Name"
             name="driverName"
             value={watch("driverName")}
@@ -41,6 +42,7 @@ export const DriverVehicleInfo = ({ methods }) => {
               setValue("driverPhone", e.target.value);
               clearErrors("driverPhone");
             }}
+            required
             label="Driver's Phone Number"
             name="driverPhone"
             placeholder="+234 00-000-000"
@@ -53,6 +55,7 @@ export const DriverVehicleInfo = ({ methods }) => {
               setValue("vehicleNumber", e.target.value);
               clearErrors("vehicleNumber");
             }}
+            required
             label="Vehicle Number"
             name="vehicleNumber"
             placeholder="Type vehicle number"
