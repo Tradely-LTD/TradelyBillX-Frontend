@@ -1,13 +1,12 @@
 import { Copy, Ship } from "lucide-react";
-import { useFormContext } from "../formContext";
 import Text from "@/common/text/text";
 import Button from "@/common/button/button";
 
 import StatusIndicator from "@/common/status";
-// import PaystackPayment from "../paystack";
+import PaystackPayment from "../paystack";
 import { useStateSlice } from "../../waybill.slice";
-import Input from "@/common/input/input";
-import { useState } from "react";
+// import Input from "@/common/input/input";
+// import { useState } from "react";
 import { useUserSlice } from "@/pages/auth/authSlice";
 import { thousandFormatter } from "@/utils/helper";
 import { useCreateWayBillsMutation } from "../../waybill.api";
@@ -21,8 +20,9 @@ const PaymentDetailsForm = ({ methods }) => {
 
   const formValues = watch();
   const { state } = useStateSlice();
-  const [agentAmount, setAmount] = useState(0);
+  // const [agentAmount, setAmount] = useState(5000);
   const { loginResponse } = useUserSlice();
+  const agentAmount = loginResponse?.user?.profile?.agentFee ?? 0;
   const totalAmount = agentAmount + Number(state?.constant_price);
   const [createWayBill, { isLoading: isCreatingWaybill }] = useCreateWayBillsMutation();
   const navigate = useNavigate();
@@ -169,19 +169,19 @@ const PaymentDetailsForm = ({ methods }) => {
 
         <div className="flex gap-5 my-4 items-start justify-between flex-wrap md:flex-nowrap">
           <div>
-            {state?.allow_price_edit && (
+            {/* {state?.allow_price_edit && (
               <>
                 <div className="bg-white p-3 rounded-md ">
                   <Input
                     label="Agent Service Fee"
                     value={agentAmount}
                     onChange={(e) => {
-                      setAmount(Number(e.target.value));
+                      // setAmount(Number(e.target.value));
                     }}
                   />
                 </div>
               </>
-            )}
+            )} */}
             <div className="flex flex-col items-center gap-4">
               <div className="flex items-center gap-1">
                 <input type="checkbox" className="w-4 h-4 text-green-600" />
@@ -196,14 +196,14 @@ const PaymentDetailsForm = ({ methods }) => {
                   </a>
                 </span>
               </div>
-              {/* <PaystackPayment
+              <PaystackPayment
                 amount={totalAmount}
                 agentFee={agentAmount}
                 waybillFee={state?.constant_price ?? ""}
                 email={loginResponse?.user?.email ?? ""}
                 reference={""}
                 stateId={state?.id ?? ""}
-              /> */}
+              />
               <Button
                 onClick={() => {
                   createWayBill({

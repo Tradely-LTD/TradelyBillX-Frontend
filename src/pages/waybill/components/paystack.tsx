@@ -60,12 +60,14 @@ const PaystackPayment = ({ agentFee, waybillFee, amount, stateId, email, referen
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `${loginResponse?.token}`,
         },
+
         body: JSON.stringify({
           stateId: stateId,
           amount: amount * 100, // Convert to kobo
-          agentAccountNumber: "0238465058",
-          agentBankCode: "058",
+          // agentAccountNumber: "0238465058",
+          // agentBankCode: "058",
         }),
       });
 
