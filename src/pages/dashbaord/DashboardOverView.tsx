@@ -51,8 +51,8 @@ const CardContent = ({ className = "", children }: cardProps) => (
 
 // Payment Stats Card Component
 const PaymentStatsCard = ({ totalPayments = 0, paymentsAmount = 0 }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-8 rounded-lg my-6">
-    <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-8 rounded-lg my-6 w-full">
+    <div className="space-y-2 w-full bg-gray-50 p-2 sm:p-[20px] rounded-lg">
       <p className="text-gray-600 text-base sm:text-lg">Payments Made</p>
       <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">
         {totalPayments} NGN
@@ -61,7 +61,7 @@ const PaymentStatsCard = ({ totalPayments = 0, paymentsAmount = 0 }) => (
         <span className="text-xs sm:text-sm">0% last month</span>
       </div>
     </div>
-    <div className="space-y-2 w-full bg-gray-50 p-4 sm:p-[20px] rounded-lg">
+    <div className="space-y-2 w-full bg-gray-50 p-2 sm:p-[20px] rounded-lg">
       <p className="text-gray-600 text-base sm:text-lg">Commission Earned</p>
       <p className="text-2xl sm:text-4xl font-bold text-gray-900 break-words">
         {paymentsAmount} NGN
@@ -180,17 +180,17 @@ const DashboardOverview = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
           {statsCards.map((stat, index) => (
             <Card key={index} className="h-[130px]">
               <CardContent>
                 <div className="flex flex-row justify-between">
-                  <div className="w-[60%]  flex h-auto flex-col gap-[5px]">
+                  <div className="w-full md:w-[70%]  flex h-auto flex-col gap-[3px] ">
                     <h3 className="text-gray-500 font-medium">{stat.title}</h3>
                     <span className="text-3xl font-semibold">{thousandFormatter(stat.value)}</span>
                     <span className="text-green-500 text-sm">{stat.change}</span>
                   </div>
-                  <div className="flex-1 flex justify-end items-center w-1/2">
+                  <div className=" md:flex flex-1 hidden justify-end items-center w-1/2">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={stat.data}>
                         <Line
