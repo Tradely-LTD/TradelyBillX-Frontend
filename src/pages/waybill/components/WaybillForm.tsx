@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useState } from "react";
 import Button from "@/common/button/button";
 import { DriverVehicleInfo } from "./driver/driver-from";
@@ -8,25 +7,25 @@ import { ProductDetails } from "./products/ProductDetails";
 import { FormProvider, useForm } from "react-hook-form";
 import { wayBillSchema } from "../types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useFormContext } from "./formContext"; // Import useFormContext
 
 const WaybillForm: React.FC = () => {
   const [step, setStep] = useState(0);
   const TOTAL_STEPS = 3;
 
-  // Initialize form methods using useForm
   const methods = useForm({
-    resolver: yupResolver(wayBillSchema), // Your validation schema
+    resolver: yupResolver(wayBillSchema),
+    defaultValues: {
+      products: [],
+    },
   });
 
   const {
     trigger,
     formState: { errors },
-  } = methods; // Destructure trigger and errors from methods
+  } = methods;
 
   const handleNext = async () => {
-    // Define the fields to validate based on the current step
-    let fieldsToValidate = [];
+    let fieldsToValidate: string[] = [];
     switch (step) {
       case 0:
         fieldsToValidate = ["driverName", "driverPhone", "vehicleNumber"];
@@ -53,11 +52,19 @@ const WaybillForm: React.FC = () => {
         break;
     }
 
-    // Trigger validation for the current step's fields
     const isValid = await trigger(fieldsToValidate);
 
-    // If validation passes, move to the next step
     if (isValid) {
+      if (step === 2) {
+        const products = methods.getValues("products");
+        if (!products || products.length === 0) {
+          methods.setError("products", {
+            type: "manual",
+            message: "At least one product must be added",
+          });
+          return;
+        }
+      }
       setStep((prev) => prev + 1);
     }
   };
@@ -65,7 +72,9 @@ const WaybillForm: React.FC = () => {
   const handlePrev = () => {
     setStep((prev) => prev - 1);
   };
-  console.log(errors);
+
+  console.log("Form errors:", errors);
+
   return (
     <FormProvider {...methods}>
       <div className="mt-4">

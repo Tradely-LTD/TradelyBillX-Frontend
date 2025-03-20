@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Trash2 } from "lucide-react";
-import { useFormContext } from "../formContext";
 
 interface Product {
   id: number;
@@ -20,11 +19,10 @@ const productOptions = [
   "Oats",
   "Tomatoes",
   "Onions",
-  "",
 ];
-const unitOptions = ["Piece(s)", "Grams", "Kilogram", "Tone", "Bag(s)", "Crate", "Box(s)", ""];
+const unitOptions = ["Piece(s)", "Grams", "Kilogram", "Tone", "Bag(s)", "Crate", "Box(s)"];
 
-export const ProductDetails: React.FC = ({ methods }) => {
+export const ProductDetails: React.FC<{ methods: any }> = ({ methods }) => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [localProducts, setLocalProducts] = useState<Product[]>([]);
   const [newProduct, setNewProduct] = useState<Omit<Product, "id">>({
@@ -37,6 +35,7 @@ export const ProductDetails: React.FC = ({ methods }) => {
     unit: "",
     quantity: 0,
   });
+
   const {
     register,
     setValue,
@@ -44,12 +43,12 @@ export const ProductDetails: React.FC = ({ methods }) => {
     clearErrors,
     formState: { errors },
   } = methods;
+
   const formProducts = watch("products") || [];
 
-  // Synchronize local state with form state
   useEffect(() => {
     setLocalProducts(formProducts);
-  }, []);
+  }, [formProducts]);
 
   const handleAdd = () => {
     if (newProduct.productName && newProduct.unit && newProduct.quantity > 0) {
@@ -58,6 +57,7 @@ export const ProductDetails: React.FC = ({ methods }) => {
       setValue("products", updatedItems);
       setLocalProducts(updatedItems);
       setNewProduct({ productName: "", unit: "", quantity: 0 });
+      clearErrors("products");
     }
   };
 
@@ -77,13 +77,14 @@ export const ProductDetails: React.FC = ({ methods }) => {
       setValue("products", updatedItems);
       setLocalProducts(updatedItems);
       setEditingId(null);
+      clearErrors("products");
     }
   };
 
   const deleteItem = (id: number) => {
     const updatedItems = localProducts.filter((item) => item.id !== id);
     setValue("products", updatedItems);
-    setLocalProducts(updatedItems); // Force immediate UI update
+    setLocalProducts(updatedItems);
   };
 
   return (
@@ -94,12 +95,16 @@ export const ProductDetails: React.FC = ({ methods }) => {
           <div className="text-lg font-semibold">Product Information</div>
           <div className="text-gray-500">
             What items will you be transporting? Please add details about the items and their
-            quantity.
+            quantity. (At least one product is required)
           </div>
         </div>
       </div>
 
-      <div className="space-y-4 ">
+      {errors.products && (
+        <div className="text-red-500 text-sm mb-4">{errors.products.message}</div>
+      )}
+
+      <div className="space-y-4">
         {localProducts.map((item) => (
           <div
             key={item.id}

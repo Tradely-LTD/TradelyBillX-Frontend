@@ -34,7 +34,7 @@ const UserManagement = () => {
           <h1 className="text-xl font-bold mb-2">User & Role Management</h1>
           <p>Allows the Super Admin to manage all users and assign agent roles to users.</p>
         </div>
-        {/* <div>
+        <div>
           <Button
             onClick={() => {
               navigate("/users/add");
@@ -42,7 +42,7 @@ const UserManagement = () => {
           >
             Add User
           </Button>
-        </div> */}
+        </div>
       </div>
       {loginResponse?.user.role === "superadmin" && (
         <div className="flex justify-between mb-4">

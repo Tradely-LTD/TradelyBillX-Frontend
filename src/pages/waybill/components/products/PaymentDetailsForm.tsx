@@ -9,8 +9,8 @@ import { useStateSlice } from "../../waybill.slice";
 // import { useState } from "react";
 import { useUserSlice } from "@/pages/auth/authSlice";
 import { thousandFormatter } from "@/utils/helper";
-import { useCreateWayBillsMutation } from "../../waybill.api";
-import { useNavigate } from "react-router-dom";
+// import { useCreateWayBillsMutation } from "../../waybill.api";
+// import { useNavigate } from "react-router-dom";
 
 const PaymentDetailsForm = ({ methods }) => {
   const {
@@ -24,8 +24,8 @@ const PaymentDetailsForm = ({ methods }) => {
   const { loginResponse } = useUserSlice();
   const agentAmount = loginResponse?.user?.profile?.agentFee ?? 0;
   const totalAmount = agentAmount + Number(state?.constant_price);
-  const [createWayBill, { isLoading: isCreatingWaybill }] = useCreateWayBillsMutation();
-  const navigate = useNavigate();
+  // const [createWayBill, { isLoading: isCreatingWaybill }] = useCreateWayBillsMutation();
+  // const navigate = useNavigate();
 
   return (
     <div className="max-w-9xl mx-auto py-6 bg-white">
@@ -204,7 +204,7 @@ const PaymentDetailsForm = ({ methods }) => {
                 reference={""}
                 stateId={state?.id ?? ""}
               />
-              <Button
+              {/* <Button
                 onClick={() => {
                   createWayBill({
                     ...formValues,
@@ -224,7 +224,7 @@ const PaymentDetailsForm = ({ methods }) => {
                 }}
               >
                 {isCreatingWaybill ? "Generating..." : "Generate Waybill"}
-              </Button>
+              </Button> */}
             </div>
           </div>
 

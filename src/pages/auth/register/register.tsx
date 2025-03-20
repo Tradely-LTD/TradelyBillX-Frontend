@@ -55,7 +55,7 @@ const Register = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  console.log(errors);
+
   const [handleRegister, { isLoading, isSuccess }] = useRegisterMutation();
   const { data: unions, isLoading: isFetchingUnion } = useGetUnionQuery();
   const { data: statesData, isLoading: isStatesLoading } = useGetStatesQuery();
@@ -74,7 +74,6 @@ const Register = () => {
 
   const onSubmit = (data: any) => {
     const { termsAccepted, ...rest } = data;
-    console.log(rest);
     handleRegister(rest);
   };
   useEffect(() => {
@@ -185,7 +184,6 @@ const Register = () => {
                     })) ?? []
                   }
                   onChange={(val, id) => {
-                    console.log(val, id);
                     setValue("union", val);
                     clearErrors("union");
                   }}
