@@ -7,6 +7,9 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+    /* Recommended by Netlify*/
+    "noImplicitAny": true,
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
