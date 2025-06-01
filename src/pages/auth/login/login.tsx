@@ -37,7 +37,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/");
+      navigate("/dashboard");
     }
   }, [isSuccess]);
 
