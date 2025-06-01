@@ -25,6 +25,7 @@ import withRoleAccess from "./common/router-helper/withRole";
 import { Unauthorized } from "./pages/components/unauthorized-component";
 import UnionManagement from "./pages/union/union-management";
 import UnionForm from "./pages/union/components/union-form";
+import LandingPage from "./pages/landing";
 
 // Apply role-based access control
 const WaybillComponent = withRoleAccess(["agent"])(Waybill);
@@ -43,6 +44,7 @@ function AppRouter() {
         <Route path={appPaths.login} element={<Login />} />
         <Route path={`${appPaths.receipt}/:id`} element={<WaybillReceipt />} />
         <Route path={appPaths.register} element={<Register />} />
+        <Route path={"/"} element={<LandingPage />} />
 
         <Route
           path={appPaths.dashboard}
@@ -54,7 +56,7 @@ function AppRouter() {
         >
           <Route
             index
-            path={"/"}
+            path={"/dashboard"}
             element={
               <PrivateRoute>
                 <DashboardOverview />

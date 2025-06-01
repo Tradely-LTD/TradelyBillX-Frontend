@@ -46,7 +46,7 @@ export const getMenuItems = (UserType: (typeof UserRoles)[UserRoleType]): MenuIt
     {
       icon: BarChart2,
       label: "Dashboard",
-      path: "/",
+      path: "/dashboard",
       description: "Overview of key metrics and performance",
       privilege: [UserRoles.AGENT, UserRoles.ADMIN],
     },
