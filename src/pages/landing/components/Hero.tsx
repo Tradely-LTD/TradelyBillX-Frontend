@@ -21,7 +21,7 @@ const Hero = () => {
                 onClick={() => navigation("/login")}
                 className="bg-transparent border-2 border-white py-3 px-6 rounded-lg hover:bg-white hover:text-green-700 transition duration-300"
               >
-                Learn More
+                Get Started
               </button>
             </div>
             <div className="mt-6 text-sm">

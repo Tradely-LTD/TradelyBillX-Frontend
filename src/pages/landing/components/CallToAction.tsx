@@ -84,8 +84,8 @@ const CallToAction = () => {
             
             <div className="mt-6 text-gray-600 text-center">
               <p>Prefer to talk to someone directly?</p>
-              <p className="font-bold">Call us at: +234 (0) 123 456 7890</p>
-              <p>Or email: <a href="mailto:info@tradely.com" className="text-green-600 hover:underline">info@tradely.com</a></p>
+              <p className="font-bold">Call us at: +234 (8) 888 888 8672</p>
+              <p>Or email: <a href="mailto:info@tradely.com" className="text-green-600 hover:underline">info@tradelyx.com</a></p>
             </div>
           </div>
         </div>
