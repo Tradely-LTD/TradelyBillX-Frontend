@@ -41,7 +41,7 @@ function WaybillsList() {
   //   alert("Custom filter logic can be implemented here.");
   // };
 
-  const { data: statsData, isLoading: isLoadingStats, error } = useGetStatsRecordQuery();
+  const { data: statsData, isLoading: isLoadingStats } = useGetStatsRecordQuery();
 
   // Get statistics from API response
   const totalWaybills = statsData?.data?.totalWaybills || 0;

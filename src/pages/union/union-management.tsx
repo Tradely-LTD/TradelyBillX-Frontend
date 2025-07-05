@@ -115,7 +115,7 @@ const UnionManagement = () => {
         isDeleteModalOpen={isDeleteModalOpen}
         selectedUnion={selectedUnion}
         setIsDeleteModalOpen={setIsDeleteModalOpen}
-        setSelectedUnion={selectedUnion}
+        setSelectedUnion={setSelectedUnion}
       />
       <EditModal
         editingUnion={editingUnion}

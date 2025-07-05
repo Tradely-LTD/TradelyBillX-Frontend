@@ -2,7 +2,7 @@ import Button from "@/common/button/button";
 import Input from "@/common/input/input";
 import SelectComponent from "@/common/input/select";
 import Text from "@/common/text/text";
-import { Save } from "lucide-react";
+
 import UserIcon from "@/assets/user.svg";
 import {
   useGetLGAsQuery,
@@ -42,7 +42,7 @@ const schema = yup.object().shape({
   city: yup.string().required("City is required"),
 });
 
-function UserForm({ mode, userId }: Props) {
+function UserForm({ mode }: Props) {
   const navigate = useNavigate();
   const [selectedState, setSelectedState] = useState<any | null>(null);
   const [selectedLGA, setSelectedLGA] = useState<string | null>(null);
@@ -200,7 +200,7 @@ function UserForm({ mode, userId }: Props) {
                     value: item.code,
                   })) ?? []
                 }
-                onChange={(val, id) => {
+                onChange={(val) => {
                   setValue("union", val);
                   clearErrors("union");
                 }}
