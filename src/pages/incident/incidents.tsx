@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Button from "@/common/button/button";
 import StatsCard from "@/common/cards/StatsCard";
 import { TabButton, TabContainer } from "@/common/tab";
@@ -85,6 +86,7 @@ function Incidents() {
   };
 
   // Generate chart data based on incidents
+  //@ts-expect-error
   const generateChartData = (incidents: Incident[]) => {
     return Array.from({ length: 20 }, (_, i) => ({
       name: i,

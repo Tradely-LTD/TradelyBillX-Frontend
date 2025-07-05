@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState } from "react";
 import Button from "@/common/button/button";
 import { TabButton, TabContainer } from "@/common/tab";

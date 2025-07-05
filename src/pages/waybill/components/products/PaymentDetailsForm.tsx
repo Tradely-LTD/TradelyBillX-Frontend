@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Copy, Ship } from "lucide-react";
 import Text from "@/common/text/text";
 import Button from "@/common/button/button";

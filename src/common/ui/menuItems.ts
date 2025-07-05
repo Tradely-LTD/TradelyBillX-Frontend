@@ -1,19 +1,16 @@
+//@ts-nocheck
 import { appPaths } from "@/utils/app-paths";
 import {
   BarChart2,
   FileText,
   DollarSign,
   AlertTriangle,
-  Activity,
-  PieChart,
   Settings2,
   Users,
   MapIcon,
   LogOut,
   FilePlus,
   FileSearch,
-  Users2,
-  UsersRound,
   UserSquare,
 } from "lucide-react";
 

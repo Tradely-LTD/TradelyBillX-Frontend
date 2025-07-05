@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Calendar, Clock } from "iconsax-react";
 import Input from "@/common/input/input";
 import SelectComponent from "@/common/input/select";

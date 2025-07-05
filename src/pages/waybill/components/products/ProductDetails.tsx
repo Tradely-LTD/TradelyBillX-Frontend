@@ -37,7 +37,7 @@ export const ProductDetails: React.FC<{ methods: any }> = ({ methods }) => {
   });
 
   const {
-    register,
+    // register,
     setValue,
     watch,
     clearErrors,
