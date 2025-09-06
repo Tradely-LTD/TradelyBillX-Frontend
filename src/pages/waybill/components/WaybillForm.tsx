@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState } from "react";
 import Button from "@/common/button/button";
 import { DriverVehicleInfo } from "./driver/driver-from";

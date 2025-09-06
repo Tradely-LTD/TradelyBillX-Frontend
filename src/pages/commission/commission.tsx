@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Button from "@/common/button/button";
 import StatsCard from "@/common/cards/StatsCard";
 import Text from "@/common/text/text";

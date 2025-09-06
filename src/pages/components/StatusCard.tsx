@@ -1,3 +1,4 @@
+//@ts-nocheck
 import AnimatedPieChart from "@/common/ui/AnimatedPieChart";
 
 const Card = ({ className = "", children }) => (

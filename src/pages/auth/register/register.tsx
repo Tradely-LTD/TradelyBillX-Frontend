@@ -183,7 +183,7 @@ const Register = () => {
                       value: item.code,
                     })) ?? []
                   }
-                  onChange={(val, id) => {
+                  onChange={(val) => {
                     setValue("union", val);
                     clearErrors("union");
                   }}

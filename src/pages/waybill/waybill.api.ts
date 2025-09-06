@@ -1,3 +1,4 @@
+//@ts-check
 import { baseApi } from "@/store/baseApi";
 import { Methods } from "@/utils/enums";
 import { toast } from "react-toastify";
@@ -12,7 +13,7 @@ export const wayBillApi = baseApi.injectEndpoints({
       providesTags: ["WAYBILL"],
     }),
     getTransactions: builder.query<WaybillsResponse, void>({
-      query: (props) => ({
+      query: () => ({
         url: `/waybill/transactions`,
         method: Methods.Get,
       }),

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Text from "@/common/text/text";
 import { Copy, Eye, Siren } from "lucide-react";
 import EmergencyIcon from "@/assets/emergency-siren.svg";

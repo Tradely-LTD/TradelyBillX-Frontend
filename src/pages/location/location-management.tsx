@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, File, Package, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Package, Pencil, Trash2 } from "lucide-react";
 
 import Button from "@/common/button/button";
 import { TabButton, TabContainer, TabPanel } from "@/common/tab";

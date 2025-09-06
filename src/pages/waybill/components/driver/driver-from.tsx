@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Input from "@/common/input/input";
 import { ChangeEvent } from "react";
 

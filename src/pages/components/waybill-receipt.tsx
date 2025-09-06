@@ -19,7 +19,7 @@ const WaybillReceipt = () => {
 
   const { data: waybillData, isLoading, isFetching } = useGetWaybillQuery({ id: id ?? "" });
   const data = waybillData?.data;
-  const qrcode = `${urls.SERVER_BASE_URL}/receipt/${id}`;
+  const qrcode = `${urls.API_BASE_URL}/receipt/${id}`;
   const componentRef = useRef<HTMLDivElement | null>(null);
 
   const handlePrint = useReactToPrint({
@@ -160,7 +160,7 @@ const WaybillReceipt = () => {
         }
 
         // Calculate the portion of the image to use for this page
-        const pageHeight = pdf.internal.pageSize.getHeight();
+        // const pageHeight = pdf.internal.pageSize.getHeight();
         const sourceY = page * (canvas.height / totalPages);
         const destY = page === 0 ? 0 : 0;
 
@@ -208,7 +208,7 @@ const WaybillReceipt = () => {
   if (isFetching || isLoading) {
     return <Loader />;
   }
-  const dateOnly = data?.createdAt?.split("T")[0];
+  // const dateOnly = data?.createdAt?.split("T")[0];
   const handleTabSwitch = (value: string) => {
     setActiveTab(value);
   };

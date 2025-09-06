@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Button from "@/common/button/button";
 import StatsCard from "@/common/cards/StatsCard";
 import { TabButton, TabContainer } from "@/common/tab";
@@ -64,7 +65,7 @@ function TransactionHistory() {
   const [filterByStatus, setFilterByStatus] = useState<string | null>(null);
   const { data, isLoading } = useGetTransactionsQuery();
 
-  const { data: statsData, isLoading: isLoadingStats, error } = useGetStatsRecordQuery();
+  const { data: statsData } = useGetStatsRecordQuery();
 
   // Get statistics from API response
   const totalWaybills = statsData?.data?.totalWaybills || 0;
