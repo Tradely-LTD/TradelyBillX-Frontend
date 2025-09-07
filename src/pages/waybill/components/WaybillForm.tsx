@@ -5,20 +5,13 @@ import { DriverVehicleInfo } from "./driver/driver-from";
 import { ShipmentDetails } from "./shipment/shipment";
 import PaymentDetailsForm from "./products/PaymentDetailsForm";
 import { ProductDetails } from "./products/ProductDetails";
-import { FormProvider, useForm } from "react-hook-form";
-import { wayBillSchema } from "../types";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useFormContext } from "./formContext";
 
 const WaybillForm: React.FC = () => {
   const [step, setStep] = useState(0);
   const TOTAL_STEPS = 3;
 
-  const methods = useForm({
-    resolver: yupResolver(wayBillSchema),
-    defaultValues: {
-      products: [],
-    },
-  });
+  const methods = useFormContext();
 
   const {
     trigger,
@@ -77,13 +70,11 @@ const WaybillForm: React.FC = () => {
   console.log("Form errors:", errors);
 
   return (
-    <FormProvider {...methods}>
-      <div className="mt-4">
-        {step === 0 && <DriverVehicleInfo methods={methods} />}
-        {step === 1 && <ShipmentDetails methods={methods} />}
-        {step === 2 && <ProductDetails methods={methods} />}
-        {step === 3 && <PaymentDetailsForm methods={methods} />}
-      </div>
+    <div className="mt-4">
+      {step === 0 && <DriverVehicleInfo methods={methods} />}
+      {step === 1 && <ShipmentDetails methods={methods} />}
+      {step === 2 && <ProductDetails methods={methods} />}
+      {step === 3 && <PaymentDetailsForm methods={methods} />}
 
       <div className="flex justify-between mt-8">
         <div>
@@ -101,7 +92,7 @@ const WaybillForm: React.FC = () => {
           ) : null}
         </div>
       </div>
-    </FormProvider>
+    </div>
   );
 };
 

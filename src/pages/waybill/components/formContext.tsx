@@ -14,6 +14,9 @@ const FormContext = createContext<FormContextType | null>(null);
 export const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const methods = useForm<WayBillFormData>({
     resolver: yupResolver(wayBillSchema),
+    defaultValues: {
+      products: [],
+    },
   });
   return <FormContext.Provider value={methods}>{children}</FormContext.Provider>;
 };
